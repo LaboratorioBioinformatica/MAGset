@@ -1,0 +1,183 @@
+					<!-- Page Heading -->
+					<div
+						class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">Summary 
+						<span class="spinner-border invisible" id="spinner" role="status" aria-hidden="true"></span>
+						</h1>
+					</div>
+
+			<div class="row">
+			<div class="col-xl-3 col-6 mb-4">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Genomes</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800" id="genomes-qty">0</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-microchip fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-6 mb-4">
+              <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Genomic regions of interest</div>
+                      <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                          <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="gris-qty">0</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas  fa-info-circle fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Genes</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800" id="genes-qty">0</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-bars fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-6 mb-4">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Genes in GRIs</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800" id="gri-genes-qty">0</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+					<!-- Content Row -->
+					<div class="row">
+						<!--  <div class="col-xl-6">
+							<div class="card shadow mb-4">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary">Genes by genome</h6>
+								</div>
+								<div class="card-body">
+                                    <div class="chart-bar">
+                                    	<canvas id="myBarChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        -->
+						<div class="col-xl-6 pb-4 ">
+							<div class="card shadow h-100">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary">Pangenome
+										Summary</h6>
+								</div>
+								<div class="card-body">
+									<div class="table-responsive">
+										<table class="table table-bordered" id="summaryGeneTable">
+											<thead class="text-center">
+											</thead>
+											<tbody class="text-center">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-6 pb-4">
+							<div class="card shadow h-100">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary">Genomic
+										Region of Interest (GRI) Summary</h6>
+								</div>
+								<div class="card-body">
+									<div class="table-responsive">
+										<table class="table table-bordered" id="summaryGRITable">
+											<thead class="text-center">
+											</thead>
+											<tbody class="text-center">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-12">
+							<div class="card shadow mb-4">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary">Comparison
+										between genomes using ANI</h6>
+								</div>
+								<div class="card-body">
+									<div class="table-responsive">
+										<table class="table table-bordered" id="aniTable">
+											<thead class="text-center">
+											</thead>
+											<tbody class="text-center">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-6 pb-4">
+							<div class="card shadow h-100">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary">MAGCheck Summary</h6>
+								</div>
+								<div class="card-body">
+    								<div class="table-responsive">
+										<table class="table table-bordered" id="summaryMAGCheckTable">
+											<thead class="text-center">
+											</thead>
+											<tbody class="text-center">
+											</tbody>
+										</table>
+									</div>
+									<p id="magCheckFileText">The matched reads can be found at: output_folder/03_gris/magcheck/reads/</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-6 pb-4">
+							<div class="card shadow h-100">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary">Annotations Summary</h6>
+								</div>
+								<div class="card-body">
+									<div class="table-responsive">
+										<table class="table table-bordered" id="annotationsTable">
+											<thead class="text-center">
+											</thead>
+											<tbody class="text-center">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /.container-fluid -->

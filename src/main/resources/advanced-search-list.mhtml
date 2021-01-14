@@ -1,0 +1,107 @@
+
+
+         <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800">
+          Advanced gene search 
+          <span class="spinner-border invisible" id="spinner" role="status" aria-hidden="true"></span> 
+          </h1>
+          <br/>
+		  <div class="row">
+		  <div class="col-xl-8">
+         <div class=" card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Filters</h6>
+            </div>
+            <div class="card-body">
+				<form class="user">
+                <div class="row">
+                  <div class="col-lg-2 mb-3 mb-lg-0">
+                    <select id="filterType" class="form-control">
+						<option value="add">Add (Union)</option>
+						<option value="remove">Remove (Minus)</option>
+						<option value="intersect">Intersect</option>
+					</select>
+                  </div>
+				<div class="col-lg-3 mb-3 mb-lg-0">
+                    <select id="filterField" class="form-control">
+						<option value="genomeName">Genome</option>
+						<option value="locusTag">Locus tag</option>
+						<option value="proteinId">Protein ID</option>
+						<option value="strand">Strand</option>
+						<option value="core">Gene core</option>
+						<option value="shared">Gene shared</option>
+						<option value="specific">Gene specific</option>
+						<option value="rgiName">GRI ID</option>
+						<option value="cogId">COG Code</option>
+						<option value="cogName">COG Name</option>
+						<option value="cazyCodes">CAZy codes</option>
+					</select>
+                  </div>
+				  <div class="col-lg-2 mb-3 mb-lg-0">
+                    <select id="filterComparatorType" class="form-control" onchange="configureFilterContentField()">
+						<option value="equals">equals</option>
+						<option value="notEquals">not equals</option>
+						<option value="in">in</option>
+						<option value="notIn">not in</option>
+						<option value="empty">empty</option>
+						<option value="notEmpty">not empty</option>
+						<option value="contains">contains</option>
+						<option value="notContains">not contains</option>
+					</select>
+                  </div>
+				  
+				  
+                  <div class="col-lg-3 mb-3 ">
+                    <input type="text" class="form-control " id="filterContent" >
+                  </div>
+				  <div class="col-lg-2">
+                    <button class="btn btn-primary " type="button" id="addFilterButton" onclick="addFilter()">
+                     	Add filter
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>		  
+		  </div>
+		  
+		  
+		  		  <div class="col-xl-4">
+         <div class=" card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Applied filters</h6>
+            </div>
+            <div class="card-body" id="appliedFilters" style="min-height: 94px;">
+				No filter applied. Use the filters to add/remove/intersect results.
+            </div>
+          </div>		  
+		  </div>
+		  
+		  </div>
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Genes</h6>
+            </div>
+            <div class="card-body">
+            <div id="columnSelectorDiv"></div>
+              <div class="table-responsive">
+                <table class="table table-bordered table-condensed" style="font-size:12px;" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                  </thead>
+                  <tfoot>
+                  </tfoot>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer">
+            	<div id="exportDiv">
+                </div>
+     		</div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+

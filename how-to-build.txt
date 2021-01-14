@@ -1,0 +1,11 @@
+#To build the code and generate new docker image:
+./build.sh fsanchez/magset:1.0.1
+docker tag fsanchez/magset:1.0.1 fsanchez/magset:1.0
+
+#to update the remote image:
+#docker push fsanchez/magset:1.0.1
+#docker push fsanchez/magset:1.0
+
+#To generate the singularity image, please execute:
+singularity pull docker://fsanchez/1.0
+

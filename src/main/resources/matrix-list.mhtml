@@ -1,0 +1,33 @@
+
+
+         <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800"><genomeName> genes matrix 
+          <span class="spinner-border invisible" id="spinner" role="status" aria-hidden="true"></span>
+          </h1>
+          <br/>
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Genes</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-condensed" style="font-size:12px;" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                  </thead>
+                  <tfoot>
+                  </tfoot>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer">
+            	<div id="exportDiv">
+                </div>
+     		</div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
