@@ -1,7 +1,7 @@
 # Quick start - Running MAGset with .fasta input
 <p>In this tutorial we will use very small sample genomes to demonstrate how MAGset works. All genomes are fasta files . Some results are generated just if the input are GenBank genome files. After this quick start, please read our tutorial with GenBank files too.</p>
 
-* [Install MAGset](How-to-install)
+* [Install MAGset](How-to-install.md)
 * [Download the test data](test-data-quick-start.tar.gz) <br/>
 
 * Descompact the test data<br/>
