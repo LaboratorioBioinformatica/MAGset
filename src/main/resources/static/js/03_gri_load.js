@@ -34,11 +34,11 @@ function createTable(){
 		line = tr + '<td>' + item.id 
 		+ '</td><td class=\'' + magClass + '\'>' + item.genomeName
 		+ '</td><td>' + item.sequenceName 
-		+ '</td><td>' + item.size 
-		+ '</td><td>' + item.start 
-		+ '</td><td>' + item.end 
+		+ '</td><td>' + item.size.toLocaleString('en-US') 
+		+ '</td><td>' + item.start.toLocaleString('en-US') 
+		+ '</td><td>' + item.end.toLocaleString('en-US') 
 		+ '</td><td>' + (annotatedGenomes?item.genesQty:'N/A')
-		+ '</td><td>' + (magCheckExecuted?item.coveredPositions:'N/A')
+		+ '</td><td>' + (magCheckExecuted?item.coveredPositions.toLocaleString('en-US'):'N/A')
 		+ '</td><td>' + (magCheckExecuted?item.coverage.toFixed(2):'N/A')
 		+ '</td><td>' + (magCheckExecuted?item.meanDepth.toFixed(2):'N/A')
 		+ '</td></tr>';

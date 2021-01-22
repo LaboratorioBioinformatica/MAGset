@@ -50,7 +50,7 @@ function loadSummaryGRITable(){
 		if (!annotatedGenomes){
 			genesInGrisQty = 'N/A';
 		}
-		line = '<tr class=\'' + magClass + '\'><th class=\'text-left\'>' + item.genomeName + '</th><td>' + item.genomeSize + '</td><td>' + item.grisQty + '</td><td>' + item.sumOfGrisSize + '</td><td>' + genesInGrisQty + '</td>';
+		line = '<tr class=\'' + magClass + '\'><th class=\'text-left\'>' + item.genomeName + '</th><td>' + item.genomeSize.toLocaleString('en-US') + '</td><td>' + item.grisQty + '</td><td>' + item.sumOfGrisSize.toLocaleString('en-US') + '</td><td>' + genesInGrisQty + '</td>';
 		line = line + '</tr>';
 		tbody.append(line);
 	});	
@@ -100,7 +100,7 @@ function loadSummaryMAGCheck(){
 			genesInGRIsFoundByMAGCheckQty = 'N/A';
 		}
 		
-		line = '<tr><th class=\'text-left\'>' + item.genomeName + '</th><td>' + grisFoundByMAGCheckQty + '</td><td>' + sumOfGrisFoundByMAGCheckSize + '</td><td>' + genesInGRIsFoundByMAGCheckQty + '</td>';
+		line = '<tr><th class=\'text-left\'>' + item.genomeName + '</th><td>' + grisFoundByMAGCheckQty + '</td><td>' + sumOfGrisFoundByMAGCheckSize.toLocaleString('en-US') + '</td><td>' + genesInGRIsFoundByMAGCheckQty + '</td>';
 		line = line + '</tr>';
 		tbody.append(line);
 	});	
