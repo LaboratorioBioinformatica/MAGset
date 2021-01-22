@@ -343,15 +343,15 @@ then
 	
 		mkdir reads
 		/programs/bbmap/reformat.sh in=result.sam out=reads/reads.fastq || exit 1
-	
-		if [ "$(prop 'execute_magfix')" == "true" ]; then
-			echo "starting magfix..." 
+		#Beta/Alpha functionality
+		if [ "$(prop 'execute_mag_improve')" == "true" ]; then
+			echo "starting mag_improve..." 
 			cd ${output_folder}
-			if [ -d "08_magfix" ]; then
-				mv -f 08_magfix 08_magfix.$date_string
+			if [ -d "08_mag_improve" ]; then
+				mv -f 08_mag_improve 08_mag_improve.$date_string
 			fi
-			mkdir 08_magfix
-			cd 08_magfix
+			mkdir 08_mag_improve
+			cd 08_mag_improve
 			echo "running bowtie2..." 
 			original_mag_file=$(prop 'mag_file')
 			bowtie2-build ${output_folder}/00_converted_genomes/$(basename ${original_mag_file%.*}).fasta original_mag_file || exit 1
@@ -362,7 +362,7 @@ then
 	
 			echo "running spades..." 
 			spades.py --s1 ${output_folder}/07_magcheck/reads/reads.fastq \
-			--s2 ${output_folder}/08_magfix/reads/reads.fastq \
+			--s2 ${output_folder}/08_mag_improve/reads/reads.fastq \
 			-o spades -t ${num_threads} || exit 1
 	
 			#creating input files to run magset for fixed fasta file
@@ -370,13 +370,13 @@ then
 			cd input 
 			cp ${output_folder}/00_converted_genomes/*.fasta .
 			rm $(basename ${original_mag_file%.*}).fasta
-			cp ../spades/scaffolds.fasta $(basename ${original_mag_file%.*}).magfixed.fasta
+			cp ../spades/scaffolds.fasta $(basename ${original_mag_file%.*}).improved.fasta
 	
-			if [ ! -z $(prop 'magfix_contig_minimum_size') ]; then
-				echo "Filtering spades result with magfix_contig_minimum_size" 
-				/programs/bbmap/reformat.sh in=$(basename ${original_mag_file%.*}).magfixed.fasta out=$(basename ${original_mag_file%.*}).magfixed.filtered.fasta minlength="$(prop 'magfix_contig_minimum_size')"  || exit 1
-				rm $(basename ${original_mag_file%.*}).magfixed.fasta
-				mv $(basename ${original_mag_file%.*}).magfixed.filtered.fasta $(basename ${original_mag_file%.*}).magfixed.fasta
+			if [ ! -z $(prop 'mag_improve_contig_minimum_size') ]; then
+				echo "Filtering spades result with mag_improve_contig_minimum_size" 
+				/programs/bbmap/reformat.sh in=$(basename ${original_mag_file%.*}).improved.fasta out=$(basename ${original_mag_file%.*}).improved.filtered.fasta minlength="$(prop 'mag_improve_contig_minimum_size')"  || exit 1
+				rm $(basename ${original_mag_file%.*}).improved.fasta
+				mv $(basename ${original_mag_file%.*}).improved.filtered.fasta $(basename ${original_mag_file%.*}).improved.fasta
 			fi
 	
 			cd ..
@@ -390,10 +390,10 @@ then
 	    		fi
 			done
 	
-			echo "title=${title} after MAGfix" >> conf.properties
-			echo "genomes_folder=${output_folder}/08_magfix/input" >> conf.properties
-			echo "output_folder=${output_folder}/08_magfix/" >> conf.properties
-			echo "mag_file=$(basename ${original_mag_file%.*}).magfixed.fasta" >> conf.properties
+			echo "title=${title} after improved" >> conf.properties
+			echo "genomes_folder=${output_folder}/08_mag_improve/input" >> conf.properties
+			echo "output_folder=${output_folder}/08_mag_improve/" >> conf.properties
+			echo "mag_file=$(basename ${original_mag_file%.*}).improved.fasta" >> conf.properties
 			echo "reference_genome_files=${reference_genome_files_fasta}" >> conf.properties
 			echo "num_threads=${num_threads}" >> conf.properties
 			echo "input_type=FASTA" >> conf.properties
@@ -432,13 +432,13 @@ then
 				echo "nucmer_minimal_covered_between_similar_gris_to_consider=$(prop 'nucmer_minimal_covered_between_similar_gris_to_consider')" >> conf.properties
 			fi
 			
-			/programs/magset.sh ${output_folder}/08_magfix/conf.properties || exit 1
+			/programs/magset.sh ${output_folder}/08_mag_improve/conf.properties || exit 1
 	
-			if [ -d "${output_folder}/result_after_magfix" ]; then
-				mv -f ${output_folder}/result_after_magfix ${output_folder}/result_after_magfix.$date_string
+			if [ -d "${output_folder}/result_after_improved" ]; then
+				mv -f ${output_folder}/result_after_improved ${output_folder}/result_after_improved.$date_string
 			fi
 	
-			mv result ../result_after_magfix
+			mv result ../result_after_improved
 		fi
 	else
 		echo "GRIs not found, MAGcheck ignored."
