@@ -22,7 +22,7 @@ public class BasicDataJavascriptExportService {
 		lines.add("$( document ).ready(function() {");
 		lines.add("	title = '" + genocom.getConfigurations().getTitle() + "';");
 		lines.add("	magOfInterest = '" + genocom.getMagOfInterest().getName() + "';");
-		lines.add("	genomeNames = " + genomes.stream().map(n -> n.getName()).collect(joining("','", "['", "']")) + ";");
+		lines.add("	genomesName = " + genomes.stream().map(n -> n.getName()).collect(joining("','", "['", "']")) + ";");
 		lines.add("	magCheckExecuted = " + genocom.isMagCheckExecuted() + ";");
 		lines.add("	annotatedGenomes = " + !genocom.getConfigurations().getInputType().equals(InputTypeEnum.FASTA)
 				+ ";");

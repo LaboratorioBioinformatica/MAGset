@@ -27,6 +27,7 @@ public class Genome {
 	private LinkedHashMap<String, ProteinSequence> protSequences;
 	private TreeMap<Location, Gene> genesLocationMap;
 	private TreeMap<Location, DNASequence> dnaSequenceLocationMap;
+	private long size;
 
 	public Genome(LinkedHashMap<String, DNASequence> dnaSequence, LinkedHashMap<String, ProteinSequence> protSequences,
 			GenomeFile genomeFile) {
@@ -37,6 +38,9 @@ public class Genome {
 		loadDNASequenceLocationMap(dnaSequence);
 
 		loadGenesLocationMap();
+		if (!dnaSequenceLocationMap.isEmpty()) {
+			size = dnaSequenceLocationMap.lastKey().getEnd();
+		}
 	}
 
 	private void loadDNASequenceLocationMap(LinkedHashMap<String, DNASequence> dnaSequences) {

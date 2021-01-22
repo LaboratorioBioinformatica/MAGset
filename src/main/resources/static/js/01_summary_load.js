@@ -37,7 +37,7 @@ function loadSummaryGeneTable(){
 
 function loadSummaryGRITable(){
 	var table = $('#summaryGRITable');
-	var headLine = '<tr><th></th><th>GRI Qty</th><th>Genes in RGIs</th></tr>';
+	var headLine = '<tr><th></th><th>Genome size (bp)</th><th>GRI Qty</th>><th>Sum of GRIs size</th><th>Genes in RGIs</th></tr>';
 	table.children('thead').append(headLine);	
 	var tbody = table.children('tbody');
 	var lines = summaryResults;
@@ -50,7 +50,7 @@ function loadSummaryGRITable(){
 		if (!annotatedGenomes){
 			genesInGrisQty = 'N/A';
 		}
-		line = '<tr class=\'' + magClass + '\'><th class=\'text-left\'>' + item.genomeName + '</th><td>' + item.grisQty + '</td><td>' + genesInGrisQty + '</td>';
+		line = '<tr class=\'' + magClass + '\'><th class=\'text-left\'>' + item.genomeName + '</th><td>' + item.genomeSize + '</td><td>' + item.grisQty + '</td><td>' + item.sumOfGrisSize + '</td><td>' + genesInGrisQty + '</td>';
 		line = line + '</tr>';
 		tbody.append(line);
 	});	
@@ -79,7 +79,7 @@ function loadSummaryAnnotations(){
 
 function loadSummaryMAGCheck(){
 	var table = $('#summaryMAGCheckTable');
-	var headLine = '<tr><th></th><th>GRIs found in raw data</th><th>Genes in GRIs</th></tr>';
+	var headLine = '<tr><th></th><th>GRIs found in raw data</th><th>Sum of GRIs size</th><th>Genes in GRIs</th></tr>';
 	table.children('thead').append(headLine);	
 	var tbody = table.children('tbody');
 	var lines = summaryResults;
@@ -89,23 +89,25 @@ function loadSummaryMAGCheck(){
 		}
 		var grisFoundByMAGCheckQty = item.grisFoundByMAGCheckQty;
 		var genesInGRIsFoundByMAGCheckQty = item.genesInGRIsFoundByMAGCheckQty;
+		var  sumOfGrisFoundByMAGCheckSize = item.sumOfGrisFoundByMAGCheckSize;
 		if (!magCheckExecuted){
 			grisFoundByMAGCheckQty = 'N/A';
 			genesInGRIsFoundByMAGCheckQty = 'N/A';
+			sumOfGrisFoundByMAGCheckSize = 'N/A';
 			$("#magCheckFileText").hide();
 		}
 		if (!annotatedGenomes){
 			genesInGRIsFoundByMAGCheckQty = 'N/A';
 		}
 		
-		line = '<tr><th class=\'text-left\'>' + item.genomeName + '</th><td>' + grisFoundByMAGCheckQty + '</td><td>' + genesInGRIsFoundByMAGCheckQty + '</td>';
+		line = '<tr><th class=\'text-left\'>' + item.genomeName + '</th><td>' + grisFoundByMAGCheckQty + '</td><td>' + sumOfGrisFoundByMAGCheckSize + '</td><td>' + genesInGRIsFoundByMAGCheckQty + '</td>';
 		line = line + '</tr>';
 		tbody.append(line);
 	});	
 }
 
 function loadSummaryBoxes(){
-	$("#genomes-qty").html(genomeNames.length);
+	$("#genomes-qty").html(genomesName.length);
 	var grisTotal = 0;
 	var genesTotal = 0;
 	var genesInGrisTotal = 0;

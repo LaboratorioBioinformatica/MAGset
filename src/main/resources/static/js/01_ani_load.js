@@ -5,7 +5,7 @@ $( document ).ready(function() {
 function loadAniTable(){
 	var table = $('#aniTable');
 	var headLine = '<tr><th></th>';
-	genomeNames.forEach(function (item, indice, array) {
+	genomesName.forEach(function (item, indice, array) {
 		headLine = headLine + '<th>' + item + '</th>';
 	});
 	

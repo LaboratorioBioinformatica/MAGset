@@ -6,16 +6,19 @@ class AniResults {
 }
 
 class SummaryResults {
-    constructor(genomeName, genesQty, specificGenesQty, sharedGenesQty, coreGenesQty, discartedGenes, grisQty, genesInGrisQty, grisFoundByMAGCheckQty, genesInGRIsFoundByMAGCheckQty, cogQty, cazyQty) {
+    constructor(genomeName, genomeSize, genesQty, specificGenesQty, sharedGenesQty, coreGenesQty, discartedGenes, grisQty, sumOfGrisSize, genesInGrisQty, grisFoundByMAGCheckQty, sumOfGrisFoundByMAGCheckSize, genesInGRIsFoundByMAGCheckQty, cogQty, cazyQty) {
         this.genomeName = genomeName;
+        this.genomeSize = genomeSize;
         this.genesQty = genesQty;
         this.specificGenesQty = specificGenesQty;
         this.sharedGenesQty = sharedGenesQty;
         this.coreGenesQty = coreGenesQty;
         this.discartedGenes = discartedGenes;
         this.grisQty = grisQty;
+        this.sumOfGrisSize = sumOfGrisSize;
         this.genesInGrisQty = genesInGrisQty;
         this.grisFoundByMAGCheckQty = grisFoundByMAGCheckQty;
+        this.sumOfGrisFoundByMAGCheckSize = sumOfGrisFoundByMAGCheckSize;
         this.genesInGRIsFoundByMAGCheckQty = genesInGRIsFoundByMAGCheckQty;
         this.cogQty = cogQty;
         this.cazyQty = cazyQty;

@@ -43,28 +43,36 @@ public class SummaryService {
 			List<GenomeSegment> gris = genocom.getGenomicRegionsOfInterest().getGenomicRegionsByGenome().get(genome);
 
 			int grisQty = 0;
+			long grisSize = 0;
 			int genesInGrisQty = 0;
 			long grisFoundByMAGCheckQty = 0;
+			long grisFoundByMAGCheckSize = 0;
 			long genesInGRIsFoundByMAGCheckQty = 0;
 			if (gris != null) {
 				grisQty = gris.size();
+				grisSize = gris.stream().collect(Collectors.summingLong(GenomeSegment::getSize));
 				genesInGrisQty = gris.stream().collect(Collectors.summingInt(GenomeSegment::getGenesQty));
 				grisFoundByMAGCheckQty = gris.stream().filter(x -> x.foundInRawData(genocom.getConfigurations()))
 						.count();
+				grisFoundByMAGCheckSize = gris.stream().filter(x -> x.foundInRawData(genocom.getConfigurations()))
+						.collect(Collectors.summingLong(GenomeSegment::getSize));
 				genesInGRIsFoundByMAGCheckQty = gris.stream().filter(x -> x.foundInRawData(genocom.getConfigurations()))
 						.collect(Collectors.summingInt(GenomeSegment::getGenesQty));
 			}
 
 			result.add(new SummaryResult( //
 					escapeEspecialCharacters(genome.getName()), //
+					genome.getGenome().getSize(), //
 					genesQty, //
 					(int) specificGenesQty, //
 					(int) sharedGenesQty, //
 					(int) coreGenesQty, //
 					(int) discartedGenes, //
 					grisQty, //
+					grisSize, //
 					genesInGrisQty, //
 					(int) grisFoundByMAGCheckQty, //
+					grisFoundByMAGCheckSize, //
 					(int) genesInGRIsFoundByMAGCheckQty, //
 					cogQty, //
 					cazyQty //

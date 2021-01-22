@@ -1,6 +1,6 @@
 var title;
 var magOfInterest;
-var genomeNames;
+var genomesName;
 var magCheckExecuted = false;
 var annotatedGenomes = true;
 var cazyAnnotations = true;

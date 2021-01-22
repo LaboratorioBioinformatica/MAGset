@@ -7,7 +7,7 @@ function createTable(){
 	var table = $('#dataTable');
 	var headLine = '<tr><th>Gene name</th><th>Annotation</th><th>N. isolates</th>';
 	var magOfInterestIndex = -1;
-	genomeNames.sort().forEach(function (item, indice, array) {
+	genomesName.sort().forEach(function (item, indice, array) {
 		var magClass = 'teste';
 		if (item === magOfInterest){
 			magClass = 'table-mag-class';
@@ -32,8 +32,8 @@ function createTable(){
 			line = line + '<td class=\'text-center ' + magClass + '\'>' + subitem + '</td>';
 		});
 		
-		if (item.genomeGeneNames.length != genomeNames.length){
-			for(var i = 0; i < (genomeNames.length - item.genomeGeneNames.length);i++){
+		if (item.genomeGeneNames.length != genomesName.length){
+			for(var i = 0; i < (genomesName.length - item.genomeGeneNames.length);i++){
 				line = line + '<td></td>';
 			}
 		}

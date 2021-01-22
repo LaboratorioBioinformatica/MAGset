@@ -47,14 +47,17 @@ public class CSVExportService {
 		for (SummaryResult summary : result) {
 			printer.printRecord( //
 					summary.getGenomeName(), //
+					summary.getGenomeSize(), //
 					summary.getGenesQty(), //
 					summary.getSpecificGenesQty(), //
 					summary.getSharedGenesQty(), //
 					summary.getCoreGenesQty(), //
 					summary.getDiscartedGenes(), //
 					summary.getGrisQty(), //
+					summary.getSumOfGrisSize(), //
 					summary.getGenesInGrisQty(), //
 					summary.getGrisFoundByMAGCheckQty(), //
+					summary.getSumOfGrisFoundByMAGCheckSize(), //
 					summary.getGenesInGRIsFoundByMAGCheckQty(), //
 					summary.getCogQty(), //
 					summary.getCazyQty() //
