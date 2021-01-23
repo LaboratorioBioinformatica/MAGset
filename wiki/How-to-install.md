@@ -7,9 +7,9 @@
 <h1>Installing </h1>
 
 * Download the main script <br/>
-`curl -OL https://github.com/LaboratorioBioinformatica/magset/releases/download/1.0.0/run-magset.sh`
+`curl -OL https://github.com/LaboratorioBioinformatica/magset/releases/download/1.1.0/run-magset.sh`
 <br/> or <br/>
-`wget https://github.com/LaboratorioBioinformatica/magset/releases/download/1.0.0/run-magset.sh`
+`wget https://github.com/LaboratorioBioinformatica/magset/releases/download/1.1.0/run-magset.sh`
 * Make the script executable <br/>
 `chmod +x run-magset.sh`
 

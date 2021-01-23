@@ -28,6 +28,5 @@ MAGset is a tool to analyze genomes obtained from metagenomic data (MAGs) of kno
 * [Output files](Output-files.md)
 * [Parameters](Parameters.md)
 
-
-##Article
+## Article
 Coming soon!
