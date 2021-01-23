@@ -4,6 +4,7 @@
 #to update the remote image:
 #docker push fsanchez/magset:1.1.0
 
+(beta)
 #To generate the singularity image, please execute:
-singularity pull docker://fsanchez/1.1.0
+singularity pull docker://fsanchez/magset:1.1.0
 
