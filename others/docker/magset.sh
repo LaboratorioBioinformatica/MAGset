@@ -111,7 +111,7 @@ fi
 if [ "$execute_cazy_annotations" == "" ]; then
 	execute_cazy_annotations="true"
 fi
-echo "num_threads: ${num_threads}" 
+echo "threads: ${num_threads}" 
 
 IFS=', ' read -r -a all_genome_files <<< "$(prop 'reference_genome_files')"
 all_genome_files+=($(prop 'mag_file'))
@@ -298,8 +298,7 @@ if [ -d "${output_folder}/03_gris/non_clustered/" ]; then
 else
 	echo "No GRIs found... ignoring clustering step"
 fi
-if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -gt 0 ]
-then
+if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -gt 0 ]; then
 	echo "starting magchek..." 
 	cd ${output_folder}
 	
@@ -342,10 +341,12 @@ then
 		samtools coverage --ff 0 -H result.sorted.bam > result.coverage || exit 1
 	
 		mkdir reads
-		/programs/bbmap/reformat.sh in=result.sam out=reads/reads.fastq || exit 1
+		samtools sort -n result.bam -o result.sorted-n.bam || exit 1
+		samtools fastq -0 reads/reads_unpaired.fastq -1 reads/reads_1.fastq -2 reads/reads_2.fastq -s reads/reads_unpaired_discordant.fastq result.sorted-n.bam || exit 1
 		#Beta/Alpha functionality
 		if [ "$(prop 'execute_mag_improve')" == "true" ]; then
 			echo "starting mag_improve..." 
+			
 			cd ${output_folder}
 			if [ -d "08_mag_improve" ]; then
 				mv -f 08_mag_improve 08_mag_improve.$date_string
@@ -356,14 +357,41 @@ then
 			original_mag_file=$(prop 'mag_file')
 			bowtie2-build ${output_folder}/00_converted_genomes/$(basename ${original_mag_file%.*}).fasta original_mag_file || exit 1
 			bowtie2 -x original_mag_file $all_raw_reads_unpaired $all_raw_reads_1 $all_raw_reads_2 -S magfile.sam -p ${num_threads} --no-unal || exit 1
-			echo "running bbmap..." 
+			
+			echo "running samtools..." 
+			samtools view -bS magfile.sam > magfile.bam || exit 1
+			samtools sort -n magfile.bam -o magfile.sorted-n.bam || exit 1
 			mkdir reads
-			/programs/bbmap/reformat.sh in=magfile.sam out=reads/reads.fastq || exit 1
-	
-			echo "running spades..." 
-			spades.py --s1 ${output_folder}/07_magcheck/reads/reads.fastq \
-			--s2 ${output_folder}/08_mag_improve/reads/reads.fastq \
-			-o spades -t ${num_threads} || exit 1
+			samtools fastq -0 reads/reads_unpaired.fastq -1 reads/reads_1.fastq -2 reads/reads_2.fastq -s reads/reads_unpaired_discordant.fastq magfile.sorted-n.bam || exit 1
+			
+			inputs_spades=""
+			if [ -s reads/reads_unpaired.fastq ]; then
+				inputs_spades="$inputs_spades --s 1 reads/reads_unpaired.fastq "
+			fi 
+			
+			if [ -s reads/reads_1.fastq ]; then
+				inputs_spades="$inputs_spades --pe-1 1 reads/reads_1.fastq --pe-2 1 reads/reads_2.fastq "
+			fi 
+			
+			if [ -s reads/reads_unpaired_discordant.fastq ]; then
+				inputs_spades="$inputs_spades --pe-s 1 reads/reads_unpaired_discordant.fastq "
+			fi 
+
+			if [ -s ../07_magcheck/reads/reads_unpaired.fastq ]; then
+				inputs_spades="$inputs_spades --s 2 ../07_magcheck/reads/reads_unpaired.fastq "
+			fi 
+			
+			if [ -s ../07_magcheck/reads/reads_1.fastq ]; then
+				inputs_spades="$inputs_spades --pe-1 2 ../07_magcheck/reads/reads_1.fastq --pe-2 2 ../07_magcheck/reads/reads_2.fastq "
+			fi 
+			
+			if [ -s ../07_magcheck/reads/reads_unpaired_discordant.fastq ]; then
+				inputs_spades="$inputs_spades --pe-s 2 ../07_magcheck/reads/reads_unpaired_discordant.fastq "
+			fi 
+
+			
+			echo "running spades... parameters: $inputs_spades" 
+			spades.py ${inputs_spades} -o spades -t ${num_threads} || exit 1
 	
 			#creating input files to run magset for fixed fasta file
 			mkdir input

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-version=1.1.0
+version=1.1.1
  
 function prop {
     grep "^${1}" ${file}|cut -d'=' -f2
@@ -84,7 +84,6 @@ then
 	  	echo 'Error: docker is not installed. Please install docker to run MAGset. Instructions to install docker: https://docs.docker.com/get-docker/. MAGset also supports Singularity container, please look at: https://github.com/LaboratorioBioinformatica/magset for more details.' >&2
 	  	exit 1
 	else
-		docker pull fsanchez/magset:$version
 		docker run --rm -t -v $output_folder/conf-container.properties:/opt/conf.properties -v $genomes_folder:/input $container_volume_raw_reads_folder_docker -v $output_folder:/output fsanchez/magset:$version ./magset.sh /opt/conf.properties |& tee -a ${output_folder}/logs/magset.log
 	fi
 else
