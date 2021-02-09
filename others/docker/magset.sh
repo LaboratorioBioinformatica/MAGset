@@ -309,36 +309,26 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 	if [ -d "${output_folder}/03_gris/clustered/" ] && [ "$(ls -A ${output_folder}/03_gris/clustered/)" ]; then
 		cat ${output_folder}/03_gris/clustered/*GRI*.fasta > all-gris.fasta
 		
-		echo "running bowtie2..." 
-		bowtie2-build all-gris.fasta all-gris || exit 1
-	
-		all_raw_reads_unpaired=""
+		echo "running bwa..."
+		spades-bwa index all-gris.fasta || exit 1 
 		if  [ "${#raw_data_files_unpaired[@]}" -gt 0 ]; then
-			for raw_data_unpaired in "${raw_data_files_unpaired[@]}"
+			for i in "${!raw_data_files_unpaired[@]}"
 			do
-				all_raw_reads_unpaired="$raw_reads_folder$raw_data_unpaired,$all_raw_reads_unpaired"
+				spades-bwa mem -a -v 1 -t ${num_threads} all-gris.fasta $raw_reads_folder${raw_data_files_unpaired[i]}  | samtools view -b -F 4  - | samtools sort - > result_unpaired$i.bam || exit 1 
 			done
-			all_raw_reads_unpaired=" -U $all_raw_reads_unpaired"
 		fi
 	
-		all_raw_reads_1=""
-		all_raw_reads_2=""
 		if [ "${#raw_data_files_r1[@]}" -gt 0 ]; then
 			for i in "${!raw_data_files_r1[@]}"
 			do
-				all_raw_reads_1="$raw_reads_folder${raw_data_files_r1[i]},$all_raw_reads_1"
-				all_raw_reads_2="$raw_reads_folder${raw_data_files_r2[i]},$all_raw_reads_2"
+				spades-bwa mem -a -v 1 -t ${num_threads} all-gris.fasta $raw_reads_folder${raw_data_files_r1[i]} $raw_reads_folder${raw_data_files_r2[i]}  | samtools view -b -F 4 - | samtools sort - > result_paired$i.bam || exit 1 
 			done
-			all_raw_reads_1=" -1 $all_raw_reads_1"
-			all_raw_reads_2=" -2 $all_raw_reads_2"
 		fi
-		bowtie2 -a -x all-gris $all_raw_reads_unpaired $all_raw_reads_1 $all_raw_reads_2 -S result.sam -p ${num_threads} --no-unal || exit 1
-	
+		
 		echo "running samtools..." 
-		samtools view -bS result.sam > result.bam || exit 1
-		samtools sort result.bam -o result.sorted.bam || exit 1
-	
-		samtools coverage --ff 0 -H result.sorted.bam > result.coverage || exit 1
+		samtools merge result.bam result_*.bam || exit 1
+		#rm -f result_*.bam || exit 1
+		samtools coverage --ff 0 -H result.bam > result.coverage || exit 1
 	
 		mkdir reads
 		samtools sort -n result.bam -o result.sorted-n.bam || exit 1
@@ -355,14 +345,29 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 			cd 08_mag_improve
 			echo "running bowtie2..." 
 			original_mag_file=$(prop 'mag_file')
-			bowtie2-build ${output_folder}/00_converted_genomes/$(basename ${original_mag_file%.*}).fasta original_mag_file || exit 1
-			bowtie2 -x original_mag_file $all_raw_reads_unpaired $all_raw_reads_1 $all_raw_reads_2 -S magfile.sam -p ${num_threads} --no-unal || exit 1
+			cp ${output_folder}/00_converted_genomes/$(basename ${original_mag_file%.*}).fasta .
+			spades-bwa index $(basename ${original_mag_file%.*}).fasta
 			
+			if  [ "${#raw_data_files_unpaired[@]}" -gt 0 ]; then
+				for raw_data_unpaired in "${!raw_data_files_unpaired[@]}"
+				do
+					spades-bwa mem -v 1 -t ${num_threads} $(basename ${original_mag_file%.*}).fasta $raw_reads_folder${raw_data_files_unpaired[i]}  | samtools view  -b -F 4 - | samtools sort -n - > result_unpaired$i.bam || exit 1 
+				done
+			fi
+		
+			if [ "${#raw_data_files_r1[@]}" -gt 0 ]; then
+				for i in "${!raw_data_files_r1[@]}"
+				do
+					spades-bwa mem -v 1 -t ${num_threads} $(basename ${original_mag_file%.*}).fasta $raw_reads_folder${raw_data_files_r1[i]} $raw_reads_folder${raw_data_files_r2[i]} | samtools view  -b -F 4 - | samtools sort -n - > result_paired$i.bam || exit 1 
+				done
+			fi
+				
 			echo "running samtools..." 
-			samtools view -bS magfile.sam > magfile.bam || exit 1
-			samtools sort -n magfile.bam -o magfile.sorted-n.bam || exit 1
+			samtools merge -n result.bam result_*.bam || exit 1
+			#rm -f result_*.bam || exit 1
+
 			mkdir reads
-			samtools fastq -0 reads/reads_unpaired.fastq -1 reads/reads_1.fastq -2 reads/reads_2.fastq -s reads/reads_unpaired_discordant.fastq magfile.sorted-n.bam || exit 1
+			samtools fastq -0 reads/reads_unpaired.fastq -1 reads/reads_1.fastq -2 reads/reads_2.fastq -s reads/reads_unpaired_discordant.fastq result.bam || exit 1
 			
 			inputs_spades=""
 			if [ -s reads/reads_unpaired.fastq ]; then
