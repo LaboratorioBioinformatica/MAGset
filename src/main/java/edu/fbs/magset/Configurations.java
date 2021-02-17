@@ -49,7 +49,7 @@ public class Configurations {
 		this.magCheckMinimalCoverage = Double.valueOf(prop.getProperty("magcheck_minimal_coverage", "0.8"));
 		this.magCheckMinimalMeanDepth = Double.valueOf(prop.getProperty("magcheck_minimal_mean_depth", "1.0"));
 
-		this.nucmerMinimalIdentity = Double.valueOf(prop.getProperty("nucmer_minimal_identity", "0.95"));
+		this.nucmerMinimalIdentity = Double.valueOf(prop.getProperty("nucmer_minimal_identity", "0.90"));
 		this.nucmerMinimalQueryMatchSize = Integer.valueOf(prop.getProperty("nucmer_minimal_query_match_size", "1000"));
 		this.nucmerMinimalCoveredBetweenSimilarGRIsToConsider = Double
 				.valueOf(prop.getProperty("nucmer_minimal_covered_between_similar_gris", "0.8"));

@@ -35,8 +35,8 @@ Defines the minimum size for a genomic region of interest (GRI). Default value: 
 `minimum_gri_size=5000`
 
 ### nucmer_minimal_identity
-Defines the minimal identity to consider when comparing genomes segments. Default value: 0.95. Supported values: Between 0.8 and 0.99. Example:<br/>
-`nucmer_minimal_identity=0.95`
+Defines the minimal identity to consider when comparing genomes segments. Default value: 0.90. Supported values: Between 0.8 and 0.99. Example:<br/>
+`nucmer_minimal_identity=0.90`
 ### nucmer_minimal_query_match_size
 Defines the minimal match size to consider when comparing genomes segments. Default value: 1000. Example:<br/>
 `nucmer_minimal_query_match_size=1000`

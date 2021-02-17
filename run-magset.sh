@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-version=1.1.1
+version=1.2.0
  
 function prop {
     grep "^${1}" ${file}|cut -d'=' -f2

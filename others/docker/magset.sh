@@ -223,8 +223,7 @@ for genome in "${reference_genome_files[@]}"; do
 	cd "$(basename ${genome%.*})"
 	
 	nucmer -maxmatch "${genomes_folder}/$(basename ${genome%.*}).fasta"  "${genomes_folder}/$(basename ${mag_file%.*}).fasta" || exit 1
-	delta-filter -q out.delta > out.delta.q || exit 1
-	show-coords -THrcl out.delta.q > out.coords || exit 1
+	show-coords -THrcl out.delta > out.coords || exit 1
 	
 	cat "${genomes_folder}/$(basename ${genome%.*}).fasta" >> ../all_references.fasta
 	
@@ -235,8 +234,7 @@ mkdir "$(basename ${mag_file%.*})"
 cd "$(basename ${mag_file%.*})"
 
 nucmer -maxmatch "${genomes_folder}/$(basename ${mag_file%.*}).fasta"  ../all_references.fasta || exit 1
-delta-filter -q out.delta> out.delta.q || exit 1
-show-coords -THrcl out.delta.q > out.coords || exit 1
+show-coords -THrcl out.delta > out.coords || exit 1
 
 
 if [ "$input_type" == "GBK" ]; then
@@ -309,29 +307,40 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 	if [ -d "${output_folder}/03_gris/clustered/" ] && [ "$(ls -A ${output_folder}/03_gris/clustered/)" ]; then
 		cat ${output_folder}/03_gris/clustered/*GRI*.fasta > all-gris.fasta
 		
-		echo "running bwa..."
-		spades-bwa index all-gris.fasta || exit 1 
+		echo "running bowtie2 --very-sensitive ..." 
+		bowtie2-build all-gris.fasta all-gris || exit 1
+	
+		all_raw_reads_unpaired=""
 		if  [ "${#raw_data_files_unpaired[@]}" -gt 0 ]; then
-			for i in "${!raw_data_files_unpaired[@]}"
+			for raw_data_unpaired in "${raw_data_files_unpaired[@]}"
 			do
-				spades-bwa mem -a -v 1 -t ${num_threads} all-gris.fasta $raw_reads_folder${raw_data_files_unpaired[i]}  | samtools view -b -F 4  - | samtools sort - > result_unpaired$i.bam || exit 1 
+				all_raw_reads_unpaired="$raw_reads_folder$raw_data_unpaired,$all_raw_reads_unpaired"
 			done
+			all_raw_reads_unpaired=" -U $all_raw_reads_unpaired"
 		fi
 	
+		all_raw_reads_1=""
+		all_raw_reads_2=""
 		if [ "${#raw_data_files_r1[@]}" -gt 0 ]; then
 			for i in "${!raw_data_files_r1[@]}"
 			do
-				spades-bwa mem -a -v 1 -t ${num_threads} all-gris.fasta $raw_reads_folder${raw_data_files_r1[i]} $raw_reads_folder${raw_data_files_r2[i]}  | samtools view -b -F 4 - | samtools sort - > result_paired$i.bam || exit 1 
+				all_raw_reads_1="$raw_reads_folder${raw_data_files_r1[i]},$all_raw_reads_1"
+				all_raw_reads_2="$raw_reads_folder${raw_data_files_r2[i]},$all_raw_reads_2"
 			done
+			all_raw_reads_1=" -1 $all_raw_reads_1"
+			all_raw_reads_2=" -2 $all_raw_reads_2"
 		fi
-		
+		bowtie2 -a -x all-gris $all_raw_reads_unpaired $all_raw_reads_1 $all_raw_reads_2 -S result.sam -p ${num_threads} --no-unal --very-sensitive || exit 1
+	
 		echo "running samtools..." 
-		samtools merge result.bam result_*.bam || exit 1
-		#rm -f result_*.bam || exit 1
-		samtools coverage --ff 0 -H result.bam > result.coverage || exit 1
+		samtools view -bS result.sam > result.bam || exit 1
+		samtools sort result.bam -o result.sorted.bam || exit 1
+	
+		samtools coverage --ff 0 -H result.sorted.bam > result.coverage || exit 1
 	
 		mkdir reads
 		samtools sort -n result.bam -o result.sorted-n.bam || exit 1
+		rm -f result.bam result.sam
 		samtools fastq -0 reads/reads_unpaired.fastq -1 reads/reads_1.fastq -2 reads/reads_2.fastq -s reads/reads_unpaired_discordant.fastq result.sorted-n.bam || exit 1
 		#Beta/Alpha functionality
 		if [ "$(prop 'execute_mag_improve')" == "true" ]; then
@@ -345,29 +354,16 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 			cd 08_mag_improve
 			echo "running bowtie2..." 
 			original_mag_file=$(prop 'mag_file')
-			cp ${output_folder}/00_converted_genomes/$(basename ${original_mag_file%.*}).fasta .
-			spades-bwa index $(basename ${original_mag_file%.*}).fasta
+			bowtie2-build ${output_folder}/00_converted_genomes/$(basename ${original_mag_file%.*}).fasta original_mag_file || exit 1
+			bowtie2 -x original_mag_file $all_raw_reads_unpaired $all_raw_reads_1 $all_raw_reads_2 -S magfile.sam -p ${num_threads} --no-unal --very-sensitive || exit 1
 			
-			if  [ "${#raw_data_files_unpaired[@]}" -gt 0 ]; then
-				for raw_data_unpaired in "${!raw_data_files_unpaired[@]}"
-				do
-					spades-bwa mem -v 1 -t ${num_threads} $(basename ${original_mag_file%.*}).fasta $raw_reads_folder${raw_data_files_unpaired[i]}  | samtools view  -b -F 4 - | samtools sort -n - > result_unpaired$i.bam || exit 1 
-				done
-			fi
-		
-			if [ "${#raw_data_files_r1[@]}" -gt 0 ]; then
-				for i in "${!raw_data_files_r1[@]}"
-				do
-					spades-bwa mem -v 1 -t ${num_threads} $(basename ${original_mag_file%.*}).fasta $raw_reads_folder${raw_data_files_r1[i]} $raw_reads_folder${raw_data_files_r2[i]} | samtools view  -b -F 4 - | samtools sort -n - > result_paired$i.bam || exit 1 
-				done
-			fi
-				
 			echo "running samtools..." 
-			samtools merge -n result.bam result_*.bam || exit 1
-			#rm -f result_*.bam || exit 1
-
+			samtools view -bS magfile.sam > magfile.bam || exit 1
+			samtools sort -n magfile.bam -o magfile.sorted-n.bam || exit 1
+			samtools merge -n merged.bam magfile.sorted-n.bam ../07_magcheck/result.sorted-n.bam
+			rm -f magfile.bam magfile.sam  magfile.sorted-n.bam
 			mkdir reads
-			samtools fastq -0 reads/reads_unpaired.fastq -1 reads/reads_1.fastq -2 reads/reads_2.fastq -s reads/reads_unpaired_discordant.fastq result.bam || exit 1
+			samtools fastq -0 reads/reads_unpaired.fastq -1 reads/reads_1.fastq -2 reads/reads_2.fastq -s reads/reads_unpaired_discordant.fastq merged.bam || exit 1
 			
 			inputs_spades=""
 			if [ -s reads/reads_unpaired.fastq ]; then
@@ -382,21 +378,8 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 				inputs_spades="$inputs_spades --pe-s 1 reads/reads_unpaired_discordant.fastq "
 			fi 
 
-			if [ -s ../07_magcheck/reads/reads_unpaired.fastq ]; then
-				inputs_spades="$inputs_spades --s 2 ../07_magcheck/reads/reads_unpaired.fastq "
-			fi 
-			
-			if [ -s ../07_magcheck/reads/reads_1.fastq ]; then
-				inputs_spades="$inputs_spades --pe-1 2 ../07_magcheck/reads/reads_1.fastq --pe-2 2 ../07_magcheck/reads/reads_2.fastq "
-			fi 
-			
-			if [ -s ../07_magcheck/reads/reads_unpaired_discordant.fastq ]; then
-				inputs_spades="$inputs_spades --pe-s 2 ../07_magcheck/reads/reads_unpaired_discordant.fastq "
-			fi 
-
-			
 			echo "running spades... parameters: $inputs_spades" 
-			spades.py ${inputs_spades} -o spades -t ${num_threads} || exit 1
+			spades.py ${inputs_spades} -o spades -t ${num_threads} $(prop 'mag_improve_spades_extra_parameters') || exit 1
 	
 			#creating input files to run magset for fixed fasta file
 			mkdir input
@@ -416,7 +399,7 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 	
 			reference_genome_files_fasta=""
 			for genome in "${reference_genome_files[@]}"; do
-				if ["${reference_genome_files_fasta}" == ""]; then
+				if [ "${reference_genome_files_fasta}" == "" ]; then
 					reference_genome_files_fasta="$(basename ${genome%.*}).fasta"
 				else
 		    		reference_genome_files_fasta="${reference_genome_files_fasta},$(basename ${genome%.*}).fasta"
