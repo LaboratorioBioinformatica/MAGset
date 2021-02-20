@@ -5,14 +5,14 @@ $( document ).ready(function() {
 
 function createTable(){
 	var table = $('#dataTable');
-	var headLine = '<tr><th>Locus tag</th><th>Type</th><th>Product</th><th>Protein ID</th><th>Start position</th><th>End position</th><th>Strand</th><th>Parent</th><th>Core</th><th>Shared</th><th>Specific</th><th>RGI name</th><th>COG ID</th><th>COG Description</th><th>CAZy Codes</th></tr>';
+	var headLine = '<tr><th>Locus tag</th><th>Type</th><th>Product</th><th>Protein ID</th><th>Start position</th><th>End position</th><th>Strand</th><th>Parent</th><th>Core</th><th>Shared</th><th>Specific</th><th>RGI name</th><th>COG ID</th><th>COG Description</th><th>CAZy Codes</th><th>Found by MAGcheck</th></tr>';
 	table.children('thead').append(headLine);	
 	table.children('tfoot').append(headLine);	
 	var tbody = table.children('tbody');
 	var lines = matrixGenes;
 	lines.forEach(function (item, indice, array) {
 		var tr = '<tr>';
-		if (item.magCheckAlert){
+		if (item.foundByMAGcheck){
 			tr ='<tr class="table-warning" data-toggle="tooltip" title="MAGCheck found this GRI (genomic region of interest) in raw data." >'; 
 		}
 		line = tr +	'<td>' 
@@ -30,7 +30,8 @@ function createTable(){
 			+ item.rgiName + '</td><td>'
 			+ item.cogId+ '</td><td>'
 			+ item.cogName + '</td><td>'
-			+ item.cazyCodes + '</td></tr>';
+			+ item.cazyCodes + '</td><td>'
+			+ item.foundByMAGcheck + '</td></tr>';
 		
 		tbody.append(line);
 	});

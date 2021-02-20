@@ -340,7 +340,7 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 	
 		mkdir reads
 		samtools sort -n result.bam -o result.sorted-n.bam || exit 1
-		rm -f result.bam result.sam
+		rm -f result.bam result.sam result.sorted.bam
 		samtools fastq -0 reads/reads_unpaired.fastq -1 reads/reads_1.fastq -2 reads/reads_2.fastq -s reads/reads_unpaired_discordant.fastq result.sorted-n.bam || exit 1
 		#Beta/Alpha functionality
 		if [ "$(prop 'execute_mag_improve')" == "true" ]; then

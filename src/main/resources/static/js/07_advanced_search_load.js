@@ -26,10 +26,11 @@ $( document ).ready(function() {
 			{ title: "GRI ID", data: "rgiName" },
 			{ title: "COG dode", data: "cogId" },
 			{ title: "COG description", data: "cogName" },
-			{ title: "CAZy codes", data: "cazyCodes" }
+			{ title: "CAZy codes", data: "cazyCodes" },
+			{ title: "Found by MAGcheck", data: "foundByMAGcheck" }
 		],
 		 "createdRow": function ( row, data, index ) {
-			 if(data.magCheckAlert){
+			 if(data.foundByMAGcheck == 'true'){
                $(row).addClass('table-warning');
                $(row).attr('data-toggle','tooltip');
                $(row).attr('title','MAGCheck found this GRI (genomic region of interest) in raw data.');
@@ -193,11 +194,6 @@ function executeFilters(){
 				return false;
 			});
 		}
-		console.log("subFilteredGenes: " + subFilteredGenes.length);
-		console.log("filteredGenes: " + filteredGenes.length);
-		console.log("item.filterType: " + item.filterType);
-		console.log("item.filterContent: " + item.filterContent);
-		console.log("item.filterField: " + item.filterField);
 		
 		if (item.filterType === 'add'){
 			filteredGenes = filteredGenes.concat(subFilteredGenes.filter(function(i) {
@@ -212,7 +208,6 @@ function executeFilters(){
 				  return subFilteredGenes.indexOf(i) > -1;
 			});
 		}
-		console.log("filteredGenes: " + filteredGenes.length);
 		
 	});	
 }
@@ -235,7 +230,8 @@ var fieldsDescription = {
 		rgiName:'GRI ID',
 		cogId:'COG code',
 		cogName:'COG description',
-		cazyCodes:'cazy codes'
+		cazyCodes:'cazy codes',
+		foundByMAGcheck:'found by MAGcheck'
 };
 
 var comparatorDescription = { 

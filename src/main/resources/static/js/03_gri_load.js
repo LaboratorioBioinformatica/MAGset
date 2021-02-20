@@ -16,6 +16,7 @@ function createTable(){
 		+ '<th>Covered positions</th>'
 		+ '<th>Covered positions (%)</th>'
 		+ '<th>Mean depth</th>'
+		+ '<th>Found by MAGcheck</th>'
 		+ '</tr>';
 	table.children('thead').append(headLine);	
 	table.children('tfoot').append(headLine);	
@@ -27,7 +28,7 @@ function createTable(){
 			magClass = 'table-mag-class';
 		}
 		var tr = '<tr>';
-		if (item.magCheckAlert){
+		if (item.foundByMAGcheck){
 			tr ='<tr class="table-warning" data-toggle="tooltip" title="MAGCheck found this GRI (genomic region of interest) in raw data." >'; 
 		}
 		
@@ -41,6 +42,7 @@ function createTable(){
 		+ '</td><td>' + (magCheckExecuted?item.coveredPositions.toLocaleString('en-US'):'N/A')
 		+ '</td><td>' + (magCheckExecuted?item.coverage.toFixed(2):'N/A')
 		+ '</td><td>' + (magCheckExecuted?item.meanDepth.toFixed(2):'N/A')
+		+ '</td><td>' + (magCheckExecuted?item.foundByMAGcheck:'N/A')
 		+ '</td></tr>';
 		
 		tbody.append(line);

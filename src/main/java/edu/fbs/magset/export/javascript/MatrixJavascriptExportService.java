@@ -39,7 +39,7 @@ public class MatrixJavascriptExportService {
 						+ geneMatrix.getGene().getMax() + ", '" //
 						+ geneMatrix.getGene().getStrand() + "', '" //
 						+ defaultString(geneMatrix.getGene().getParent()) + "', '" //
-						+ geneMatrix.getPangenomeGene().getGeneName() + "', '" //
+						+ escapeEspecialCharacters(geneMatrix.getPangenomeGene().getGeneName()) + "', '" //
 						+ geneMatrix.getPangenomeGene().isCore(genesByGenome.size()) + "', '" //
 						+ geneMatrix.getPangenomeGene().isShared(genesByGenome.size()) + "', '" //
 						+ geneMatrix.getPangenomeGene().isSpecific() + "', '" //
@@ -53,11 +53,11 @@ public class MatrixJavascriptExportService {
 						+ (geneMatrix.getCazyAnnotation() != null
 								? escapeEspecialCharacters(geneMatrix.getCazyAnnotation().getCazyCodes())
 								: "")
-						+ "',"
+						+ "','"
 						+ (geneMatrix.getGriGenome() != null
 								? geneMatrix.getGriGenome().foundInRawData(genocom.getConfigurations())
 								: "false") //
-						+ "));");
+						+ "'));");
 			}
 			lines.add("});");
 			Files.write(Paths.get(javascriptOutputFolder + "06_matrix_" + genome.getName() + "_data.js"), lines,

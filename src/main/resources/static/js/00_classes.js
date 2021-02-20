@@ -35,7 +35,7 @@ class PangenomeGene {
 }
 
 class GRI {
-    constructor(id, genomeName, sequenceName, size, start, end, genesQty, coveredPositions, coverage, meanDepth, magCheckAlert) {
+    constructor(id, genomeName, sequenceName, size, start, end, genesQty, coveredPositions, coverage, meanDepth, foundByMAGcheck) {
         this.id = id;
         this.genomeName = genomeName;
         this.sequenceName = sequenceName;
@@ -46,7 +46,7 @@ class GRI {
         this.coveredPositions = coveredPositions;
         this.coverage = coverage;
         this.meanDepth = meanDepth;
-        this.magCheckAlert = magCheckAlert;
+        this.foundByMAGcheck = foundByMAGcheck;
     }
 }
 
@@ -81,7 +81,7 @@ class CazyGene {
 }
 
 class MatrixGene {
-    constructor(genomeName, locusTag, type, product, proteinId, min, max, strand, parent, pangenomeGeneName, core, shared, specific, rgiName, cogId, cogName, cazyCodes, magCheckAlert) {
+    constructor(genomeName, locusTag, type, product, proteinId, min, max, strand, parent, pangenomeGeneName, core, shared, specific, rgiName, cogId, cogName, cazyCodes, foundByMAGcheck) {
         this.genomeName = genomeName;
         this.type = type;
         this.locusTag = locusTag;
@@ -99,7 +99,7 @@ class MatrixGene {
         this.cogId = cogId;
         this.cogName = cogName;
         this.cazyCodes = cazyCodes;
-        this.magCheckAlert = magCheckAlert;
+        this.foundByMAGcheck = foundByMAGcheck;
     }
 }
 

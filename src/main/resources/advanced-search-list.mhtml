@@ -35,6 +35,7 @@
 						<option value="cogId">COG Code</option>
 						<option value="cogName">COG Name</option>
 						<option value="cazyCodes">CAZy codes</option>
+						<option value="foundByMAGcheck">Found by MAGcheck</option>
 					</select>
                   </div>
 				  <div class="col-lg-2 mb-3 mb-lg-0">
