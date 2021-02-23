@@ -54,7 +54,7 @@ RUN curl -O http://bcb.unl.edu/dbCAN2/download/Databases/CAZyDB.07312019.fa && d
     && curl -O http://bcb.unl.edu/dbCAN2/download/Databases/stp.hmm && hmmpress stp.hmm
 
 WORKDIR /programs
-RUN curl -O https://ufpr.dl.sourceforge.net/project/bbmap/BBMap_38.86.tar.gz
+RUN curl -O https://phoenixnap.dl.sourceforge.net/project/bbmap/BBMap_38.86.tar.gz
 RUN tar xvfz BBMap_38.86.tar.gz
 
 COPY magset.sh /programs/magset.sh

@@ -406,7 +406,7 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 	    		fi
 			done
 	
-			echo "title=${title} after improved" >> conf.properties
+			echo "title=${title} after reassembly" >> conf.properties
 			echo "genomes_folder=${output_folder}/08_mag_improve/input" >> conf.properties
 			echo "output_folder=${output_folder}/08_mag_improve/" >> conf.properties
 			echo "mag_file=$(basename ${original_mag_file%.*}).improved.fasta" >> conf.properties
@@ -450,11 +450,11 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 			
 			/programs/magset.sh ${output_folder}/08_mag_improve/conf.properties || exit 1
 	
-			if [ -d "${output_folder}/result_after_improved" ]; then
-				mv -f ${output_folder}/result_after_improved ${output_folder}/result_after_improved.$date_string
+			if [ -d "${output_folder}/result_after_reassembly" ]; then
+				mv -f ${output_folder}/result_after_reassembly ${output_folder}/result_after_reassembly.$date_string
 			fi
 	
-			mv result ../result_after_improved
+			mv result ../result_after_reassembly
 		fi
 	else
 		echo "GRIs not found, MAGcheck ignored."
