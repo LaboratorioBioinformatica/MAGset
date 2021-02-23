@@ -37,7 +37,7 @@ function loadSummaryGeneTable(){
 
 function loadSummaryGRITable(){
 	var table = $('#summaryGRITable');
-	var headLine = '<tr><th></th><th>Genome size (bp)</th><th>GRI Qty</th>><th>Sum of GRIs size</th><th>Genes in RGIs</th></tr>';
+	var headLine = '<tr><th></th><th>Genome size (bp)</th><th>GRI Qty</th>><th>Sum of GRIs size</th><th>Genes in GRIs</th></tr>';
 	table.children('thead').append(headLine);	
 	var tbody = table.children('tbody');
 	var lines = summaryResults;

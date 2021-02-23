@@ -5,7 +5,7 @@ $( document ).ready(function() {
 
 function createTable(){
 	var table = $('#dataTable');
-	var headLine = '<tr><th>Locus tag</th><th>Type</th><th>Product</th><th>Protein ID</th><th>Start position</th><th>End position</th><th>Strand</th><th>Parent</th><th>Core</th><th>Shared</th><th>Specific</th><th>RGI name</th><th>COG ID</th><th>COG Description</th><th>CAZy Codes</th><th>Found by MAGcheck</th></tr>';
+	var headLine = '<tr><th>Locus tag</th><th>Type</th><th>Product</th><th>Protein ID</th><th>Start position</th><th>End position</th><th>Strand</th><th>Parent</th><th>Core</th><th>Shared</th><th>Specific</th><th>GRI name</th><th>COG ID</th><th>COG Description</th><th>CAZy Codes</th><th>Found by MAGcheck</th></tr>';
 	table.children('thead').append(headLine);	
 	table.children('tfoot').append(headLine);	
 	var tbody = table.children('tbody');
