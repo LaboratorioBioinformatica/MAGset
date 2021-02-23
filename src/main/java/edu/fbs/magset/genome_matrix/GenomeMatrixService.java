@@ -10,6 +10,7 @@ import edu.fbs.magset.cog.COGAnnotation;
 import edu.fbs.magset.genome.Gene;
 import edu.fbs.magset.genome_file.GenomeFile;
 import edu.fbs.magset.genomic_region_interest.GenomeSegment;
+import edu.fbs.magset.pangenome.NonconsideredPangenomeGene;
 import edu.fbs.magset.pangenome.PangenomeGene;
 
 public class GenomeMatrixService {
@@ -41,7 +42,8 @@ public class GenomeMatrixService {
 				pangenomeId = genocom.getPangenome().getReplacedIdInPangenome(genomeFile, locusTag);
 			}
 			if (pangenomeGene == null) {
-				continue;
+				pangenomeGene = new NonconsideredPangenomeGene();
+				pangenomeId = "-";
 			}
 
 			GenomeSegment gri = genocom.getGenomicRegionsOfInterest().getGenomicRegionByGene(genomeFile, locusTag);
