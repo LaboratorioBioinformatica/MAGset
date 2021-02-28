@@ -23,17 +23,15 @@ function createTable(){
 	var tbody = table.children('tbody');
 	var lines = gris;
 	lines.forEach(function (item) {
-		var magClass = '';
-		if (item.genomeName === magOfInterest){
-			magClass = 'table-mag-class';
-		}
 		var tr = '<tr>';
-		if (item.foundByMAGcheck){
+		if (item.genomeName === magOfInterest){
+			tr ='<tr class="table-success">';
+		}else if (item.foundByMAGcheck){
 			tr ='<tr class="table-warning" data-toggle="tooltip" title="MAGCheck found this GRI (genomic region of interest) in raw data." >'; 
 		}
 		
 		line = tr + '<td>' + item.id 
-		+ '</td><td class=\'' + magClass + '\'>' + item.genomeName
+		+ '</td><td>' + item.genomeName
 		+ '</td><td>' + item.sequenceName 
 		+ '</td><td>' + item.size.toLocaleString('en-US') 
 		+ '</td><td>' + item.start.toLocaleString('en-US') 
