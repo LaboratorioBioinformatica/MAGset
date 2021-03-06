@@ -223,6 +223,7 @@ var fieldsDescription = {
 		genomeName:'genome',
 		locusTag:'locus tag',
 		proteinId:'protein ID',
+		product:'product',
 		strand:'strand',
 		core:'gene core',
 		shared:'gene shared',

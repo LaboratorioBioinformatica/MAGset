@@ -26,6 +26,7 @@
                     <select id="filterField" class="form-control">
 						<option value="genomeName">Genome</option>
 						<option value="locusTag">Locus tag</option>
+						<option value="product">Product</option>
 						<option value="proteinId">Protein ID</option>
 						<option value="strand">Strand</option>
 						<option value="core">Gene core</option>
