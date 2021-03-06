@@ -35,10 +35,10 @@ RUN conda install -y -c bioconda roary=3.13.0
 RUN conda install -y -c bioconda diamond=0.9.24 hmmer=3.1b2 prodigal=2.6.3
 RUN conda install -y -c bioconda java-jdk=8.0.112
 RUN conda install -y -c bioconda mummer=3.23
-RUN conda install -y -c bioconda bowtie2=2.4.1
+RUN conda install -y -c bioconda bowtie2=2.4.2
 RUN conda install -y -c bioconda samtools=1.10
 RUN conda install -y -c bioconda emboss=6.6.0 
-RUN conda install -y -c bioconda spades=3.14.1
+RUN conda install -y -c bioconda spades=3.15.0
 
 RUN gem install sqlite3-ruby
 RUN pip install run-dbcan==2.0.6 
