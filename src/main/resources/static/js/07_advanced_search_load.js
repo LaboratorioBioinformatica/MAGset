@@ -17,6 +17,7 @@ $( document ).ready(function() {
 		    { title: "Type", data: "type" },
 		    { title: "Product", data: "product" },
 		    { title: "Protein ID", data: "proteinId" },
+		    { title: "Parent", data: "parent" },
 		    { title: "Start position", data: "min" },
 			{ title: "End position", data: "max" },
 			{ title: "Strand", data: "strand" },
