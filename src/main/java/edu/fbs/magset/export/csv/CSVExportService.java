@@ -95,8 +95,7 @@ public class CSVExportService {
 	}
 
 	private void exportGRIGeneFiles(GenomesComparator genocom) throws IOException {
-		File outputFolderFile = new File(
-				genocom.getConfigurations().getGriFolder(genocom.getGenomicRegionsOfInterest()) + "/csv/genes_by_gri/");
+		File outputFolderFile = new File(genocom.getConfigurations().getResultFolder() + "/csv/genes_by_gri/");
 		if (!outputFolderFile.exists()) {
 			outputFolderFile.mkdirs();
 		}
@@ -126,8 +125,7 @@ public class CSVExportService {
 	}
 
 	private void exportGenomesMatrix(GenomesComparator genocom) throws IOException {
-		File outputFolderFile = new File(
-				genocom.getConfigurations().getGriFolder(genocom.getGenomicRegionsOfInterest()) + "/csv/genes_matrix/");
+		File outputFolderFile = new File(genocom.getConfigurations().getResultFolder() + "/csv/genes_matrix/");
 		if (!outputFolderFile.exists()) {
 			outputFolderFile.mkdirs();
 		}
