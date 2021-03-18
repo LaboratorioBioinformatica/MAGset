@@ -120,7 +120,7 @@ function executeFilters(){
 
 		if (item.filterComparatorType === 'equals'){
 			subFilteredGenes = matrixGenes.filter(function(subitem) {
-				if (subitem[item.filterField] === item.filterContent){
+				if (subitem[item.filterField].toLowerCase() === item.filterContent.toLowerCase()){
 					return true;
 				}
 				return false;
@@ -129,7 +129,7 @@ function executeFilters(){
 		
 		if (item.filterComparatorType === 'notEquals'){
 			subFilteredGenes = matrixGenes.filter(function(subitem) {
-				if (!(subitem[item.filterField] === item.filterContent)){
+				if (!(subitem[item.filterField].toLowerCase() === item.filterContent.toLowerCase())){
 					return true;
 				}
 				return false;
@@ -139,7 +139,7 @@ function executeFilters(){
 		if (item.filterComparatorType === 'in'){
 			console.log('in filter');
 			subFilteredGenes = matrixGenes.filter(function(subitem) {
-				if (item.filterContent.indexOf(subitem[item.filterField]) != -1 && !(subitem[item.filterField] === '')){
+				if (item.filterContent.toLowerCase().indexOf(subitem[item.filterField].toLowerCase()) != -1 && !(subitem[item.filterField] === '')){
 					return true;
 				}
 				return false;
@@ -149,7 +149,7 @@ function executeFilters(){
 		if (item.filterComparatorType === 'notIn'){
 			console.log('notIn filter');
 			subFilteredGenes = matrixGenes.filter(function(subitem) {
-				if (item.filterContent.indexOf(subitem[item.filterField]) === -1 || subitem[item.filterField] === ''){
+				if (item.filterContent.toLowerCase().indexOf(subitem[item.filterField].toLowerCase()) === -1 || subitem[item.filterField] === ''){
 					return true;
 				}
 				return false;
@@ -159,7 +159,7 @@ function executeFilters(){
 		if (item.filterComparatorType === 'contains'){
 			console.log('contains filter');
 			subFilteredGenes = matrixGenes.filter(function(subitem) {
-				if (subitem[item.filterField].indexOf(item.filterContent) != -1){
+				if (subitem[item.filterField].toLowerCase().indexOf(item.filterContent.toLowerCase()) != -1){
 					return true;
 				}
 				return false;
@@ -169,7 +169,7 @@ function executeFilters(){
 		if (item.filterComparatorType === 'notContains'){
 			console.log('notContains filter');
 			subFilteredGenes = matrixGenes.filter(function(subitem) {
-				if (subitem[item.filterField].indexOf(item.filterContent) === -1){
+				if (subitem[item.filterField].toLowerCase().indexOf(item.filterContent.toLowerCase()) === -1){
 					return true;
 				}
 				return false;
