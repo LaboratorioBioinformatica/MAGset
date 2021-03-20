@@ -25,7 +25,7 @@ public class Genome {
 	private GenomeFile genomeFile;
 	private LinkedHashMap<String, DNASequence> dnaSequence;
 	private LinkedHashMap<String, ProteinSequence> protSequences;
-	private TreeMap<Location, Gene> genesLocationMap;
+	private TreeMap<GeneLocation, Gene> genesLocationMap;
 	private TreeMap<Location, DNASequence> dnaSequenceLocationMap;
 	private long size;
 
@@ -83,7 +83,6 @@ public class Genome {
 	}
 
 	private void loadGenesLocationMap() {
-		int currentPosition = 0;
 
 		genesLocationMap = new TreeMap<>();
 		for (Entry<String, ProteinSequence> proteinSequence : protSequences.entrySet()) {
@@ -95,12 +94,11 @@ public class Genome {
 					continue;
 				}
 				Gene gene = new Gene(proteinSequence.getKey(), feature);
-				gene.setMin(gene.getMin() + currentPosition);
-				gene.setMax(gene.getMax() + currentPosition);
-				Location key = new Location(gene.getMin(), gene.getMax());
+				gene.setMin(gene.getMin());
+				gene.setMax(gene.getMax());
+				GeneLocation key = new GeneLocation(proteinSequence.getKey(), gene.getMin(), gene.getMax());
 				genesLocationMap.put(key, gene);
 			}
-			currentPosition += proteinSequence.getValue().getLength();
 		}
 	}
 
