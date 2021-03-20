@@ -12,7 +12,7 @@ function createTable(){
 	var lines = matrixGenes;
 	lines.forEach(function (item, indice, array) {
 		var tr = '<tr>';
-		if (item.foundByMAGcheck){
+		if (item.foundByMAGcheck == 'true'){
 			tr ='<tr class="table-warning" data-toggle="tooltip" title="MAGCheck found this GRI (genomic region of interest) in raw data." >'; 
 		}
 		line = tr +	'<td>' 
