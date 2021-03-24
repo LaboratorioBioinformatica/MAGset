@@ -28,7 +28,7 @@ public class GRIGenesJavascriptExportService {
 			for (GenomeSegment genomeSegment : gri.getGenomeSegments()) {
 				for (Gene gene : genomeSegment.getGenes()) {
 					lines.add("griGenes.push(new GRIGene('" //
-							+ gri.getName() + "', '" //
+							+ genomeSegment.getNameWithoutGenome() + "', '" //
 							+ genomeSegment.getGenomeFile().getName() + "', '"//
 							+ gene.getType() + "', '" //
 							+ gene.getLocusTag() + "', '"//
