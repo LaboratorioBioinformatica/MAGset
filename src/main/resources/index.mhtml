@@ -157,7 +157,7 @@
 											</tbody>
 										</table>
 									</div>
-									<p id="magCheckFileText">The matched reads can be found at: output_folder/03_gris/magcheck/reads/</p>
+									<p id="magCheckFileText">The matched reads can be found at: ${output_folder}/07_magcheck/reads/</p>
 								</div>
 							</div>
 						</div>
