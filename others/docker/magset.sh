@@ -62,8 +62,7 @@ if [ ! -f "${genomes_folder}/${mag_file}" ]; then
 fi
 echo "mag_file: $mag_file" 
 
-for genome in "${reference_genome_files[@]}"
-do
+for genome in "${reference_genome_files[@]}"; do
 	if [ ! -f "${genomes_folder}/${genome}" ]; then
 		echo "reference genome file $genome not found."
 		exit 1
@@ -75,7 +74,7 @@ do
     echo "reference: $genome "
 done
 
-if [ "$input_type" != "" ]; then
+if [ "$raw_reads_folder" != "" ]; then
 	if [ "${#raw_data_files_r1[@]}" != "${#raw_data_files_r2[@]}" ]; then
 		echo "raw_data_files_r1 and raw_data_files_r2 should have the same number of files."
 		exit 1
@@ -83,22 +82,22 @@ if [ "$input_type" != "" ]; then
 
 	for raw_data_r1 in "${raw_data_files_r1[@]}"
 	do
-		if [ ! -f "$raw_reads_folder$raw_data_r1" ]; then
-			echo "raw_data_r1 $raw_reads_folder$raw_data_r1 not found."
+		if [ ! -f "$raw_reads_folder/$raw_data_r1" ]; then
+			echo "raw_data_r1 $raw_reads_folder/$raw_data_r1 not found."
 			exit 1
 		fi
 	done
 
 	for raw_data_r2 in "${raw_data_files_r2[@]}"; do
-		if [ ! -f "$raw_reads_folder$raw_data_r2" ]; then
-			echo "raw_data_r2 $raw_reads_folder$raw_data_r2 not found."
+		if [ ! -f "$raw_reads_folder/$raw_data_r2" ]; then
+			echo "raw_data_r2 $raw_reads_folder/$raw_data_r2 not found."
 			exit 1
 		fi	
 	done 
 
 	for raw_data_unpaired in "${raw_data_files_unpaired[@]}"; do
-		if [ ! -f "$raw_reads_folder$raw_data_unpaired" ]; then
-			echo "raw_data_unpaired $raw_reads_folder$raw_data_unpaired not found."
+		if [ ! -f "$raw_reads_folder/$raw_data_unpaired" ]; then
+			echo "raw_data_unpaired $raw_reads_folder/$raw_data_unpaired not found."
 			exit 1
 		fi	
 	done
@@ -314,7 +313,7 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 		if  [ "${#raw_data_files_unpaired[@]}" -gt 0 ]; then
 			for raw_data_unpaired in "${raw_data_files_unpaired[@]}"
 			do
-				all_raw_reads_unpaired="$raw_reads_folder$raw_data_unpaired,$all_raw_reads_unpaired"
+				all_raw_reads_unpaired="$raw_reads_folder/$raw_data_unpaired,$all_raw_reads_unpaired"
 			done
 			all_raw_reads_unpaired=" -U $all_raw_reads_unpaired"
 		fi
@@ -324,8 +323,8 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 		if [ "${#raw_data_files_r1[@]}" -gt 0 ]; then
 			for i in "${!raw_data_files_r1[@]}"
 			do
-				all_raw_reads_1="$raw_reads_folder${raw_data_files_r1[i]},$all_raw_reads_1"
-				all_raw_reads_2="$raw_reads_folder${raw_data_files_r2[i]},$all_raw_reads_2"
+				all_raw_reads_1="$raw_reads_folder/${raw_data_files_r1[i]},$all_raw_reads_1"
+				all_raw_reads_2="$raw_reads_folder/${raw_data_files_r2[i]},$all_raw_reads_2"
 			done
 			all_raw_reads_1=" -1 $all_raw_reads_1"
 			all_raw_reads_2=" -2 $all_raw_reads_2"

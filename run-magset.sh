@@ -29,7 +29,14 @@ fi
 
 genomes_folder=$(prop 'genomes_folder');
 output_folder=$(prop 'output_folder');
+mag_file=$(prop 'mag_file');
+IFS=', ' read -r -a reference_genome_files <<< "$(prop 'reference_genome_files')"
+
 raw_reads_folder=$(prop 'raw_reads_folder');
+IFS=', ' read -r -a raw_data_files_r1 <<< "$(prop 'raw_reads_files_r1')"
+IFS=', ' read -r -a raw_data_files_r2 <<< "$(prop 'raw_reads_files_r2')"
+IFS=', ' read -r -a raw_data_files_unpaired <<< "$(prop 'raw_reads_files_unpaired')"
+
 singularity_container_file=$(prop 'singularity_container_file');
 
 if [ ! -d "$genomes_folder" ]
@@ -44,6 +51,57 @@ then
 	mkdir $output_folder
 fi
 echo "output_folder: $output_folder" 
+
+#Check if the files are using symbolic links
+if [[ -L "$genomes_folder" ]]; then
+	echo "genomes folder $genomes_folder is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
+	exit 1
+fi
+if [[ -L "${output_folder}" ]]; then
+	echo "output_folder $output_folder is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
+	exit 1
+fi
+if [[ -L "${genomes_folder}/${mag_file}" ]]; then
+	echo "mag_file ${genomes_folder}/${mag_file} is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
+	exit 1
+fi
+
+for genome in "${reference_genome_files[@]}"
+do
+	if [[ -L "${genomes_folder}/${genome}" ]]; then
+		echo "reference genome file $genome is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
+		exit 1
+	fi
+done
+
+if [ "$raw_reads_folder" != "" ]; then
+
+	if [[ -L "${raw_reads_folder}" ]]; then
+		echo "raw_reads_folder $raw_reads_folder is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
+		exit 1
+	fi
+	
+	for raw_data_r1 in "${raw_data_files_r1[@]}"; do
+		if [[ -L "$raw_reads_folder/$raw_data_r1" ]]; then
+			echo "raw_data_r1 $raw_reads_folder/$raw_data_r1 is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
+			exit 1
+		fi
+	done
+
+	for raw_data_r2 in "${raw_data_files_r2[@]}"; do
+		if [[ -L "$raw_reads_folder/$raw_data_r2" ]]; then
+			echo "raw_data_r2 $raw_reads_folder/$raw_data_r2 is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
+			exit 1
+		fi	
+	done 
+
+	for raw_data_unpaired in "${raw_data_files_unpaired[@]}"; do
+		if [[ -L "$raw_reads_folder/$raw_data_unpaired" ]]; then
+			echo "raw_data_unpaired $raw_reads_folder/$raw_data_unpaired  is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
+			exit 1
+		fi	
+	done
+fi
 
 date_string=`date "+%Y%m%d%H%M%S"`
 
