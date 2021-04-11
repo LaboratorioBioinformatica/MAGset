@@ -122,7 +122,7 @@ then
 		echo "raw reads folder $raw_reads_folder not found."
 		exit 1
 	fi
-	
+	echo "raw_reads_folder: $raw_reads_folder."
 	container_volume_raw_reads_folder_docker=" -v $raw_reads_folder:/raw_data/ "
 	container_volume_raw_reads_folder_singularity=",$raw_reads_folder:/raw_data/"
 	

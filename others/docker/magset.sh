@@ -49,22 +49,20 @@ if [ ! -d "$genomes_folder" ]; then
 	echo "genomes folder $genomes_folder not found."
 	exit 1
 fi
-echo "genomes_folder: $genomes_folder" 
 
 if [ ! -d "${output_folder}" ]; then
 	mkdir ${output_folder}
 fi
-echo "output_folder: ${output_folder}" 
 
 if [ ! -f "${genomes_folder}/${mag_file}" ]; then
-	echo "mag_file ${genomes_folder}/${mag_file} not found."
+	echo "mag_file ${mag_file} not found in genomes_folder."
 	exit 1
 fi
 echo "mag_file: $mag_file" 
 
 for genome in "${reference_genome_files[@]}"; do
 	if [ ! -f "${genomes_folder}/${genome}" ]; then
-		echo "reference genome file $genome not found."
+		echo "reference genome file $genome not found in genomes_folder."
 		exit 1
 	fi
 	if [ "${genome}" == "${mag_file}" ]; then
@@ -83,21 +81,21 @@ if [ "$raw_reads_folder" != "" ]; then
 	for raw_data_r1 in "${raw_data_files_r1[@]}"
 	do
 		if [ ! -f "$raw_reads_folder/$raw_data_r1" ]; then
-			echo "raw_data_r1 $raw_reads_folder/$raw_data_r1 not found."
+			echo "raw_data_r1 $raw_data_r1 not found."
 			exit 1
 		fi
 	done
 
 	for raw_data_r2 in "${raw_data_files_r2[@]}"; do
 		if [ ! -f "$raw_reads_folder/$raw_data_r2" ]; then
-			echo "raw_data_r2 $raw_reads_folder/$raw_data_r2 not found."
+			echo "raw_data_r2 $raw_data_r2 not found."
 			exit 1
 		fi	
 	done 
 
 	for raw_data_unpaired in "${raw_data_files_unpaired[@]}"; do
 		if [ ! -f "$raw_reads_folder/$raw_data_unpaired" ]; then
-			echo "raw_data_unpaired $raw_reads_folder/$raw_data_unpaired not found."
+			echo "raw_data_unpaired $raw_data_unpaired not found."
 			exit 1
 		fi	
 	done
