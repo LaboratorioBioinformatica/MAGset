@@ -199,7 +199,7 @@ if [ "$input_type" == "GBK" ]; then
 
 	roary -f results_roary -e -n -v -p ${num_threads} ${output_folder}/00_converted_genomes/*.gff || exit 1
 	cd results_roary
-	fasttree -nt -gtr core_gene_alignment.aln > core_gene_alignment.nwk || exit 1
+	fasttree -boot 100 -nt -gtr core_gene_alignment.aln > core_gene_alignment.nwk || exit 1
 	python /programs/Roary/contrib/roary_plots/roary_plots.py --labels core_gene_alignment.nwk gene_presence_absence.csv || exit 1
 fi
 
