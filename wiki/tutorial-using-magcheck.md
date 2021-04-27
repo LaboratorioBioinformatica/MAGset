@@ -1,5 +1,5 @@
 # Tutorial - Running MAGset with MAGcheck
-<p>In this tutorial, we will use very small sample genomes and very small raw data to demonstrate how MAGcheck works. MAGcheck allows you to identify negative GRIs (genomic regions of interest) in raw data. Please read the MAGset article for more details. </p>
+<p>In this tutorial, we will use very small sample genomes and very small raw data to demonstrate how MAGcheck works. MAGcheck allows you to identify negative GRIs (genomic regions of interest) in raw data. </p>
 
 * [Install MAGset](How-to-install.md)
 * [Download the test data](test-data-magcheck.tar.gz) <br/>
@@ -15,6 +15,7 @@ Example of conf.properties, considering the genomes folder is at /home/fabiosanc
 `num_threads=8`<br/>
 `mag_file=MAG.fasta`<br/>
 `reference_genome_files=REF_A.fasta,REF_B.fasta`<br/>
+`input_type=FASTA`<br/>
 `raw_reads_folder=/mnt/c/Projetos/Mestrado/magset-export/others/samples/small-fasta/raw-data/`<br/>
 `raw_reads_files_unpaired=reads.fastq`
     * This example is using unpaired reads, if you have paired reads please look at [Parameters](Parameters.md) page, properties `raw_reads_files_r1` and `raw_reads_files_r2`.

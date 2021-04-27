@@ -1,5 +1,5 @@
 # Quick start - Running MAGset with .fasta input
-<p>In this tutorial we will use very small sample genomes to demonstrate how MAGset works. All genomes are fasta files . Some results are generated just if the input are GenBank genome files. After this quick start, please read our tutorial with GenBank files too.</p>
+<p>In this tutorial we will use very small sample genomes to demonstrate how MAGset works. All genome files in this example are in FASTA format. Some results are generated just if the genome files are in GenBank format. After this quick start, please read our tutorial with GenBank files too.</p>
 
 * [Install MAGset](How-to-install.md)
 * [Download the test data](test-data-quick-start.tar.gz) <br/>
@@ -14,7 +14,9 @@ Example of conf.properties, considering the genomes folder is at /home/fabiosanc
 `output_folder=/home/fabiosanchez/magset/test/output/`<br/>
 `num_threads=8`<br/>
 `mag_file=MAG.fasta`<br/>
-`reference_genome_files=REF_A.fasta,REF_B.fasta`
+`reference_genome_files=REF_A.fasta,REF_B.fasta`<br/>
+`input_type=FASTA`
+
 
 * Run MAGset script<br/>
 To run the script, just execute the main script and inform the path of the conf.properties file as first parameter: 
