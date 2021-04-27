@@ -36,7 +36,7 @@ The tables below show some examples of time/memory consumption, using Ubuntu 20.
 
 |   | FASTA without MAGcheck | FASTA with MAGcheck | GBK without MAGcheck | GBK with MAGcheck |
 |---|---|---|---|---|
-|Time (hh:mm)| 00:05 | 45:00 | 01:00 | 01:45 |
+|Time (hh:mm)| 00:05 | 00:45 | 01:00 | 01:45 |
 |Memory| 600MB | 600MB | 3.5 GB	| 3.5 GB |
 
 * **Data:**
