@@ -28,7 +28,7 @@ $( document ).ready(function() {
 			{ title: "COG dode", data: "cogId" },
 			{ title: "COG description", data: "cogName" },
 			{ title: "CAZy codes", data: "cazyCodes" },
-			{ title: "Found by MAGcheck", data: "foundByMAGcheck" }
+			{ title: "GRI found by MAGcheck", data: "foundByMAGcheck" }
 		],
 		 "createdRow": function ( row, data, index ) {
 			 if(data.foundByMAGcheck == 'true'){
@@ -233,7 +233,7 @@ var fieldsDescription = {
 		cogId:'COG code',
 		cogName:'COG description',
 		cazyCodes:'cazy codes',
-		foundByMAGcheck:'found by MAGcheck'
+		foundByMAGcheck:'GRI found by MAGcheck'
 };
 
 var comparatorDescription = { 
