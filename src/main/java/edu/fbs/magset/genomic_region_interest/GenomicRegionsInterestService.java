@@ -138,7 +138,7 @@ public class GenomicRegionsInterestService {
 
 				if (current.getReferenceMatchStart() - previous.getReferenceMatchEnd() + 1 > genocom.getConfigurations()
 						.getMinimumGRISize()) {
-					GenomeSegment genomeSegment = new GenomeSegment(genomeFile, sequenceName,
+					GenomeSegment genomeSegment = new GenomeSegment(genomeFile, sequenceName, dnaSequence.getDNAType(),
 							previous.getReferenceMatchEnd() + 1, current.getReferenceMatchStart());
 					GenomicRegionInterest gri = new GenomicRegionInterest(type, genomeSegment);
 					result.add(gri);

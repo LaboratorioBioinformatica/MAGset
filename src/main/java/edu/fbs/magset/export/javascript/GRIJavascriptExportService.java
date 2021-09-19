@@ -33,7 +33,8 @@ public class GRIJavascriptExportService {
 						+ ", " + genomeSegment.getReadsCoverage().getCoverage() //
 						+ ", " + genomeSegment.getReadsCoverage().getMeanDepth() //
 						+ ", " + genomeSegment.getReadsCoverage().foundInRawData(genocom.getConfigurations()) //
-						+ "));");
+						+ ", '" + genomeSegment.getComments() //
+						+ "'));");
 			}
 		}
 		lines.add("});");

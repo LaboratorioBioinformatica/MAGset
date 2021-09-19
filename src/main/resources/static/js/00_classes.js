@@ -35,7 +35,7 @@ class PangenomeGene {
 }
 
 class GRI {
-    constructor(id, genomeName, sequenceName, size, start, end, genesQty, coveredPositions, coverage, meanDepth, foundByMAGcheck) {
+    constructor(id, genomeName, sequenceName, size, start, end, genesQty, coveredPositions, coverage, meanDepth, foundByMAGcheck, comments) {
         this.id = id;
         this.genomeName = genomeName;
         this.sequenceName = sequenceName;
@@ -47,6 +47,7 @@ class GRI {
         this.coverage = coverage;
         this.meanDepth = meanDepth;
         this.foundByMAGcheck = foundByMAGcheck;
+        this.comments = comments;
     }
 }
 

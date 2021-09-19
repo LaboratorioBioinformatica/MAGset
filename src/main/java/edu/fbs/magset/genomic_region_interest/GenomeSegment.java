@@ -3,6 +3,7 @@ package edu.fbs.magset.genomic_region_interest;
 import java.util.Collection;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.biojava.nbio.core.sequence.DNASequence.DNAType;
 
 import edu.fbs.magset.Configurations;
 import edu.fbs.magset.genome.Gene;
@@ -26,13 +27,15 @@ public class GenomeSegment implements Comparable<GenomeSegment> {
 	private int start;
 	@ToString.Include
 	private int end;
+	private DNAType dnaType;
 	private Collection<Gene> genes;
 	private GRIRawReadsCoverage readsCoverage = new GRIRawReadsCoverage();
 
-	public GenomeSegment(GenomeFile genomeFile, String sequenceName, int start, int end) {
+	public GenomeSegment(GenomeFile genomeFile, String sequenceName, DNAType dnaType, int start, int end) {
 		super();
 		this.sequenceName = sequenceName;
 		this.genomeFile = genomeFile;
+		this.dnaType = dnaType;
 		this.start = start;
 		this.end = end;
 	}
@@ -84,12 +87,19 @@ public class GenomeSegment implements Comparable<GenomeSegment> {
 	}
 
 	public static final String[] CSV_HEADER = { "gri_id", "genome_name", "sequence_name", "size", "start", "end",
-			"genes_qty", "covered_positions", "coverage", "mean_depth", "found_in_raw_data" };
+			"genes_qty", "covered_positions", "coverage", "mean_depth", "found_in_raw_data", "comments" };
 
 	@Override
 	public int compareTo(GenomeSegment o) {
 		return new CompareToBuilder().append(genomeFile, o.genomeFile).append(sequenceName, o.sequenceName)
 				.append(start, o.start).append(end, o.end).build();
+	}
+
+	public String getComments() {
+		if (getDnaType().equals(DNAType.PLASMID)) {
+			return "plasmid region";
+		}
+		return "";
 	}
 
 }

@@ -87,7 +87,8 @@ public class CSVExportService {
 						genomeSegment.getReadsCoverage().getCoveredPositions(), //
 						genomeSegment.getReadsCoverage().getCoverage(), //
 						genomeSegment.getReadsCoverage().getMeanDepth(), //
-						genomeSegment.getReadsCoverage().foundInRawData(genocom.getConfigurations()) //
+						genomeSegment.getReadsCoverage().foundInRawData(genocom.getConfigurations()), //
+						genomeSegment.getComments() //
 				);
 			}
 		}

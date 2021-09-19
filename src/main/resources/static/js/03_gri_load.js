@@ -17,6 +17,7 @@ function createTable(){
 		+ '<th>Covered positions (%)</th>'
 		+ '<th>Mean depth</th>'
 		+ '<th>Found by MAGcheck</th>'
+		+ '<th>Comments</th>'
 		+ '</tr>';
 	table.children('thead').append(headLine);	
 	table.children('tfoot').append(headLine);	
@@ -41,6 +42,7 @@ function createTable(){
 		+ '</td><td>' + (magCheckExecuted?item.coverage.toFixed(2):'N/A')
 		+ '</td><td>' + (magCheckExecuted?item.meanDepth.toFixed(2):'N/A')
 		+ '</td><td>' + (magCheckExecuted?item.foundByMAGcheck:'N/A')
+		+ '</td><td>' + item.comments
 		+ '</td></tr>';
 		
 		tbody.append(line);
