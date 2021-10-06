@@ -54,11 +54,17 @@ This parameter is used by MAGcheck module. Defines the paired end raw reads. It 
 Example with two files per parameter:<br/>
 `raw_reads_files_r1=rA_1.fastq,rB_1.fastq`<br/>
 `raw_reads_files_r2=rA_2.fastq,rB_2.fastq`<br/>
+### raw_reads_files_interleaved
+This parameter is used by MAGcheck module. Defines the interleaved raw reads file. It is possible to inform more than one file, separated by comma. These files must be at the raw_reads_folder. Example with just one file:<br/>
+`raw_reads_files_interleaved=reads.fastq`<br/>
+Example with two files:<br/>
+`raw_reads_files_interleaved=reads.fastq,reads2.fastq`<br/>
 ### raw_reads_files_unpaired
-This parameter is used by MAGcheck module. Defines the unpaired end raw reads file. It is possible to inform more than one file, separated by comma. These files must be at the raw_reads_folder. Example with just one file:<br/>
+This parameter is used by MAGcheck module. Defines the unpaired raw reads file. It is possible to inform more than one file, separated by comma. These files must be at the raw_reads_folder. Example with just one file:<br/>
 `raw_reads_files_unpaired=reads.fastq`<br/>
 Example with two files:<br/>
 `raw_reads_files_unpaired=reads.fastq,reads2.fastq`<br/>
+
 ### magcheck_minimal_coverage
 This parameter is used by MAGcheck module. Defines the minimal coverage to consider the GRI exists in raw data. Default value: 0.8. Supported values: Between 0.5 and 0.99. Example:<br/>
 `magcheck_minimal_coverage=0.8`

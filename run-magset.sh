@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-version=1.3.1
+version=1.4.0
  
 function prop {
     grep "^${1}" ${file}|cut -d'=' -f2
@@ -36,6 +36,7 @@ raw_reads_folder=$(prop 'raw_reads_folder');
 IFS=', ' read -r -a raw_data_files_r1 <<< "$(prop 'raw_reads_files_r1')"
 IFS=', ' read -r -a raw_data_files_r2 <<< "$(prop 'raw_reads_files_r2')"
 IFS=', ' read -r -a raw_data_files_unpaired <<< "$(prop 'raw_reads_files_unpaired')"
+IFS=', ' read -r -a raw_data_files_interleaved <<< "$(prop 'raw_reads_files_interleaved')"
 
 singularity_container_file=$(prop 'singularity_container_file');
 
@@ -97,7 +98,14 @@ if [ "$raw_reads_folder" != "" ]; then
 
 	for raw_data_unpaired in "${raw_data_files_unpaired[@]}"; do
 		if [[ -L "$raw_reads_folder/$raw_data_unpaired" ]]; then
-			echo "raw_data_unpaired $raw_reads_folder/$raw_data_unpaired  is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
+			echo "raw_data_unpaired $raw_reads_folder/$raw_data_unpaired is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
+			exit 1
+		fi	
+	done
+	
+	for raw_data_unpaired in "${raw_data_files_interleaved[@]}"; do
+		if [[ -L "$raw_reads_folder/$raw_data_interleaved" ]]; then
+			echo "raw_data_interleaved $raw_reads_folder/$raw_data_interleaved is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
 			exit 1
 		fi	
 	done

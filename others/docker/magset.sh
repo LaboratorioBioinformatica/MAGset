@@ -32,6 +32,7 @@ raw_reads_folder=$(prop 'raw_reads_folder');
 IFS=', ' read -r -a raw_data_files_r1 <<< "$(prop 'raw_reads_files_r1')"
 IFS=', ' read -r -a raw_data_files_r2 <<< "$(prop 'raw_reads_files_r2')"
 IFS=', ' read -r -a raw_data_files_unpaired <<< "$(prop 'raw_reads_files_unpaired')"
+IFS=', ' read -r -a raw_data_files_interleaved <<< "$(prop 'raw_reads_files_interleaved')"
 
 if [ "$title" == "" ]; then
 	echo "property title not found in $properties_file"
@@ -96,6 +97,13 @@ if [ "$raw_reads_folder" != "" ]; then
 	for raw_data_unpaired in "${raw_data_files_unpaired[@]}"; do
 		if [ ! -f "$raw_reads_folder/$raw_data_unpaired" ]; then
 			echo "raw_data_unpaired $raw_data_unpaired not found."
+			exit 1
+		fi	
+	done
+	
+	for raw_data_interleaved in "${raw_data_files_interleaved[@]}"; do
+		if [ ! -f "$raw_reads_folder/$raw_data_interleaved" ]; then
+			echo "raw_data_interleaved $raw_data_interleaved not found."
 			exit 1
 		fi	
 	done
@@ -293,7 +301,7 @@ if [ -d "${output_folder}/03_gris/non_clustered/" ]; then
 else
 	echo "No GRIs found... ignoring clustering step"
 fi
-if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -gt 0 ]; then
+if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -gt 0 ] ||   [ "${#raw_data_files_interleaved[@]}" -gt 0 ]; then
 	echo "starting magchek..." 
 	cd ${output_folder}
 	
@@ -315,6 +323,15 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 			done
 			all_raw_reads_unpaired=" -U $all_raw_reads_unpaired"
 		fi
+		
+		all_raw_reads_interleaved=""
+		if  [ "${#raw_data_files_interleaved[@]}" -gt 0 ]; then
+			for raw_data_interleaved in "${raw_data_files_interleaved[@]}"
+			do
+				all_raw_reads_interleaved="$raw_reads_folder/$raw_data_interleaved,$all_raw_reads_interleaved"
+			done
+			all_raw_reads_interleaved=" --interleaved $all_raw_reads_interleaved"
+		fi
 	
 		all_raw_reads_1=""
 		all_raw_reads_2=""
@@ -327,7 +344,7 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 			all_raw_reads_1=" -1 $all_raw_reads_1"
 			all_raw_reads_2=" -2 $all_raw_reads_2"
 		fi
-		bowtie2 -a -x all-gris $all_raw_reads_unpaired $all_raw_reads_1 $all_raw_reads_2 -S result.sam -p ${num_threads} --no-unal --very-sensitive || exit 1
+		bowtie2 -a -x all-gris $all_raw_reads_unpaired $all_raw_reads_1 $all_raw_reads_2 $all_raw_reads_interleaved -S result.sam -p ${num_threads} --no-unal --very-sensitive || exit 1
 	
 		echo "running samtools..." 
 		samtools view -bS result.sam > result.bam || exit 1
@@ -352,7 +369,7 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 			echo "running bowtie2..." 
 			original_mag_file=$(prop 'mag_file')
 			bowtie2-build ${output_folder}/00_converted_genomes/$(basename ${original_mag_file%.*}).fasta original_mag_file || exit 1
-			bowtie2 -x original_mag_file $all_raw_reads_unpaired $all_raw_reads_1 $all_raw_reads_2 -S magfile.sam -p ${num_threads} --no-unal --very-sensitive || exit 1
+			bowtie2 -x original_mag_file $all_raw_reads_unpaired $all_raw_reads_1 $all_raw_reads_2 $all_raw_reads_interleaved -S magfile.sam -p ${num_threads} --no-unal --very-sensitive || exit 1
 			
 			echo "running samtools..." 
 			samtools view -bS magfile.sam > magfile.bam || exit 1
@@ -418,6 +435,9 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 			fi
 			if [ "${#raw_data_files_unpaired[@]}" -gt 0 ]; then
 				echo "raw_reads_files_unpaired=$(prop 'raw_reads_files_unpaired')" >> conf.properties
+			fi
+			if [ "${#raw_data_files_interleaved[@]}" -gt 0 ]; then
+				echo "raw_reads_files_interleaved=$(prop 'raw_reads_files_interleaved')" >> conf.properties
 			fi
 			
 			if [ ! -z "$(prop 'minimum_gri_size')" ]; then
