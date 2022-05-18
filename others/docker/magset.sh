@@ -168,7 +168,8 @@ if [ "$input_type" == "GBK" ]; then
 
 	# generate .fasta
 	cd ${output_folder}/00_converted_genomes
-	for file in "${all_genome_files[@]}"; do seqret $(basename ${file%.*}).gb -out $(basename ${file%.*}).fasta || exit 1; done 
+	for file in "${all_genome_files[@]}"; do python /programs/gb_to_fasta.py $(basename ${file%.*}).gb $(basename ${file%.*}).fasta || exit 1; done 
+
 elif [ "$input_type" == "FASTA" ]; then
 	echo "renaming files to .fasta..."
 	for genome in "${all_genome_files[@]}"; do

@@ -40,6 +40,7 @@ RUN curl -O http://bcb.unl.edu/dbCAN2/download/Databases/CAZyDB.07312019.fa && d
     && curl -O http://bcb.unl.edu/dbCAN2/download/Databases/stp.hmm && hmmpress stp.hmm
 
 COPY gb_to_faa.py /programs/gb_to_faa.py
+COPY gb_to_fasta.py /programs/gb_to_fasta.py
 COPY ani-matrix.bash /programs/enveomics/Examples/ani-matrix.bash
 COPY magset-export.jar /programs/magset-export.jar
 COPY magset.sh /programs/magset.sh
