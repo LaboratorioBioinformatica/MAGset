@@ -41,32 +41,43 @@ public class PangenomeService {
 			Map<Integer, GenomeFile> genomeFilesMap) throws FileNotFoundException, IOException {
 		Reader in = new FileReader(roaryResultsFolder + "gene_presence_absence.csv");
 		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
-		int numberOfcolumnsBeforeGene = 13;
 
 		Map<String, PangenomeGene> allGeneNames = new TreeMap<>();
 
 		List<GenomeFile> genomeFiles = new ArrayList<>(genomeFilesMap.values());
 		genomeFiles.sort(GenomeFile.COMPARATOR_BY_NAME);
-		
+
 		for (CSVRecord record : records) {
-			List<GenomeFile> genomes = new ArrayList<>();
-			PangenomeGene genePresenceAbsence = new PangenomeGene(record.get(0), record.get(2),
-					Integer.valueOf(record.get(3)), genomes);
-
-			for (int i = 1; i <= genomeFiles.size(); i++) {
-				String geneInGenome = record.get(numberOfcolumnsBeforeGene + i);
-				if (geneInGenome != null && !geneInGenome.isEmpty()) {
-					int dotIndexOf = geneInGenome.indexOf(".");
-					if (dotIndexOf > 0) {
-						geneInGenome = geneInGenome.substring(0, dotIndexOf);
-					}
-
-					genomes.add(genomeFiles.get(i - 1));
-					allGeneNames.put(geneInGenome, genePresenceAbsence);
-				}
-			}
+			createPangenomeGene(allGeneNames, genomeFiles, record);
 		}
 		return allGeneNames;
+	}
+
+	private void createPangenomeGene(Map<String, PangenomeGene> allGeneNames, List<GenomeFile> genomeFiles,
+			CSVRecord record) {
+		int numberOfcolumnsBeforeGene = 13;
+		List<GenomeFile> genomes = new ArrayList<>();
+		PangenomeGene genePresenceAbsence = new PangenomeGene(record.get(0), record.get(2),
+				Integer.valueOf(record.get(3)), genomes);
+
+		for (int i = 1; i <= genomeFiles.size(); i++) {
+			String geneNameInGenome = record.get(numberOfcolumnsBeforeGene + i);
+			if (geneNameInGenome == null || geneNameInGenome.isEmpty()) {
+				continue;
+			}
+			geneNameInGenome = getGeneNameFixed(geneNameInGenome);
+
+			genomes.add(genomeFiles.get(i - 1));
+			allGeneNames.put(geneNameInGenome, genePresenceAbsence);
+		}
+	}
+
+	private String getGeneNameFixed(String geneInGenome) {
+		int dotIndexOf = geneInGenome.indexOf(".");
+		if (dotIndexOf > 0) {
+			geneInGenome = geneInGenome.substring(0, dotIndexOf);
+		}
+		return geneInGenome;
 	}
 
 }
