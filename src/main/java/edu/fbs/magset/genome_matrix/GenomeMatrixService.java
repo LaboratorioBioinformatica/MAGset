@@ -25,6 +25,7 @@ public class GenomeMatrixService {
 	}
 
 	private GenomeMatrix createGenomeMatrix(GenomeFile genomeFile, GenomesComparator genocom) {
+		String panarooGeneNameSufix = ".mRNA.0.CDS.1";
 		GenomeMatrix genomeMatrix = new GenomeMatrix();
 		genomeMatrix.setGenomeFile(genomeFile);
 
@@ -37,6 +38,9 @@ public class GenomeMatrixService {
 
 			PangenomeGene pangenomeGene = genocom.getPangenome().getGenes().get(locusTag);
 
+			if (pangenomeGene == null) {
+				pangenomeGene = genocom.getPangenome().getGenes().get(locusTag + panarooGeneNameSufix);
+			}
 			if (pangenomeGene == null) {
 				pangenomeGene = genocom.getPangenome().getReplacedGeneInPangenome(genomeFile, locusTag);
 				pangenomeId = genocom.getPangenome().getReplacedIdInPangenome(genomeFile, locusTag);

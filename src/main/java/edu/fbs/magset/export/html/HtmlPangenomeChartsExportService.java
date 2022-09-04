@@ -22,12 +22,12 @@ public class HtmlPangenomeChartsExportService {
 
 		IOUtils.write(content, new FileOutputStream(outputFolder + "/pangenome-charts.html"), "UTF-8");
 
-		FileUtils.copyFile(new File(pangenomeResultsFolder + "pangenome_frequency.png"),
-				new File(outputFolder + "img/" + "pangenome_frequency.png"));
-		FileUtils.copyFile(new File(pangenomeResultsFolder + "pangenome_matrix.png"),
-				new File(outputFolder + "img/" + "pangenome_matrix.png"));
-		FileUtils.copyFile(new File(pangenomeResultsFolder + "pangenome_pie.png"),
-				new File(outputFolder + "img/" + "pangenome_pie.png"));
+//		FileUtils.copyFile(new File(pangenomeResultsFolder + "pangenome_frequency.png"),
+//				new File(outputFolder + "img/" + "pangenome_frequency.png"));
+//		FileUtils.copyFile(new File(pangenomeResultsFolder + "pangenome_matrix.png"),
+//				new File(outputFolder + "img/" + "pangenome_matrix.png"));
+//		FileUtils.copyFile(new File(pangenomeResultsFolder + "pangenome_pie.png"),
+//				new File(outputFolder + "img/" + "pangenome_pie.png"));
 	}
 
 	private String getScriptItems(GenomesComparator genocom) {

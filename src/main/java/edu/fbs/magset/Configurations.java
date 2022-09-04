@@ -208,7 +208,7 @@ public class Configurations {
 
 	public static final String CONVERTED_GENOMES_FOLDER = "/00_converted_genomes/";
 	public static final String ANI_FILE = "/01_ani/result.output.txt";
-	public static final String PANGENOME_FOLDER = "/02_pangenome/results_roary/";
+	public static final String PANGENOME_FOLDER = "/02_pangenome/results/";
 	public static final String BACKBONE_FILE = "/03_gris/mauve.backbone";
 	public static final String GRI_FOLDER_NON_CLUSTERED = "/03_gris/non_clustered/";
 	public static final String GRI_FOLDER_CLUSTERED = "/03_gris/clustered/";

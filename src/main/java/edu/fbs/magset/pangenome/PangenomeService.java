@@ -39,7 +39,7 @@ public class PangenomeService {
 
 	private Map<String, PangenomeGene> getPangenomeGenesMap(String roaryResultsFolder,
 			Map<Integer, GenomeFile> genomeFilesMap) throws FileNotFoundException, IOException {
-		Reader in = new FileReader(roaryResultsFolder + "gene_presence_absence.csv");
+		Reader in = new FileReader(roaryResultsFolder + "gene_presence_absence_roary.csv");
 		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
 
 		Map<String, PangenomeGene> allGeneNames = new TreeMap<>();
@@ -61,23 +61,30 @@ public class PangenomeService {
 				Integer.valueOf(record.get(3)), genomes);
 
 		for (int i = 1; i <= genomeFiles.size(); i++) {
-			String geneNameInGenome = record.get(numberOfcolumnsBeforeGene + i);
-			if (geneNameInGenome == null || geneNameInGenome.isEmpty()) {
+			String genesNameInGenome = record.get(numberOfcolumnsBeforeGene + i);
+			if (genesNameInGenome == null || genesNameInGenome.isEmpty()) {
 				continue;
 			}
-			geneNameInGenome = getGeneNameFixed(geneNameInGenome);
-
+			
 			genomes.add(genomeFiles.get(i - 1));
-			allGeneNames.put(geneNameInGenome, genePresenceAbsence);
+			
+			addPangenomeGenes(allGeneNames, genePresenceAbsence, genesNameInGenome);
 		}
 	}
 
-	private String getGeneNameFixed(String geneInGenome) {
-		int dotIndexOf = geneInGenome.indexOf(".");
-		if (dotIndexOf > 0) {
-			geneInGenome = geneInGenome.substring(0, dotIndexOf);
+	private void addPangenomeGenes(Map<String, PangenomeGene> allGeneNames, PangenomeGene genePresenceAbsence,
+			String genesNameInGenome) {
+		String[] genes = genesNameInGenome.split(";");
+		for (String geneName : genes) {
+			allGeneNames.put(geneName, genePresenceAbsence);	
 		}
-		return geneInGenome;
 	}
 
+	public static void main(String[] args) {
+		String[] genes = "Fabio".split(";");
+		for (String geneName : genes) {
+			System.out.println(geneName);
+		}
+	}
+	
 }

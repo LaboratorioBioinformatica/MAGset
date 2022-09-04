@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-version=1.4.1
+version=1.5.0
  
 function prop {
     grep "^${1}" ${file}|cut -d'=' -f2
@@ -50,6 +50,7 @@ echo "genomes_folder: $genomes_folder"
 if [ ! -d "$output_folder" ]
 then
 	mkdir $output_folder
+	chmod 0777 $output_folder
 fi
 echo "output_folder: $output_folder" 
 
@@ -116,10 +117,10 @@ date_string=`date "+%Y%m%d%H%M%S"`
 if [ -f "$output_folder/conf-container.properties" ]; then
 	mv -f $output_folder/conf-container.properties $output_folder/conf-container.properties.$date_string
 fi
-
+root_container_folder="/home/mambauser"
 cp $file $output_folder/conf-container.properties
-setProperty "output_folder" "/output/" "$output_folder/conf-container.properties"
-setProperty "genomes_folder" "/input/" "$output_folder/conf-container.properties"
+setProperty "output_folder" "$root_container_folder/output/" "$output_folder/conf-container.properties"
+setProperty "genomes_folder" "$root_container_folder/input/" "$output_folder/conf-container.properties"
 
 container_volume_raw_reads_folder_docker=""
 container_volume_raw_reads_folder_singularity=""
@@ -131,10 +132,10 @@ then
 		exit 1
 	fi
 	echo "raw_reads_folder: $raw_reads_folder."
-	container_volume_raw_reads_folder_docker=" -v $raw_reads_folder:/raw_data/ "
-	container_volume_raw_reads_folder_singularity=",$raw_reads_folder:/raw_data/"
+	container_volume_raw_reads_folder_docker=" -v $raw_reads_folder:$root_container_folder/raw_data/ "
+	container_volume_raw_reads_folder_singularity=",$raw_reads_folder:$root_container_folder/raw_data/"
 	
-	setProperty "raw_reads_folder" "/raw_data/" "$output_folder/conf-container.properties"
+	setProperty "raw_reads_folder" "$root_container_folder/raw_data/" "$output_folder/conf-container.properties"
 fi
 
 date_string=`date "+%Y%m%d%H%M%S"`
@@ -150,7 +151,7 @@ then
 	  	echo 'Error: docker is not installed. Please install docker to run MAGset. Instructions to install docker: https://docs.docker.com/get-docker/. MAGset also supports Singularity container, please look at: https://github.com/LaboratorioBioinformatica/magset for more details.' >&2
 	  	exit 1
 	else
-		docker run --rm -t -v $output_folder/conf-container.properties:/opt/conf.properties -v $genomes_folder:/input $container_volume_raw_reads_folder_docker -v $output_folder:/output fsanchez/magset:$version ./magset.sh /opt/conf.properties |& tee -a ${output_folder}/logs/magset.log
+		docker run --rm -t -v $output_folder/conf-container.properties:$root_container_folder/conf.properties -v $genomes_folder:$root_container_folder/input $container_volume_raw_reads_folder_docker -v $output_folder:$root_container_folder/output fsanchez/magset:$version |& tee -a ${output_folder}/logs/magset.log
 	fi
 else
 	if [ ! -f "$singularity_container_file" ]
@@ -166,6 +167,6 @@ else
 		then
 			mkdir $output_folder/tmp
 		fi
-		singularity exec -B $output_folder/tmp:/tmp$container_volume_raw_reads_folder_singularity,$output_folder:/output,$genomes_folder:/input,$output_folder/conf-container.properties:/opt/conf.properties $singularity_container_file /programs/magset.sh /opt/conf.properties |& tee -a ${output_folder}/logs/magset.log 
+		singularity exec -B $output_folder/tmp:/tmp$container_volume_raw_reads_folder_singularity,$output_folder:$root_container_folder/output,$genomes_folder:$root_container_folder/input,$output_folder/conf-container.properties:$root_container_folder/conf.properties $singularity_container_file $root_container_folder/programs/magset.sh $root_container_folder/conf.properties |& tee -a ${output_folder}/logs/magset.log 
 	fi
 fi

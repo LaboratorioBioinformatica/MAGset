@@ -117,9 +117,9 @@ if [ "$execute_cazy_annotations" == "" ]; then
 	execute_cazy_annotations="true"
 fi
 echo "threads: ${num_threads}" 
-
-IFS=', ' read -r -a all_genome_files <<< "$(prop 'reference_genome_files')"
-all_genome_files+=($(prop 'mag_file'))
+all_genome_files=($(prop 'mag_file'))
+IFS=', ' read -r -a array_reference_genome_files <<< "$(prop 'reference_genome_files')"
+all_genome_files+=(${array_reference_genome_files[@]})
 
 cd ${output_folder}
 
@@ -138,17 +138,10 @@ done
 
 genomes_folder="${output_folder}/00_converted_genomes"
 
-if [ "$input_type" == "GBK" ]; then
-	echo "fixing genome accession/version header, if necessary..."
-	for genome in "${all_genome_files[@]}"; do
-		if grep -c "ACCESSION\s*$" ${genome}; then
-			cat ${genome} | perl -p -e  'BEGIN{undef $/;} s/LOCUS       (.*?) (.*?)ACCESSION  (.*?)KEYWORDS/LOCUS       \1 \2ACCESSION   \1\nVERSION     1\nKEYWORDS/smg' > ${genome}.fixed
-			rm ${genome}
-			mv ${genome}.fixed ${genome}
-			echo "header fixed for: ${genome}"
-		fi
-	done
+eval "$(micromamba shell hook --shell=bash)"
+micromamba activate base
 
+if [ "$input_type" == "GBK" ]; then
 	for genome in "${all_genome_files[@]}"; do
 		if [ "${genome: -3}" != ".gb" ]
 		then
@@ -157,18 +150,15 @@ if [ "$input_type" == "GBK" ]; then
 	done
 	
 	echo "converting genomes to .fasta, .faa and .gff" 
-	# generate .gff
-	cd $genomes_folder
-	for file in "${all_genome_files[@]}"; do bp_genbank2gff3.pl --outdir ${output_folder}/00_converted_genomes $(basename ${file%.*}).gb || exit 1; done 
 
 	## generate .faa
 	cd $genomes_folder
 
-	for file in "${all_genome_files[@]}"; do python /programs/gb_to_faa.py $(basename ${file%.*}).gb $(basename ${file%.*}).faa || exit 1; done
+	for file in "${all_genome_files[@]}"; do python ~/programs/gb_to_faa.py $(basename ${file%.*}).gb $(basename ${file%.*}).faa || exit 1; done
 
 	# generate .fasta
 	cd ${output_folder}/00_converted_genomes
-	for file in "${all_genome_files[@]}"; do python /programs/gb_to_fasta.py $(basename ${file%.*}).gb $(basename ${file%.*}).fasta || exit 1; done 
+	for file in "${all_genome_files[@]}"; do python ~/programs/gb_to_fasta.py $(basename ${file%.*}).gb $(basename ${file%.*}).fasta || exit 1; done 
 
 elif [ "$input_type" == "FASTA" ]; then
 	echo "renaming files to .fasta..."
@@ -191,9 +181,10 @@ fi
 
 mkdir 01_ani
 cd 01_ani
+ls -1d ${genomes_folder}/*.fasta > list_fasta.txt 
 #Fix for makeblastdb memory issue in blast+ 2.10
-export BLASTDB_LMDB_MAP_SIZE=1000000 
-/programs/enveomics/Examples/ani-matrix.bash result.output.txt $(ls -d ${output_folder}/00_converted_genomes/*.fasta) || exit 1
+export BLASTDB_LMDB_MAP_SIZE=1000000
+fastANI --threads ${num_threads} --ql list_fasta.txt  --rl list_fasta.txt -o result.output.txt   || exit 1
 
 if [ "$input_type" == "GBK" ]; then
 #generate pangenome
@@ -206,10 +197,12 @@ if [ "$input_type" == "GBK" ]; then
 	mkdir 02_pangenome
 	cd 02_pangenome
 
-	roary -f results_roary -e -n -v -p ${num_threads} ${output_folder}/00_converted_genomes/*.gff || exit 1
-	cd results_roary
-	fasttree -boot 100 -nt -gtr core_gene_alignment.aln > core_gene_alignment.nwk || exit 1
-	python /programs/Roary/contrib/roary_plots/roary_plots.py --labels core_gene_alignment.nwk gene_presence_absence.csv || exit 1
+	for genome in "${all_genome_files[@]}"
+	do
+		echo ${genomes_folder}/$(basename ${genome%.*}).gb >> list_gb.txt
+	done
+
+	panaroo -i list_gb.txt -o results --clean-mode strict --remove-invalid-genes -t ${num_threads} || exit 1
 fi
 
 #generate alignments to find genomic regions of interest 
@@ -252,9 +245,9 @@ if [ "$input_type" == "GBK" ]; then
 	mkdir 04_cogs
 	cd 04_cogs
 
-	for file in ${output_folder}/00_converted_genomes/*.faa; do rpsblast -query ${file} -db /databases/cog_files/Cog -out ${output_folder}/04_cogs/$(basename ${file%.*}).rps_blast -evalue 1e-20 -outfmt 7 -num_threads ${num_threads} || exit 1; done
+	for file in ${output_folder}/00_converted_genomes/*.faa; do rpsblast -query ${file} -db ~/databases/cog_files/Cog -out ${output_folder}/04_cogs/$(basename ${file%.*}).rps_blast -evalue 1e-20 -outfmt 7 -num_threads ${num_threads} || exit 1; done
 
-	for file in *.rps_blast; do perl /programs/bac-genomics-scripts/cdd2cog/cdd2cog.pl -r ${file} -c /databases/cog_files/cddid.tbl -f /databases/cog_files/fun.txt -w /databases/cog_files/whog || exit 1; mv results/ results_${file%.*}; done
+	for file in *.rps_blast; do perl ~/programs/bac-genomics-scripts/cdd2cog/cdd2cog.pl -r ${file} -c ~/databases/cog_files/cddid.tbl -f ~/databases/cog_files/fun.txt -w ~/databases/cog_files/whog || exit 1; mv results/ results_${file%.*}; done
 
 	echo "starting step 05 - DBCAN" 
 	cd ..
@@ -265,7 +258,7 @@ if [ "$input_type" == "GBK" ]; then
 		fi
 		mkdir 05_cazy
 		cd 05_cazy
-		for file in ${output_folder}/00_converted_genomes/*.faa; do run_dbcan.py  ${output_folder}/00_converted_genomes/$(basename ${file}) protein --out_dir $(basename ${file%.*}) --db_dir /databases/dbcan/ || exit 1; done
+		for file in ${output_folder}/00_converted_genomes/*.faa; do run_dbcan.py  ${output_folder}/00_converted_genomes/$(basename ${file}) protein --out_dir $(basename ${file%.*}) --db_dir ~/databases/dbcan/ || exit 1; done
 	fi
 fi
 
@@ -283,7 +276,7 @@ if [ -d "07_magcheck" ]; then
 	mv -f 07_magcheck 07_magcheck.$date_string
 fi
 
-java -jar /programs/magset-export.jar ${properties_file} "FASTA_CSV" || exit 1
+java -jar ~/programs/magset-export.jar ${properties_file} "FASTA_CSV" || exit 1
 
 if [ -d "${output_folder}/03_gris/non_clustered/" ]; then
 	cd ${output_folder}/03_gris/non_clustered/
@@ -298,7 +291,7 @@ if [ -d "${output_folder}/03_gris/non_clustered/" ]; then
 		show-coords -THrcl out.delta > out.coords || exit 1
 	fi
 	
-	java -jar /programs/magset-export.jar ${properties_file} "FASTA_CSV" || exit 1
+	java -jar ~/programs/magset-export.jar ${properties_file} "FASTA_CSV" || exit 1
 else
 	echo "No GRIs found... ignoring clustering step"
 fi
@@ -309,6 +302,8 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 
 	mkdir 07_magcheck
 	cd 07_magcheck
+
+	micromamba activate bowtie2
 
 	if [ -d "${output_folder}/03_gris/clustered/" ] && [ "$(ls -A ${output_folder}/03_gris/clustered/)" ]; then
 		cat ${output_folder}/03_gris/clustered/*GRI*.fasta > all-gris.fasta
@@ -488,5 +483,7 @@ if [ -d "result" ]; then
 fi
 mkdir result
 
-java -jar /programs/magset-export.jar ${properties_file} "ALL" || exit 1
+micromamba activate base
+
+java -jar ~/programs/magset-export.jar ${properties_file} "ALL" || exit 1
 echo "MAGset: done!"
