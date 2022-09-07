@@ -245,9 +245,9 @@ if [ "$input_type" == "GBK" ]; then
 	mkdir 04_cogs
 	cd 04_cogs
 
-	for file in ${output_folder}/00_converted_genomes/*.faa; do rpsblast -query ${file} -db ~/databases/cog_files/Cog -out ${output_folder}/04_cogs/$(basename ${file%.*}).rps_blast -evalue 1e-20 -outfmt 7 -num_threads ${num_threads} || exit 1; done
-
-	for file in *.rps_blast; do perl ~/programs/bac-genomics-scripts/cdd2cog/cdd2cog.pl -r ${file} -c ~/databases/cog_files/cddid.tbl -f ~/databases/cog_files/fun.txt -w ~/databases/cog_files/whog || exit 1; mv results/ results_${file%.*}; done
+	for file in ${output_folder}/00_converted_genomes/*.faa; do 
+		COGclassifier -i ${file} -d ~/databases/cog_files/Cog -o ${output_folder}/04_cogs/results_$(basename ${file%.*}) -t ${num_threads} || exit 1; 
+	done
 
 	echo "starting step 05 - DBCAN" 
 	cd ..
@@ -258,7 +258,9 @@ if [ "$input_type" == "GBK" ]; then
 		fi
 		mkdir 05_cazy
 		cd 05_cazy
-		for file in ${output_folder}/00_converted_genomes/*.faa; do run_dbcan.py  ${output_folder}/00_converted_genomes/$(basename ${file}) protein --out_dir $(basename ${file%.*}) --db_dir ~/databases/dbcan/ || exit 1; done
+		for file in ${output_folder}/00_converted_genomes/*.faa; do 
+			run_dbcan  ${output_folder}/00_converted_genomes/$(basename ${file}) protein --out_dir $(basename ${file%.*}) --db_dir ~/databases/dbcan/ --dia_cpu ${num_threads} --hmm_cpu ${num_threads} --tf_cpu ${num_threads} || exit 1; 
+		done
 	fi
 fi
 

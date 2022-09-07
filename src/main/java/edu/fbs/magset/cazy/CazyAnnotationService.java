@@ -34,17 +34,17 @@ public class CazyAnnotationService {
 		for (CSVRecord record : records) {
 			String locusTag = record.get(0);
 
-			int toolsThatIdentifiedAnnotation = Integer.valueOf(record.get(4));
+			int toolsThatIdentifiedAnnotation = Integer.valueOf(record.get(5));
 			if (toolsThatIdentifiedAnnotation < 2) {
 				continue;
 			}
 
 			CazyAnnotation line = new CazyAnnotation();
 			line.setLocusTag(locusTag);
-			String cazyCodes = record.get(1);
+			String cazyCodes = record.get(2);
 
 			if (cazyCodes.equals("-")) {
-				cazyCodes = record.get(3);
+				cazyCodes = record.get(4);
 			}
 
 			line.setCazyCodes(cazyCodes);

@@ -18,23 +18,25 @@ RUN cd /home/$MAMBA_USER/programs && git clone https://github.com/aleimba/bac-ge
 RUN cd /home/$MAMBA_USER/programs && curl -L -O -k https://master.dl.sourceforge.net/project/bbmap/BBMap_38.86.tar.gz
 RUN cd /home/$MAMBA_USER/programs && tar xvfz BBMap_38.86.tar.gz
 
-RUN cd /home/$MAMBA_USER/databases && mkdir cog_files
+RUN cd /home/$MAMBA_USER/databases && mkdir -p cog_files/Cog
 
-RUN cd /home/$MAMBA_USER/databases/cog_files && curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/mmdb/cdd/cddid.tbl.gz \ 
-    && gunzip cddid.tbl.gz \
+RUN cd /home/$MAMBA_USER/databases/cog_files/Cog \ 
+	&& curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/mmdb/cdd/cddid.tbl.gz \ 
+    && gunzip -c cddid.tbl.gz > cddid.tbl \
     && curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/mmdb/cdd/./little_endian/Cog_LE.tar.gz \
     && tar xvfz Cog_LE.tar.gz \
-    && curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/COG/COG/fun.txt \ 
-    && curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/COG/COG/whog 
+    && curl -O ftp://ftp.ncbi.nih.gov/pub/COG/COG2020/data/cog-20.def.tab \ 
+    && curl -O ftp://ftp.ncbi.nih.gov/pub/COG/COG2020/data/fun-20.tab
 
   
 RUN cd /home/$MAMBA_USER/databases && mkdir dbcan
-RUN cd /home/$MAMBA_USER/databases/dbcan && curl -O -L http://bcb.unl.edu/dbCAN2/download/Databases/CAZyDB.07312019.fa && diamond makedb --in CAZyDB.07312019.fa -d CAZy \
-    && curl -O -L http://bcb.unl.edu/dbCAN2/download/Databases/dbCAN-HMMdb-V8.txt && mv dbCAN-HMMdb-V8.txt dbCAN.txt && hmmpress dbCAN.txt \
-    && curl -O -L http://bcb.unl.edu/dbCAN2/download/Databases/tcdb.fa && diamond makedb --in tcdb.fa -d tcdb \
-    && curl -O -L http://bcb.unl.edu/dbCAN2/download/Databases/tf-1.hmm && hmmpress tf-1.hmm \
-    && curl -O -L http://bcb.unl.edu/dbCAN2/download/Databases/tf-2.hmm && hmmpress tf-2.hmm \
-    && curl -O -L http://bcb.unl.edu/dbCAN2/download/Databases/stp.hmm && hmmpress stp.hmm
+RUN cd /home/$MAMBA_USER/databases/dbcan \ 
+	&& curl -O -L http://bcb.unl.edu/dbCAN2/download/Databases/V11/CAZyDB.08062022.fa && diamond makedb --in CAZyDB.08062022.fa -d CAZy \
+    && curl -O -L https://bcb.unl.edu/dbCAN2/download/Databases/V11/dbCAN-HMMdb-V11.txt && mv dbCAN-HMMdb-V11.txt dbCAN.txt && hmmpress dbCAN.txt \
+    && curl -O -L https://bcb.unl.edu/dbCAN2/download/Databases/V11/tcdb.fa && diamond makedb --in tcdb.fa -d tcdb \
+    && curl -O -L http://bcb.unl.edu/dbCAN2/download/Databases/V11/tf-1.hmm && hmmpress tf-1.hmm \
+    && curl -O -L http://bcb.unl.edu/dbCAN2/download/Databases/V11/tf-2.hmm && hmmpress tf-2.hmm \
+    && curl -O -L https://bcb.unl.edu/dbCAN2/download/Databases/V11/stp.hmm && hmmpress stp.hmm
 
 COPY --chown=$MAMBA_USER:$MAMBA_USER gb_to_faa.py /home/$MAMBA_USER/programs/gb_to_faa.py
 COPY --chown=$MAMBA_USER:$MAMBA_USER gb_to_fasta.py /home/$MAMBA_USER/programs/gb_to_fasta.py

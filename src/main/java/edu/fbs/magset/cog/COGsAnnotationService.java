@@ -26,7 +26,7 @@ public class COGsAnnotationService {
 
 	private COGAnnotations getCOGMap(GenomeFile genomeFile, String cogResultsFolder) throws IOException {
 		String genomeName = genomeFile.getName();
-		Reader in = new FileReader(cogResultsFolder + "//results_" + genomeName + "//rps-blast_cog.txt");
+		Reader in = new FileReader(cogResultsFolder + "//results_" + genomeName + "//classifier_result.tsv");
 		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withDelimiter('\t').withAllowMissingColumnNames()
 				.withFirstRecordAsHeader().parse(in);
 
@@ -35,8 +35,8 @@ public class COGsAnnotationService {
 			String locusTag = record.get(0);
 			COGAnnotation cogLine = new COGAnnotation();
 			cogLine.setLocusTag(locusTag);
-			cogLine.setCogId(record.get(12));
-			cogLine.setCogDescription(record.get(record.size() - 1));
+			cogLine.setCogId(record.get(1));
+			cogLine.setCogDescription(record.get(6));
 			result.put(locusTag, cogLine);
 		}
 		return new COGAnnotations(genomeFile, result);
