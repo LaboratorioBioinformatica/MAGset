@@ -2,17 +2,17 @@ package edu.fbs.magset;
 
 import java.util.Map;
 
-import edu.fbs.magset.ani.AniResultService;
-import edu.fbs.magset.ani.AniResults;
-import edu.fbs.magset.cazy.CazyAnnotationService;
-import edu.fbs.magset.cog.COGsAnnotationService;
-import edu.fbs.magset.genome_file.GenomeFile;
-import edu.fbs.magset.genome_matrix.GenomeMatrix;
-import edu.fbs.magset.genome_matrix.GenomeMatrixService;
-import edu.fbs.magset.genomic_region_interest.GenomicRegionsInterest;
-import edu.fbs.magset.genomic_region_interest.GenomicRegionsInterestService;
-import edu.fbs.magset.pangenome.Pangenome;
-import edu.fbs.magset.pangenome.PangenomeService;
+import edu.fbs.magset.model.ani.AniResultService;
+import edu.fbs.magset.model.ani.AniResults;
+import edu.fbs.magset.model.cazy.CazyAnnotationService;
+import edu.fbs.magset.model.cog.COGsAnnotationService;
+import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome_matrix.GenomeMatrix;
+import edu.fbs.magset.model.genome_matrix.GenomeMatrixService;
+import edu.fbs.magset.model.genomic_region_interest.GenomicRegionsInterest;
+import edu.fbs.magset.model.genomic_region_interest.GenomicRegionsInterestService;
+import edu.fbs.magset.model.pangenome.Pangenome;
+import edu.fbs.magset.model.pangenome.PangenomeService;
 
 public class GenomeComparatorService {
 
@@ -23,8 +23,8 @@ public class GenomeComparatorService {
 	private CazyAnnotationService cazyService = new CazyAnnotationService();
 	private GenomeMatrixService genomeMatrixService = new GenomeMatrixService();
 
-	public GenomesComparator createGenomeComparator(Configurations configurations) throws Exception {
-		GenomesComparator genocom = new GenomesComparator(configurations);
+	public MagsetResults createGenomeComparator(Configurations configurations) throws Exception {
+		MagsetResults genocom = new MagsetResults(configurations);
 
 		GenomicRegionsInterest genomicRegionsInterest = griService.getGRIs(genocom);
 		genocom.setGenomicRegionsOfInterest(genomicRegionsInterest);

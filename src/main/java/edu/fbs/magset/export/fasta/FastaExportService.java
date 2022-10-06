@@ -6,23 +6,23 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map.Entry;
 
-import edu.fbs.magset.GenomesComparator;
-import edu.fbs.magset.genome_file.GenomeFile;
-import edu.fbs.magset.genomic_region_interest.GenomeSegment;
-import edu.fbs.magset.genomic_region_interest.GenomicRegionInterest;
+import edu.fbs.magset.MagsetResults;
+import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genomic_region_interest.GenomeSegment;
+import edu.fbs.magset.model.genomic_region_interest.GenomicRegionInterest;
 import lombok.extern.java.Log;
 
 @Log
 public class FastaExportService {
 
-	public void export(GenomesComparator genocom) throws IOException {
+	public void export(MagsetResults genocom) throws IOException {
 		if (!genocom.getGenomicRegionsOfInterest().getGenomicRegionsById().isEmpty()) {
 			exportGRIsFastaFile(genocom);
 			exportGRIsFastaFileByGenome(genocom);
 		}
 	}
 
-	private void exportGRIsFastaFile(GenomesComparator genocom) throws IOException {
+	private void exportGRIsFastaFile(MagsetResults genocom) throws IOException {
 		String griFolderPath = genocom.getConfigurations().getGriFolder(genocom.getGenomicRegionsOfInterest());
 		File griFolder = new File(griFolderPath);
 		if (!griFolder.exists()) {
@@ -48,7 +48,7 @@ public class FastaExportService {
 		}
 	}
 
-	private void exportGRIsFastaFileByGenome(GenomesComparator genocom) throws IOException {
+	private void exportGRIsFastaFileByGenome(MagsetResults genocom) throws IOException {
 
 		for (Entry<GenomeFile, List<GenomeSegment>> entry : genocom.getGenomicRegionsOfInterest()
 				.getGenomicRegionsByGenome().entrySet()) {

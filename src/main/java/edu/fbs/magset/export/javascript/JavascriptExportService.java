@@ -3,12 +3,12 @@ package edu.fbs.magset.export.javascript;
 import java.io.File;
 import java.io.IOException;
 
-import edu.fbs.magset.GenomesComparator;
+import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.InputTypeEnum;
 
 public class JavascriptExportService {
 
-	public void exportAll(GenomesComparator genocom) throws IOException {
+	public void exportAll(MagsetResults genocom) throws IOException {
 		String javascriptOutputFolder = genocom.getConfigurations().getHTMLResultFolder() + "js/";
 
 		File jsFolder = new File(javascriptOutputFolder);

@@ -6,18 +6,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import edu.fbs.magset.GenomesComparator;
 import edu.fbs.magset.InputTypeEnum;
+import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.javascript.SummaryResult;
-import edu.fbs.magset.genome_file.GenomeFile;
-import edu.fbs.magset.genome_matrix.GeneMatrix;
-import edu.fbs.magset.genomic_region_interest.GenomeSegment;
+import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome_matrix.GeneMatrix;
+import edu.fbs.magset.model.genomic_region_interest.GenomeSegment;
 
 public class SummaryService {
 
-	public List<SummaryResult> getSummaryResults(GenomesComparator genocom) throws IOException {
+	public List<SummaryResult> getSummaryResults(MagsetResults genocom) throws IOException {
 		List<SummaryResult> result = new ArrayList<>();
-		Collection<GenomeFile> genomes = genocom.getConfigurations().getAllGenomes();
+		Collection<GenomeFile> genomes = genocom.getAllGenomes();
 
 		for (GenomeFile genome : genomes) {
 			int genesQty = genome.getAllGenes().size();

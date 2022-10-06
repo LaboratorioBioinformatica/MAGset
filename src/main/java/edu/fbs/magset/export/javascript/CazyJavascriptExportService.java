@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import edu.fbs.magset.GenomesComparator;
-import edu.fbs.magset.cazy.CazyAnnotation;
-import edu.fbs.magset.cazy.CazyAnnotations;
-import edu.fbs.magset.genome_file.GenomeFile;
+import edu.fbs.magset.MagsetResults;
+import edu.fbs.magset.model.cazy.CazyAnnotation;
+import edu.fbs.magset.model.cazy.CazyAnnotations;
+import edu.fbs.magset.model.genome.GenomeFile;
 
 public class CazyJavascriptExportService {
 
-	public void exportToJavascript(GenomesComparator genocom, String javascriptOutputFolder) throws IOException {
+	public void exportToJavascript(MagsetResults genocom, String javascriptOutputFolder) throws IOException {
 		if (!genocom.getConfigurations().isExecuteCazyAnnotations()) {
 			return;
 		}

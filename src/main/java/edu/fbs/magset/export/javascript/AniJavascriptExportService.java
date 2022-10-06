@@ -8,23 +8,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import edu.fbs.magset.GenomesComparator;
-import edu.fbs.magset.ani.AniResult;
-import edu.fbs.magset.ani.AniResults;
-import edu.fbs.magset.genome_file.GenomeFile;
+import edu.fbs.magset.MagsetResults;
+import edu.fbs.magset.model.ani.AniResult;
+import edu.fbs.magset.model.ani.AniResults;
+import edu.fbs.magset.model.genome.GenomeFile;
 
 public class AniJavascriptExportService {
 
-	public void exportAniResultToJavascript(GenomesComparator genocom, String javascriptOutputFolder)
-			throws IOException {
+	public void exportAniResultToJavascript(MagsetResults genocom, String javascriptOutputFolder) throws IOException {
 		List<String> lines = new ArrayList<>();
 		lines.add("$( document ).ready(function() {\r\n");
 
 		AniResults aniResults = genocom.getAniResults();
-		for (GenomeFile genome1 : genocom.getConfigurations().getAllGenomes()) {
+		for (GenomeFile genome1 : genocom.getAllGenomes()) {
 			List<String> results = new ArrayList<>();
 
-			for (GenomeFile genome2 : genocom.getConfigurations().getAllGenomes()) {
+			for (GenomeFile genome2 : genocom.getAllGenomes()) {
 				AniResult aniResult = aniResults.getAniResult(genome1, genome2);
 				if (aniResult != null) {
 					results.add(aniResult.getResult().toString());

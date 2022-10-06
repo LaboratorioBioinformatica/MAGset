@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import edu.fbs.magset.GenomesComparator;
+import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.SummaryService;
 
 public class SummaryJavascriptExportService {
 
-	public void exportGenesSummaryToJavascript(GenomesComparator genocom, String javascriptOutputFolder)
+	public void exportGenesSummaryToJavascript(MagsetResults genocom, String javascriptOutputFolder)
 			throws IOException {
 		List<String> lines = new ArrayList<>();
 		Collection<SummaryResult> result = new SummaryService().getSummaryResults(genocom);

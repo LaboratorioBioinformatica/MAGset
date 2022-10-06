@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import edu.fbs.magset.GenomesComparator;
-import edu.fbs.magset.genome_file.GenomeFile;
-import edu.fbs.magset.genome_matrix.GeneMatrix;
-import edu.fbs.magset.genome_matrix.GenomeMatrix;
+import edu.fbs.magset.MagsetResults;
+import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome_matrix.GeneMatrix;
+import edu.fbs.magset.model.genome_matrix.GenomeMatrix;
 
 public class MatrixJavascriptExportService {
 
-	public void exportToJavascript(GenomesComparator genocom, String javascriptOutputFolder) throws IOException {
+	public void exportToJavascript(MagsetResults genocom, String javascriptOutputFolder) throws IOException {
 
 		Map<GenomeFile, GenomeMatrix> genesByGenome = genocom.getGenomesMatrix();
 		for (GenomeFile genome : genesByGenome.keySet()) {

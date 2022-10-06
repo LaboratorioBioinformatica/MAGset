@@ -11,21 +11,21 @@ import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
-import edu.fbs.magset.GenomesComparator;
 import edu.fbs.magset.InputTypeEnum;
+import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.SummaryService;
 import edu.fbs.magset.export.javascript.SummaryResult;
-import edu.fbs.magset.genome.Gene;
-import edu.fbs.magset.genome_file.GenomeFile;
-import edu.fbs.magset.genome_matrix.GeneMatrix;
-import edu.fbs.magset.genome_matrix.GenomeMatrix;
-import edu.fbs.magset.genomic_region_interest.GenomeSegment;
-import edu.fbs.magset.genomic_region_interest.GenomicRegionInterest;
-import edu.fbs.magset.pangenome.PangenomeGene;
+import edu.fbs.magset.model.genome.Gene;
+import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome_matrix.GeneMatrix;
+import edu.fbs.magset.model.genome_matrix.GenomeMatrix;
+import edu.fbs.magset.model.genomic_region_interest.GenomeSegment;
+import edu.fbs.magset.model.genomic_region_interest.GenomicRegionInterest;
+import edu.fbs.magset.model.pangenome.PangenomeGene;
 
 public class CSVExportService {
 
-	public void export(GenomesComparator genocom) throws IOException {
+	public void export(MagsetResults genocom) throws IOException {
 		exportSummary(genocom);
 		exportGRIsFile(genocom);
 		if (genocom.getConfigurations().getInputType().equals(InputTypeEnum.GBK)) {
@@ -34,7 +34,7 @@ public class CSVExportService {
 		}
 	}
 
-	private void exportSummary(GenomesComparator genocom) throws IOException {
+	private void exportSummary(MagsetResults genocom) throws IOException {
 		File outputFolderFile = new File(genocom.getConfigurations().getResultFolder() + "/csv/");
 		if (!outputFolderFile.exists()) {
 			outputFolderFile.mkdirs();
@@ -66,7 +66,7 @@ public class CSVExportService {
 		printer.close();
 	}
 
-	private void exportGRIsFile(GenomesComparator genocom) throws IOException {
+	private void exportGRIsFile(MagsetResults genocom) throws IOException {
 		File outputFolderFile = new File(genocom.getConfigurations().getResultFolder() + "/csv/");
 		if (!outputFolderFile.exists()) {
 			outputFolderFile.mkdirs();
@@ -95,7 +95,7 @@ public class CSVExportService {
 		printer.close();
 	}
 
-	private void exportGRIGeneFiles(GenomesComparator genocom) throws IOException {
+	private void exportGRIGeneFiles(MagsetResults genocom) throws IOException {
 		File outputFolderFile = new File(genocom.getConfigurations().getResultFolder() + "/csv/genes_by_gri/");
 		if (!outputFolderFile.exists()) {
 			outputFolderFile.mkdirs();
@@ -125,13 +125,13 @@ public class CSVExportService {
 		}
 	}
 
-	private void exportGenomesMatrix(GenomesComparator genocom) throws IOException {
+	private void exportGenomesMatrix(MagsetResults genocom) throws IOException {
 		File outputFolderFile = new File(genocom.getConfigurations().getResultFolder() + "/csv/genes_matrix/");
 		if (!outputFolderFile.exists()) {
 			outputFolderFile.mkdirs();
 		}
 
-		Map<Integer, GenomeFile> genomeFiles = genocom.getConfigurations().getAllGenomesMap();
+		Map<Integer, GenomeFile> genomeFiles = genocom.getAllGenomesMap();
 
 		for (GenomeFile genomeFile : genomeFiles.values()) {
 			FileWriter out = new FileWriter(

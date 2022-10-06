@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import edu.fbs.magset.GenomesComparator;
-import edu.fbs.magset.cog.COGAnnotation;
-import edu.fbs.magset.cog.COGAnnotations;
-import edu.fbs.magset.genome_file.GenomeFile;
+import edu.fbs.magset.MagsetResults;
+import edu.fbs.magset.model.cog.COGAnnotation;
+import edu.fbs.magset.model.cog.COGAnnotations;
+import edu.fbs.magset.model.genome.GenomeFile;
 
 public class COGsJavascriptExportService {
 
-	public void exportToJavascript(GenomesComparator genocom, String javascriptOutputFolder) throws IOException {
+	public void exportToJavascript(MagsetResults genocom, String javascriptOutputFolder) throws IOException {
 
 		Map<GenomeFile, COGAnnotations> genesByGenome = genocom.getCogsAnnotation();
 		for (GenomeFile genome : genesByGenome.keySet()) {

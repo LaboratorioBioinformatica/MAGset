@@ -8,12 +8,12 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import edu.fbs.magset.GenomesComparator;
+import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.util.ResourceFinder;
 
 public class HtmlPangenomeChartsExportService {
 
-	public void export(GenomesComparator genocom, String pangenomeResultsFolder, String outputFolder, String header,
+	public void export(MagsetResults genocom, String pangenomeResultsFolder, String outputFolder, String header,
 			String footer) throws IOException, FileNotFoundException {
 		footer = footer.replaceAll("<scriptItems>", getScriptItems(genocom));
 
@@ -30,7 +30,7 @@ public class HtmlPangenomeChartsExportService {
 //				new File(outputFolder + "img/" + "pangenome_pie.png"));
 	}
 
-	private String getScriptItems(GenomesComparator genocom) {
+	private String getScriptItems(MagsetResults genocom) {
 		StringBuilder result = new StringBuilder();
 		return result.toString();
 	}

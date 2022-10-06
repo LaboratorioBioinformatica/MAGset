@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import edu.fbs.magset.GenomesComparator;
-import edu.fbs.magset.genome.Gene;
-import edu.fbs.magset.genomic_region_interest.GenomeSegment;
-import edu.fbs.magset.genomic_region_interest.GenomicRegionInterest;
+import edu.fbs.magset.MagsetResults;
+import edu.fbs.magset.model.genome.Gene;
+import edu.fbs.magset.model.genomic_region_interest.GenomeSegment;
+import edu.fbs.magset.model.genomic_region_interest.GenomicRegionInterest;
 
 public class GRIGenesJavascriptExportService {
 
-	public void exportRGIListToJavascript(GenomesComparator genocom, String javascriptOutputFolder) throws IOException {
+	public void exportRGIListToJavascript(MagsetResults genocom, String javascriptOutputFolder) throws IOException {
 
 		Collection<GenomicRegionInterest> gris = genocom.getGenomicRegionsOfInterest().getGenomicRegionsById().values();
 

@@ -6,12 +6,12 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 
-import edu.fbs.magset.GenomesComparator;
+import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.util.ResourceFinder;
 
 public class HtmlGRIGeneListExportService {
 
-	public void export(GenomesComparator genocom, String outputFolder, String header, String footer)
+	public void export(MagsetResults genocom, String outputFolder, String header, String footer)
 			throws IOException, FileNotFoundException {
 		footer = footer.replaceAll("<scriptItems>", getScriptItems(genocom));
 
@@ -21,7 +21,7 @@ public class HtmlGRIGeneListExportService {
 		IOUtils.write(content, new FileOutputStream(outputFolder + "/gri-gene-list.html"), "UTF-8");
 	}
 
-	private String getScriptItems(GenomesComparator genocom) {
+	private String getScriptItems(MagsetResults genocom) {
 		StringBuilder result = new StringBuilder();
 		result.append("<script src=\"js/03_gri_gene_data.js\"></script>");
 		result.append("<script src=\"js/03_gri_gene_load.js\"></script>");

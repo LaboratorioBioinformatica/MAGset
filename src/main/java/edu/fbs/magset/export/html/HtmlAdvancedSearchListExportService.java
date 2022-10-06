@@ -6,13 +6,13 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 
-import edu.fbs.magset.GenomesComparator;
+import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.util.ResourceFinder;
-import edu.fbs.magset.genome_file.GenomeFile;
+import edu.fbs.magset.model.genome.GenomeFile;
 
 public class HtmlAdvancedSearchListExportService {
 
-	public void export(GenomesComparator genocom, String outputFolder, String header, String footer)
+	public void export(MagsetResults genocom, String outputFolder, String header, String footer)
 			throws IOException, FileNotFoundException {
 		footer = footer.replaceAll("<scriptItems>", getScriptItems(genocom));
 		String content = header
@@ -20,9 +20,9 @@ public class HtmlAdvancedSearchListExportService {
 		IOUtils.write(content, new FileOutputStream(outputFolder + "/advanced-search-list.html"), "UTF-8");
 	}
 
-	private String getScriptItems(GenomesComparator genocom) {
+	private String getScriptItems(MagsetResults genocom) {
 		StringBuilder result = new StringBuilder();
-		for (GenomeFile genome : genocom.getConfigurations().getAllGenomes()) {
+		for (GenomeFile genome : genocom.getAllGenomes()) {
 			result.append("<script src=\"js/06_matrix_" + genome.getName() + "_data.js\"></script>");
 
 		}

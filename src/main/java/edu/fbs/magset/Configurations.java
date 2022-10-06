@@ -3,14 +3,12 @@ package edu.fbs.magset;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
-import edu.fbs.magset.genome_file.GenomeFile;
-import edu.fbs.magset.genomic_region_interest.GenomicRegionsInterest;
+import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genomic_region_interest.GenomicRegionsInterest;
 
 public class Configurations {
 	private String outputFolder;
@@ -30,8 +28,8 @@ public class Configurations {
 
 	private int backboneAllowedExtraPositionsFromExtraContigs;
 
-	private GenomeFile magGenomeFile;
-	private Map<Integer, GenomeFile> referenceGenomeFiles = new TreeMap<>();
+	private String magGenomeFile;
+	private Map<Integer, String> referenceGenomeFiles = new TreeMap<>();
 
 	public Configurations(File properties, String exportType) throws Exception {
 		this.exportType = ExportEnum.valueOf(exportType);
@@ -54,14 +52,13 @@ public class Configurations {
 		this.nucmerMinimalCoveredBetweenSimilarGRIsToConsider = Double
 				.valueOf(prop.getProperty("nucmer_minimal_covered_between_similar_gris", "0.8"));
 
-		String magFile = prop.getProperty("mag_file");
-		this.magGenomeFile = new GenomeFile(this.getConvertedGenomesFolder() + magFile, magFile, this);
+		this.magGenomeFile = prop.getProperty("mag_file");
 
 		String[] referenceFilenames = prop.getProperty("reference_genome_files").split(",");
 		for (int i = 0; i < referenceFilenames.length; i++) {
 			String filePath = this.getConvertedGenomesFolder() + referenceFilenames[i];
 			String fileName = Paths.get(filePath).getFileName().toString();
-			this.referenceGenomeFiles.put(i + 1, new GenomeFile(filePath, fileName, i + 1, this));
+			this.referenceGenomeFiles.put(i + 1, fileName);
 		}
 	}
 
@@ -85,7 +82,7 @@ public class Configurations {
 		return title;
 	}
 
-	public GenomeFile getMagGenomeFile() {
+	public String getMagGenomeFile() {
 		return magGenomeFile;
 	}
 
@@ -93,7 +90,7 @@ public class Configurations {
 		return executeCazyAnnotations;
 	}
 
-	public Map<Integer, GenomeFile> getReferenceGenomeFiles() {
+	public Map<Integer, String> getReferenceGenomeFiles() {
 		return referenceGenomeFiles;
 	}
 
@@ -119,20 +116,6 @@ public class Configurations {
 
 	public int getBackboneAllowedExtraPositionsFromExtraContigs() {
 		return backboneAllowedExtraPositionsFromExtraContigs;
-	}
-
-	public List<GenomeFile> getAllGenomes() {
-		List<GenomeFile> genomes = new ArrayList<>();
-		genomes.add(getMagGenomeFile());
-		genomes.addAll(getReferenceGenomeFiles().values());
-		return genomes;
-	}
-
-	public Map<Integer, GenomeFile> getAllGenomesMap() {
-		Map<Integer, GenomeFile> genomes = new TreeMap<>();
-		genomes.put(0, getMagGenomeFile());
-		genomes.putAll(getReferenceGenomeFiles());
-		return genomes;
 	}
 
 	public String getNucmerResultFile(GenomeFile genomeFile) {

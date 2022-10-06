@@ -10,18 +10,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import edu.fbs.magset.GenomesComparator;
 import edu.fbs.magset.InputTypeEnum;
-import edu.fbs.magset.genome_file.GenomeFile;
+import edu.fbs.magset.MagsetResults;
+import edu.fbs.magset.model.genome.GenomeFile;
 
 public class BasicDataJavascriptExportService {
 
-	public void exportToJavascript(GenomesComparator genocom, String javascriptOutputFolder) throws IOException {
+	public void exportToJavascript(MagsetResults genocom, String javascriptOutputFolder) throws IOException {
 		List<String> lines = new ArrayList<>();
-		Collection<GenomeFile> genomes = genocom.getConfigurations().getAllGenomes();
+		Collection<GenomeFile> genomes = genocom.getAllGenomes();
 		lines.add("$( document ).ready(function() {");
 		lines.add("	title = '" + genocom.getConfigurations().getTitle() + "';");
-		lines.add("	magOfInterest = '" + genocom.getMagOfInterest().getName() + "';");
+		lines.add("	magOfInterest = '" + genocom.getMagGenomeFile().getName() + "';");
 		lines.add("	genomesName = " + genomes.stream().map(n -> n.getName()).collect(joining("','", "['", "']")) + ";");
 		lines.add("	magCheckExecuted = " + genocom.isMagCheckExecuted() + ";");
 		lines.add("	annotatedGenomes = " + !genocom.getConfigurations().getInputType().equals(InputTypeEnum.FASTA)

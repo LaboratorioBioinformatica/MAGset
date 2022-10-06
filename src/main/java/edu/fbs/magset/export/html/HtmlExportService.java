@@ -5,15 +5,15 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
-import edu.fbs.magset.GenomesComparator;
 import edu.fbs.magset.InputTypeEnum;
+import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.util.ResourceFinder;
 import edu.fbs.magset.export.util.UnzipFile;
-import edu.fbs.magset.genome_file.GenomeFile;
+import edu.fbs.magset.model.genome.GenomeFile;
 
 public class HtmlExportService {
 
-	public void exportAll(GenomesComparator genocom) throws IOException {
+	public void exportAll(MagsetResults genocom) throws IOException {
 		copyDefaultFiles(genocom.getConfigurations().getHTMLResultFolder());
 
 		String header = IOUtils.toString(ResourceFinder.getResourceAsStream("header.mhtml"), "UTF-8");
@@ -47,10 +47,10 @@ public class HtmlExportService {
 		UnzipFile.unzip(zip, outputFolder);
 	}
 
-	private String getCogItems(GenomesComparator genocom) {
+	private String getCogItems(MagsetResults genocom) {
 		StringBuilder result = new StringBuilder();
 
-		for (GenomeFile genome : genocom.getConfigurations().getAllGenomes()) {
+		for (GenomeFile genome : genocom.getAllGenomes()) {
 			result.append("<li class=\"nav-item annotated-genomes\"><a class=\"nav-link\" href=\"cog-list-"
 					+ genome.getName() + ".html\"><i class=\"fas fa-fw fa-table\"></i> <span>" + genome.getName()
 					+ "</span></a></li>");
@@ -58,10 +58,10 @@ public class HtmlExportService {
 		return result.toString();
 	}
 
-	private String getCazyItems(GenomesComparator genocom) {
+	private String getCazyItems(MagsetResults genocom) {
 		StringBuilder result = new StringBuilder();
 
-		for (GenomeFile genome : genocom.getConfigurations().getAllGenomes()) {
+		for (GenomeFile genome : genocom.getAllGenomes()) {
 			result.append("<li class=\"nav-item annotated-genomes\"><a class=\"nav-link\" href=\"cazy-list-"
 					+ genome.getName() + ".html\"><i class=\"fas fa-fw fa-table\"></i> <span>" + genome.getName()
 					+ "</span></a></li>");
@@ -69,10 +69,10 @@ public class HtmlExportService {
 		return result.toString();
 	}
 
-	private String getMatrixItems(GenomesComparator genocom) {
+	private String getMatrixItems(MagsetResults genocom) {
 		StringBuilder result = new StringBuilder();
 
-		for (GenomeFile genome : genocom.getConfigurations().getAllGenomes()) {
+		for (GenomeFile genome : genocom.getAllGenomes()) {
 			result.append("<li class=\"nav-item annotated-genomes\"><a class=\"nav-link\" href=\"matrix-list-"
 					+ genome.getName() + ".html\"><i class=\"fas fa-fw fa-table\"></i> <span>" + genome.getName()
 					+ "</span></a></li>");
