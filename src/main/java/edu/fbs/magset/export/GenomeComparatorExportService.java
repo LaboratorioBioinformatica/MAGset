@@ -4,12 +4,12 @@ import java.io.IOException;
 
 import org.springframework.stereotype.Service;
 
-import edu.fbs.magset.ExportEnum;
 import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.csv.CSVExportService;
 import edu.fbs.magset.export.fasta.FastaExportService;
 import edu.fbs.magset.export.html.HtmlExportService;
 import edu.fbs.magset.export.javascript.JavascriptExportService;
+import edu.fbs.magset.util.ExportEnum;
 
 @Service
 public class GenomeComparatorExportService {

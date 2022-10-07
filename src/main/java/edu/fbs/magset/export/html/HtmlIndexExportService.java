@@ -26,9 +26,6 @@ public class HtmlIndexExportService {
 		result.append("<script src=\"js/01_ani_load.js\"></script>");
 		result.append("<script src=\"js/01_summary_data.js\"></script>");
 		result.append("<script src=\"js/01_summary_load.js\"></script>");
-		result.append("<script src=\"js/01_charts.js\"></script>");
-		result.append("<script src=\"vendor/chart.js/Chart.min.js\"></script>");
-		result.append("<script src=\"js/01_charts.js\"></script>");
 		return result.toString();
 	}
 }

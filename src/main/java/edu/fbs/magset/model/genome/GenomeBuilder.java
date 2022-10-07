@@ -15,7 +15,7 @@ import org.biojava.nbio.core.sequence.io.GenbankReaderHelper;
 import org.biojava.nbio.core.sequence.template.AbstractSequence;
 
 import edu.fbs.magset.Configurations;
-import edu.fbs.magset.InputTypeEnum;
+import edu.fbs.magset.util.InputTypeEnum;
 
 public class GenomeBuilder {
 

@@ -1,4 +1,4 @@
-package edu.fbs.magset;
+package edu.fbs.magset.util;
 
 public enum InputTypeEnum {
 	GFF(".gff"), GBK(".gb"), FASTA(".fasta");

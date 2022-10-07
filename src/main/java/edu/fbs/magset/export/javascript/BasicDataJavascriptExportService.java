@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import edu.fbs.magset.InputTypeEnum;
 import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.util.InputTypeEnum;
 
 public class BasicDataJavascriptExportService {
 

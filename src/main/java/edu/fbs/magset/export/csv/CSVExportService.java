@@ -11,7 +11,6 @@ import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
-import edu.fbs.magset.InputTypeEnum;
 import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.SummaryService;
 import edu.fbs.magset.export.javascript.SummaryResult;
@@ -22,6 +21,7 @@ import edu.fbs.magset.model.genome_matrix.GenomeMatrix;
 import edu.fbs.magset.model.genomic_region_interest.GenomeSegment;
 import edu.fbs.magset.model.genomic_region_interest.GenomicRegionInterest;
 import edu.fbs.magset.model.pangenome.PangenomeGene;
+import edu.fbs.magset.util.InputTypeEnum;
 
 public class CSVExportService {
 

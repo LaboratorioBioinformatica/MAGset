@@ -20,6 +20,8 @@ import edu.fbs.magset.model.genomic_region_interest.GenomicRegionsInterest;
 import edu.fbs.magset.model.genomic_region_interest.GenomicRegionsInterestService;
 import edu.fbs.magset.model.pangenome.Pangenome;
 import edu.fbs.magset.model.pangenome.PangenomeService;
+import edu.fbs.magset.util.ExportEnum;
+import edu.fbs.magset.util.InputTypeEnum;
 import lombok.extern.java.Log;
 
 @Log

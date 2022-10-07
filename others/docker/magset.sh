@@ -278,7 +278,7 @@ if [ -d "07_magcheck" ]; then
 	mv -f 07_magcheck 07_magcheck.$date_string
 fi
 
-java -jar ~/programs/magset-export.jar ${properties_file} "FASTA_CSV" || exit 1
+java -jar ~/programs/magset-export.jar ${properties_file} "EXPORT_GRIS" || exit 1
 
 if [ -d "${output_folder}/03_gris/non_clustered/" ]; then
 	cd ${output_folder}/03_gris/non_clustered/
@@ -293,7 +293,7 @@ if [ -d "${output_folder}/03_gris/non_clustered/" ]; then
 		show-coords -THrcl out.delta > out.coords || exit 1
 	fi
 	
-	java -jar ~/programs/magset-export.jar ${properties_file} "FASTA_CSV" || exit 1
+	java -jar ~/programs/magset-export.jar ${properties_file} "EXPORT_CLUSTERED_GRIS" || exit 1
 else
 	echo "No GRIs found... ignoring clustering step"
 fi
@@ -487,5 +487,5 @@ mkdir result
 
 micromamba activate base
 
-java -jar ~/programs/magset-export.jar ${properties_file} "ALL" || exit 1
+java -jar ~/programs/magset-export.jar ${properties_file} "EXPORT_CSV_HTML" || exit 1
 echo "MAGset: done!"

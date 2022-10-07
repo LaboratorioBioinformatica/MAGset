@@ -12,12 +12,7 @@
 
 <title>MAGSET</title>
 
-<!-- Custom fonts for this template-->
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
-	type="text/css">
-<link
-	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-	rel="stylesheet">
+<link href="css/fontawesome.all.min.css" rel="stylesheet" type="text/css">
 
 <!-- Custom styles for this template-->
 <link href="css/sb-admin-2.min.css" rel="stylesheet">
@@ -63,9 +58,6 @@
 				<hr class="sidebar-divider  annotated-genomes">
 				<!-- Heading -->
 				<div class="sidebar-heading  annotated-genomes">Pangenome</div>
-				<li class="nav-item  annotated-genomes"><a class="nav-link" href="pangenome-charts.html">
-						<i class="fas fa-fw fa-chart-area"></i> <span>Charts</span>
-				</a></li>
 				<!-- Nav Item - Tables -->
 				<li class="nav-item  annotated-genomes"><a class="nav-link" href="pangenome-list.html">
 						<i class="fas fa-fw fa-table"></i> <span>Genes list</span>

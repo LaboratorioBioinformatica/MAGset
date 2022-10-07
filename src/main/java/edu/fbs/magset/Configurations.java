@@ -9,6 +9,8 @@ import java.util.TreeMap;
 
 import edu.fbs.magset.model.genome.GenomeFile;
 import edu.fbs.magset.model.genomic_region_interest.GenomicRegionsInterest;
+import edu.fbs.magset.util.ExportEnum;
+import edu.fbs.magset.util.InputTypeEnum;
 
 public class Configurations {
 	private String outputFolder;

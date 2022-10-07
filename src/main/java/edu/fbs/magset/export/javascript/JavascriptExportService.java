@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import edu.fbs.magset.MagsetResults;
-import edu.fbs.magset.InputTypeEnum;
+import edu.fbs.magset.util.InputTypeEnum;
 
 public class JavascriptExportService {
 

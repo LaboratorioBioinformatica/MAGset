@@ -5,11 +5,11 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
-import edu.fbs.magset.InputTypeEnum;
 import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.util.ResourceFinder;
 import edu.fbs.magset.export.util.UnzipFile;
 import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.util.InputTypeEnum;
 
 public class HtmlExportService {
 
@@ -24,13 +24,10 @@ public class HtmlExportService {
 		String footer = IOUtils.toString(ResourceFinder.getResourceAsStream("footer.mhtml"), "UTF-8");
 
 		String outputFolder = genocom.getConfigurations().getHTMLResultFolder();
-		String pangenomeResultsFolder = genocom.getConfigurations().getPangenomeFolder();
 		new HtmlIndexExportService().export(genocom, outputFolder, header, footer);
 		new HtmlGRIListExportService().export(genocom, outputFolder, header, footer);
 
 		if (genocom.getConfigurations().getInputType().equals(InputTypeEnum.GBK)) {
-			new HtmlPangenomeChartsExportService().export(genocom, pangenomeResultsFolder, outputFolder, header,
-					footer);
 			new HtmlPangenomeListExportService().export(genocom, outputFolder, header, footer);
 			new HtmlGRIGeneListExportService().export(genocom, outputFolder, header, footer);
 			new HtmlCogListExportService().export(genocom, outputFolder, header, footer);
