@@ -1,5 +1,5 @@
 package edu.fbs.magset.util;
 
 public enum ExportEnum {
-	FASTA_CSV, ALL
+	EXPORT_GRIS, EXPORT_CLUSTERED_GRIS, EXPORT_CSV_HTML
 }

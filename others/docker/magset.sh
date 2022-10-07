@@ -298,7 +298,7 @@ else
 	echo "No GRIs found... ignoring clustering step"
 fi
 if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -gt 0 ] ||   [ "${#raw_data_files_interleaved[@]}" -gt 0 ]; then
-	echo "starting magchek..." 
+	echo "starting magcheck..." 
 	cd ${output_folder}
 	
 
@@ -364,7 +364,8 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 			fi
 			mkdir 08_mag_improve
 			cd 08_mag_improve
-			echo "running bowtie2..." 
+			echo "running bowtie2..."
+			micromamba activate bowtie2 
 			original_mag_file=$(prop 'mag_file')
 			bowtie2-build ${output_folder}/00_converted_genomes/$(basename ${original_mag_file%.*}).fasta original_mag_file || exit 1
 			bowtie2 -x original_mag_file $all_raw_reads_unpaired $all_raw_reads_1 $all_raw_reads_2 $all_raw_reads_interleaved -S magfile.sam -p ${num_threads} --no-unal --very-sensitive || exit 1

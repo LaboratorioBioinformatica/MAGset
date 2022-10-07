@@ -12,7 +12,7 @@ mvn clean install
 
 cd others/docker
 
-cp ../../target/magset-export.jar .
+cp ../../target/magset-export-1.0.0-SNAPSHOT.jar magset-export.jar
 
 docker build -t $image_name .
 
