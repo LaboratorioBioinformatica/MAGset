@@ -5,7 +5,7 @@ $( document ).ready(function() {
 
 function createTable(){
 	var table = $('#dataTable');
-	var headLine = '<tr><th>Gene name</th><th>Annotation</th><th>N. isolates</th>';
+	var headLine = '<tr><th>Gene name</th><th>N. isolates</th>';
 	var magOfInterestIndex = -1;
 	genomesName.sort().forEach(function (item, indice, array) {
 		var magClass = 'teste';
@@ -22,7 +22,7 @@ function createTable(){
 	var tbody = table.children('tbody');
 	var lines = pangenomeGenes;
 	lines.forEach(function (item, indice, array) {
-		line = '<tr><td>' + item.geneName + '</td><td>' + item.annotation + '</td><td>' + item.numberOfIsolates + '</td>';
+		line = '<tr><td>' + item.geneName + '</td><td>' + item.numberOfIsolates + '</td>';
 		
 		item.genomeGeneNames.forEach(function (subitem, subindice, subarray) {
 			var magClass = 'teste';

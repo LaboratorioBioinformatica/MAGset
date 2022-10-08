@@ -20,6 +20,7 @@ import edu.fbs.magset.model.genomic_region_interest.GenomicRegionsInterest;
 import edu.fbs.magset.model.genomic_region_interest.GenomicRegionsInterestService;
 import edu.fbs.magset.model.pangenome.Pangenome;
 import edu.fbs.magset.model.pangenome.PangenomeService;
+import edu.fbs.magset.util.ExportEnum;
 import edu.fbs.magset.util.InputTypeEnum;
 import lombok.extern.java.Log;
 
@@ -59,26 +60,24 @@ public class App implements CommandLineRunner {
 		GenomicRegionsInterest genomicRegionsInterest = griService.getGRIs(results);
 		results.setGenomicRegionsOfInterest(genomicRegionsInterest);
 
-		// TODO
-		// if (configurations.getExportType().equals(ExportEnum.ALL)) {
-		AniResults aniResults = aniResultService.getAniResults(results);
-		results.setAniResults(aniResults);
+		if (configurations.getExportType().equals(ExportEnum.EXPORT_CSV_HTML)) {
+			AniResults aniResults = aniResultService.getAniResults(results);
+			results.setAniResults(aniResults);
 
-		if (configurations.getInputType().equals(InputTypeEnum.GBK)) {
-			Pangenome pangenome = pangenomeService.getPangenome(results);
-			results.setPangenome(pangenome);
+			if (configurations.getInputType().equals(InputTypeEnum.GBK)) {
+				Pangenome pangenome = pangenomeService.getPangenome(results);
+				results.setPangenome(pangenome);
 
-			results.setCogsAnnotation(cogsService.loadCOGsAnnotation(results));
+				results.setCogsAnnotation(cogsService.loadCOGsAnnotation(results));
 
-			if (configurations.isExecuteCazyAnnotations()) {
-				results.setCazyAnnotation(cazyService.loadCazyAnnotations(results));
+				if (configurations.isExecuteCazyAnnotations()) {
+					results.setCazyAnnotation(cazyService.loadCazyAnnotations(results));
+				}
+
+				Map<GenomeFile, GenomeMatrix> genomesMatrix = genomeMatrixService.loadGenomesMatrix(results);
+				results.setGenomesMatrix(genomesMatrix);
 			}
-
-			Map<GenomeFile, GenomeMatrix> genomesMatrix = genomeMatrixService.loadGenomesMatrix(results);
-			results.setGenomesMatrix(genomesMatrix);
 		}
-		// }
-
 		log.info("Exporting results... ");
 		exportService.exportFiles(results);
 		log.info("export finished! ");

@@ -391,7 +391,8 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 				inputs_spades="$inputs_spades --pe-s 1 reads/reads_unpaired_discordant.fastq "
 			fi 
 
-			echo "running spades... parameters: $inputs_spades" 
+			echo "running spades... parameters: $inputs_spades"
+			micromamba activate base 
 			spades.py ${inputs_spades} -o spades -t ${num_threads} $(prop 'mag_improve_spades_extra_parameters') || exit 1
 	
 			#creating input files to run magset for fixed fasta file
@@ -403,7 +404,7 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 	
 			if [ ! -z $(prop 'mag_improve_contig_minimum_size') ]; then
 				echo "Filtering spades result with mag_improve_contig_minimum_size" 
-				/programs/bbmap/reformat.sh in=$(basename ${original_mag_file%.*}).improved.fasta out=$(basename ${original_mag_file%.*}).improved.filtered.fasta minlength="$(prop 'mag_improve_contig_minimum_size')"  || exit 1
+				/home/mambauser/programs/bbmap/reformat.sh in=$(basename ${original_mag_file%.*}).improved.fasta out=$(basename ${original_mag_file%.*}).improved.filtered.fasta minlength="$(prop 'mag_improve_contig_minimum_size')"  || exit 1
 				rm $(basename ${original_mag_file%.*}).improved.fasta
 				mv $(basename ${original_mag_file%.*}).improved.filtered.fasta $(basename ${original_mag_file%.*}).improved.fasta
 			fi

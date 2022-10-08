@@ -1,6 +1,6 @@
 package edu.fbs.magset.model.pangenome;
 
-import java.util.List;
+import java.util.Map;
 
 import edu.fbs.magset.model.genome.GenomeFile;
 import lombok.Data;
@@ -10,30 +10,27 @@ public class PangenomeGene {
 	private String geneName;
 	private String annotation;
 	private Integer numberOfIsolates;
-	private List<GenomeFile> genomes;
+	private Map<GenomeFile, String> geneNames;
 
-	public PangenomeGene(String geneName, String annotation, Integer numberOfIsolates, List<GenomeFile> genomes) {
+	public PangenomeGene(String geneName, String annotation, Integer numberOfIsolates,
+			Map<GenomeFile, String> geneNames) {
 		super();
 		this.geneName = geneName;
 		this.annotation = annotation;
 		this.numberOfIsolates = numberOfIsolates;
-		this.genomes = genomes;
-	}
-	
-	public boolean existsInGenome(GenomeFile genome) {
-		return genomes.contains(genome);
+		this.geneNames = geneNames;
 	}
 
 	public boolean isSpecific() {
-		return genomes.size() == 1;
+		return geneNames.size() == 1;
 	}
 
 	public boolean isCore(int genomesQuantity) {
-		return genomes.size() == genomesQuantity;
+		return geneNames.size() == genomesQuantity;
 	}
 
 	public boolean isShared(int genomesQuantity) {
-		return genomes.size() > 1 && genomes.size() < genomesQuantity;
+		return geneNames.size() > 1 && geneNames.size() < genomesQuantity;
 	}
 
 	public static final String[] CSV_HEADER = { "type", "locus_tag", "pangenome_id", "product", "protein_id", "start",

@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -47,9 +48,9 @@ public class PangenomeService {
 	private void createPangenomeGene(Map<String, PangenomeGene> allGeneNames, List<GenomeFile> genomeFiles,
 			CSVRecord record) {
 		int numberOfcolumnsBeforeGene = 13;
-		List<GenomeFile> genomes = new ArrayList<>();
+		Map<GenomeFile, String> geneNames = new HashMap<>();
 		PangenomeGene genePresenceAbsence = new PangenomeGene(record.get(0), record.get(2),
-				Integer.valueOf(record.get(3)), genomes);
+				Integer.valueOf(record.get(3)), geneNames);
 
 		for (int i = 1; i <= genomeFiles.size(); i++) {
 			String genesNameInGenome = record.get(numberOfcolumnsBeforeGene + i);
@@ -57,7 +58,7 @@ public class PangenomeService {
 				continue;
 			}
 
-			genomes.add(genomeFiles.get(i - 1));
+			geneNames.put(genomeFiles.get(i - 1), genesNameInGenome);
 
 			addPangenomeGenes(allGeneNames, genePresenceAbsence, genesNameInGenome);
 		}

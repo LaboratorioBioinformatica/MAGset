@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import edu.fbs.magset.MagsetResults;
@@ -39,14 +40,13 @@ public class PangenomeJavascriptExportService {
 
 		List<String> hasGenomeInPangenome = new ArrayList<>();
 
-		List<GenomeFile> genomesInPangenome = gene.getGenomes();
-		genomesInPangenome.sort(GenomeFile.COMPARATOR_BY_NAME);
+		Map<GenomeFile, String> geneNames = gene.getGeneNames();
 
 		for (GenomeFile genomeFile : genomes) {
-			if (genomesInPangenome.contains(genomeFile)) {
-				hasGenomeInPangenome.add("<i class=\"fas fa-check\"></i>");
+			if (geneNames.containsKey(genomeFile)) {
+				hasGenomeInPangenome.add(geneNames.get(genomeFile));
 			} else {
-				hasGenomeInPangenome.add("---");
+				hasGenomeInPangenome.add("");
 			}
 		}
 
