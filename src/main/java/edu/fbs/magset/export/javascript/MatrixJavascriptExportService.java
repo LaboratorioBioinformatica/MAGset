@@ -19,7 +19,7 @@ public class MatrixJavascriptExportService {
 
 	public void exportToJavascript(MagsetResults genocom, String javascriptOutputFolder) throws IOException {
 
-		Map<GenomeFile, GenomeMatrix> genesByGenome = genocom.getGenomesMatrix();
+		Map<GenomeFile, GenomeMatrix> genesByGenome = genocom.getGenomeMatrices();
 		for (GenomeFile genome : genesByGenome.keySet()) {
 
 			List<String> lines = new ArrayList<>();

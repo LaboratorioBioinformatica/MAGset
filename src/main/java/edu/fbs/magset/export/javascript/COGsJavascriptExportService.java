@@ -17,7 +17,7 @@ public class COGsJavascriptExportService {
 
 	public void exportToJavascript(MagsetResults genocom, String javascriptOutputFolder) throws IOException {
 
-		Map<GenomeFile, COGAnnotations> genesByGenome = genocom.getCogsAnnotation();
+		Map<GenomeFile, COGAnnotations> genesByGenome = genocom.getCogAnnotations();
 		for (GenomeFile genome : genesByGenome.keySet()) {
 
 			List<String> lines = new ArrayList<>();

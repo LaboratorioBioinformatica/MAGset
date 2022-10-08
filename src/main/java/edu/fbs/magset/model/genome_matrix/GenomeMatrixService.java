@@ -18,13 +18,20 @@ import edu.fbs.magset.model.pangenome.PangenomeGene;
 @Service
 public class GenomeMatrixService {
 
-	public Map<GenomeFile, GenomeMatrix> loadGenomesMatrix(MagsetResults genocom) {
-		Map<GenomeFile, GenomeMatrix> genomesMatrix = new TreeMap<>();
+	public Map<GenomeFile, GenomeMatrix> getGenomeMatrices(MagsetResults magset) {
+		Map<GenomeFile, GenomeMatrix> genomeMatrices = new TreeMap<>();
 
-		for (GenomeFile genomeFile : genocom.getAllGenomes()) {
-			genomesMatrix.put(genomeFile, createGenomeMatrix(genomeFile, genocom));
+		if (!magset.shouldExportHtmlCsvFiles()) {
+			return genomeMatrices;
 		}
-		return genomesMatrix;
+		if (!magset.hasAnnotatedGenomes()) {
+			return genomeMatrices;
+		}
+
+		for (GenomeFile genomeFile : magset.getAllGenomes()) {
+			genomeMatrices.put(genomeFile, createGenomeMatrix(genomeFile, magset));
+		}
+		return genomeMatrices;
 	}
 
 	private GenomeMatrix createGenomeMatrix(GenomeFile genomeFile, MagsetResults genocom) {
@@ -50,10 +57,10 @@ public class GenomeMatrixService {
 			}
 
 			GenomeSegment gri = genocom.getGenomicRegionsOfInterest().getGenomicRegionByGene(genomeFile, locusTag);
-			COGAnnotation cog = genocom.getCogsAnnotation().get(genomeFile).getAnnotations().get(locusTag);
+			COGAnnotation cog = genocom.getCogAnnotations().get(genomeFile).getAnnotations().get(locusTag);
 			CazyAnnotation cazy = null;
 			if (genocom.getConfigurations().isExecuteCazyAnnotations()) {
-				cazy = genocom.getCazyAnnotation().get(genomeFile).getAnnotations().get(locusTag);
+				cazy = genocom.getCazyAnnotations().get(genomeFile).getAnnotations().get(locusTag);
 			}
 
 			GeneMatrix geneMatrix = new GeneMatrix();

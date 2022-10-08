@@ -16,11 +16,21 @@ import edu.fbs.magset.model.genome.GenomeFile;
 @Service
 public class CazyAnnotationService {
 
-	public Map<GenomeFile, CazyAnnotations> loadCazyAnnotations(MagsetResults genocom) throws IOException {
+	public Map<GenomeFile, CazyAnnotations> getCazyAnnotations(MagsetResults magset) throws IOException {
 		Map<GenomeFile, CazyAnnotations> result = new TreeMap<>();
 
-		for (GenomeFile genomeFile : genocom.getAllGenomes()) {
-			result.put(genomeFile, getMap(genomeFile, genocom.getConfigurations().getCazyFolder()));
+		if (!magset.shouldExportHtmlCsvFiles()) {
+			return result;
+		}
+		if (!magset.hasAnnotatedGenomes()) {
+			return result;
+		}
+		if (!magset.getConfigurations().isExecuteCazyAnnotations()) {
+			return result;
+		}
+
+		for (GenomeFile genomeFile : magset.getAllGenomes()) {
+			result.put(genomeFile, getMap(genomeFile, magset.getConfigurations().getCazyFolder()));
 		}
 
 		return result;

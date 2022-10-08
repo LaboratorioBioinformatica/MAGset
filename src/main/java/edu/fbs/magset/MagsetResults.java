@@ -15,6 +15,8 @@ import edu.fbs.magset.model.genome.GenomeFile;
 import edu.fbs.magset.model.genome_matrix.GenomeMatrix;
 import edu.fbs.magset.model.genomic_region_interest.GenomicRegionsInterest;
 import edu.fbs.magset.model.pangenome.Pangenome;
+import edu.fbs.magset.util.ExportEnum;
+import edu.fbs.magset.util.InputTypeEnum;
 import lombok.Data;
 import lombok.ToString;
 
@@ -28,13 +30,14 @@ public class MagsetResults {
 	private AniResults aniResults;
 	private Pangenome pangenome;
 	private GenomicRegionsInterest genomicRegionsOfInterest;
-	private Map<GenomeFile, COGAnnotations> cogsAnnotation = new TreeMap<>();
-	private Map<GenomeFile, CazyAnnotations> cazyAnnotation = new TreeMap<>();
-	private Map<GenomeFile, GenomeMatrix> genomesMatrix = new TreeMap<>();
+	private Map<GenomeFile, COGAnnotations> cogAnnotations = new TreeMap<>();
+	private Map<GenomeFile, CazyAnnotations> cazyAnnotations = new TreeMap<>();
+	private Map<GenomeFile, GenomeMatrix> genomeMatrices = new TreeMap<>();
 	private boolean magCheckExecuted;
 
-	public MagsetResults(Configurations configurations) {
+	public MagsetResults(Configurations configurations) throws Exception {
 		this.configurations = configurations;
+		loadAllGenomeFiles();
 	}
 
 	public GenomeFile getGenomeFileByNameWithoutExtension(String genomeName) {
@@ -77,6 +80,19 @@ public class MagsetResults {
 			this.referenceGenomeFiles.put(entry.getKey(),
 					new GenomeFile(filePath, fileName, entry.getKey(), configurations));
 		}
+	}
+
+	public boolean shouldExportFastaFiles() {
+		return getConfigurations().getExportType().equals(ExportEnum.EXPORT_CLUSTERED_GRIS)
+				|| getConfigurations().getExportType().equals(ExportEnum.EXPORT_GRIS);
+	}
+
+	public boolean shouldExportHtmlCsvFiles() {
+		return getConfigurations().getExportType().equals(ExportEnum.EXPORT_CSV_HTML);
+	}
+
+	public boolean hasAnnotatedGenomes() {
+		return configurations.getInputType().equals(InputTypeEnum.GBK);
 	}
 
 }

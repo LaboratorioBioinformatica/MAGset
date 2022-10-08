@@ -16,11 +16,18 @@ import edu.fbs.magset.model.genome.GenomeFile;
 @Service
 public class COGsAnnotationService {
 
-	public Map<GenomeFile, COGAnnotations> loadCOGsAnnotation(MagsetResults genocom) throws IOException {
+	public Map<GenomeFile, COGAnnotations> getCOGAnnotations(MagsetResults magset) throws IOException {
 		Map<GenomeFile, COGAnnotations> result = new TreeMap<>();
 
-		for (GenomeFile genomeFile : genocom.getAllGenomes()) {
-			result.put(genomeFile, getCOGMap(genomeFile, genocom.getConfigurations().getCogFolder()));
+		if (!magset.shouldExportHtmlCsvFiles()) {
+			return result;
+		}
+		if (!magset.hasAnnotatedGenomes()) {
+			return result;
+		}
+
+		for (GenomeFile genomeFile : magset.getAllGenomes()) {
+			result.put(genomeFile, getCOGMap(genomeFile, magset.getConfigurations().getCogFolder()));
 		}
 
 		return result;

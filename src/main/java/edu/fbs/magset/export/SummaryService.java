@@ -22,8 +22,8 @@ public class SummaryService {
 		for (GenomeFile genome : genomes) {
 			int genesQty = genome.getAllGenes().size();
 			Collection<GeneMatrix> genes = new ArrayList<>();
-			if (genocom.getGenomesMatrix().get(genome) != null) {
-				genes = genocom.getGenomesMatrix().get(genome).getGenesByName().values();
+			if (genocom.getGenomeMatrices().get(genome) != null) {
+				genes = genocom.getGenomeMatrices().get(genome).getGenesByName().values();
 			}
 			long specificGenesQty = genes.stream().filter(x -> x.getPangenomeGene().isSpecific()).count();
 			long sharedGenesQty = genes.stream().filter(x -> x.getPangenomeGene().isShared(genomes.size())).count();
@@ -35,9 +35,9 @@ public class SummaryService {
 			int cazyQty = 0;
 
 			if (!genocom.getConfigurations().getInputType().equals(InputTypeEnum.FASTA)) {
-				cogQty = genocom.getCogsAnnotation().get(genome).getAnnotations().size();
+				cogQty = genocom.getCogAnnotations().get(genome).getAnnotations().size();
 				if (genocom.getConfigurations().isExecuteCazyAnnotations()) {
-					cazyQty = genocom.getCazyAnnotation().get(genome).getAnnotations().size();
+					cazyQty = genocom.getCazyAnnotations().get(genome).getAnnotations().size();
 				}
 			}
 			List<GenomeSegment> gris = genocom.getGenomicRegionsOfInterest().getGenomicRegionsByGenome().get(genome);

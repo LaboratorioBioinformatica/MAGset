@@ -139,7 +139,7 @@ public class CSVExportService {
 			CSVPrinter printer = new CSVPrinter(out,
 					CSVFormat.EXCEL.withDelimiter(';').withHeader(PangenomeGene.CSV_HEADER));
 
-			GenomeMatrix genomeMatrix = genocom.getGenomesMatrix().get(genomeFile);
+			GenomeMatrix genomeMatrix = genocom.getGenomeMatrices().get(genomeFile);
 			if (genomeMatrix != null) {
 				for (GeneMatrix geneMatrix : genomeMatrix.getGenesByName().values()) {
 					printer.printRecord(defaultString(geneMatrix.getGene().getType()), //

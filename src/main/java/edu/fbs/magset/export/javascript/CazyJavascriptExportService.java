@@ -19,8 +19,8 @@ public class CazyJavascriptExportService {
 		if (!genocom.getConfigurations().isExecuteCazyAnnotations()) {
 			return;
 		}
-		
-		Map<GenomeFile, CazyAnnotations> genesByGenome = genocom.getCazyAnnotation();
+
+		Map<GenomeFile, CazyAnnotations> genesByGenome = genocom.getCazyAnnotations();
 		for (GenomeFile genome : genesByGenome.keySet()) {
 
 			List<String> lines = new ArrayList<>();

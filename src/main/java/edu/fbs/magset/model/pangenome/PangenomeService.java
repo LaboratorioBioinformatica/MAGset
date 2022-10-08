@@ -20,10 +20,17 @@ import edu.fbs.magset.model.genome.GenomeFile;
 @Service
 public class PangenomeService {
 
-	public Pangenome getPangenome(MagsetResults genocom) throws IOException {
+	public Pangenome getPangenome(MagsetResults magset) throws IOException {
 		Pangenome pangenome = new Pangenome();
+
+		if (!magset.shouldExportHtmlCsvFiles()) {
+			return pangenome;
+		}
+		if (!magset.hasAnnotatedGenomes()) {
+			return pangenome;
+		}
 		Map<String, PangenomeGene> pangenomeGenes = getPangenomeGenesMap(
-				genocom.getConfigurations().getPangenomeFolder(), genocom.getAllGenomesMap());
+				magset.getConfigurations().getPangenomeFolder(), magset.getAllGenomesMap());
 		pangenome.setGenes(pangenomeGenes);
 
 		return pangenome;
@@ -71,12 +78,4 @@ public class PangenomeService {
 			allGeneNames.put(geneName, genePresenceAbsence);
 		}
 	}
-
-	public static void main(String[] args) {
-		String[] genes = "Fabio".split(";");
-		for (String geneName : genes) {
-			System.out.println(geneName);
-		}
-	}
-
 }

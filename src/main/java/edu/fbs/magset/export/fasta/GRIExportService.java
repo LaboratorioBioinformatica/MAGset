@@ -13,7 +13,7 @@ import edu.fbs.magset.model.genomic_region_interest.GenomicRegionInterest;
 import lombok.extern.java.Log;
 
 @Log
-public class FastaExportService {
+public class GRIExportService {
 
 	public void export(MagsetResults genocom) throws IOException {
 		if (!genocom.getGenomicRegionsOfInterest().getGenomicRegionsById().isEmpty()) {
