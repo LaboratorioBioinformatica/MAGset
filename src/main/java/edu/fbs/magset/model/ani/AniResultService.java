@@ -11,6 +11,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 
 import edu.fbs.magset.MagsetResults;
+import edu.fbs.magset.model.genome.Genome;
 
 @Service
 public class AniResultService {
@@ -25,14 +26,23 @@ public class AniResultService {
 		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withDelimiter('\t').withFirstRecordAsHeader().parse(in);
 
 		for (CSVRecord record : records) {
-			String genomeName1 = FilenameUtils.removeExtension(Paths.get(record.get(0)).getFileName().toString());
-			String genomeName2 = FilenameUtils.removeExtension(Paths.get(record.get(1)).getFileName().toString());
+			String genomeName1 = getGenomeName(record.get(0));
+			String genomeName2 = getGenomeName(record.get(1));
 			Double result = Double.valueOf(record.get(2));
-			results.addAniResult(magset.getGenomeFileByNameWithoutExtension(genomeName1),
-					magset.getGenomeFileByNameWithoutExtension(genomeName2), result);
+			Genome genome1 = findGenomeByName(magset, genomeName1);
+			Genome genome2 = findGenomeByName(magset, genomeName2);
+			results.addAniResult(genome1, genome2, result);
 		}
 
 		return results;
+	}
+
+	private String getGenomeName(String path) {
+		return FilenameUtils.removeExtension(Paths.get(path).getFileName().toString());
+	}
+
+	private Genome findGenomeByName(MagsetResults magset, String genomeName) {
+		return magset.getAllGenomes().stream().filter(x -> x.getName().equals(genomeName)).findFirst().get();
 	}
 
 }

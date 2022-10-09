@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.model.ani.AniResult;
 import edu.fbs.magset.model.ani.AniResults;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 
 public class AniJavascriptExportService {
 
@@ -20,10 +20,10 @@ public class AniJavascriptExportService {
 		lines.add("$( document ).ready(function() {\r\n");
 
 		AniResults aniResults = genocom.getAniResults();
-		for (GenomeFile genome1 : genocom.getAllGenomes()) {
+		for (Genome genome1 : genocom.getAllGenomes()) {
 			List<String> results = new ArrayList<>();
 
-			for (GenomeFile genome2 : genocom.getAllGenomes()) {
+			for (Genome genome2 : genocom.getAllGenomes()) {
 				AniResult aniResult = aniResults.getAniResult(genome1, genome2);
 				if (aniResult != null) {
 					results.add(aniResult.getResult().toString());

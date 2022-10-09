@@ -29,7 +29,7 @@ public class GRIGenesJavascriptExportService {
 				for (Gene gene : genomeSegment.getGenes()) {
 					lines.add("griGenes.push(new GRIGene('" //
 							+ genomeSegment.getNameWithoutGenome() + "', '" //
-							+ genomeSegment.getGenomeFile().getName() + "', '"//
+							+ genomeSegment.getGenome().getName() + "', '"//
 							+ gene.getType() + "', '" //
 							+ gene.getLocusTag() + "', '"//
 							+ escapeEspecialCharacters(defaultString(gene.getProduct())) + "', '"//

@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.commons.io.FilenameUtils;
 import org.biojava.nbio.core.sequence.DNASequence;
 import org.biojava.nbio.core.sequence.DNASequence.DNAType;
 import org.biojava.nbio.core.sequence.ProteinSequence;
@@ -19,10 +20,9 @@ import edu.fbs.magset.util.InputTypeEnum;
 
 public class GenomeBuilder {
 
-	public static Genome buildGenome(String path, GenomeFile genomeFile, Configurations configurations)
-			throws Exception {
+	public static Genome build(String path, int genomeId, Configurations configurations) throws Exception {
 
-		File file = new File(path);
+		File file = new File(FilenameUtils.removeExtension(path) + configurations.getInputType().getExtension());
 
 		LinkedHashMap<String, ProteinSequence> protSequences = new LinkedHashMap<>();
 		LinkedHashMap<String, DNASequence> dnaSequences = new LinkedHashMap<>();
@@ -46,7 +46,7 @@ public class GenomeBuilder {
 			dnaSequences = FastaReaderHelper.readFastaDNASequence(file);
 		}
 
-		return new Genome(dnaSequences, protSequences, genomeFile);
+		return new Genome(dnaSequences, protSequences, path, genomeId, configurations);
 	}
 
 }

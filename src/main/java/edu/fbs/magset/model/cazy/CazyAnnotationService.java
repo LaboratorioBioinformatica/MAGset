@@ -11,13 +11,13 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
 
 import edu.fbs.magset.MagsetResults;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 
 @Service
 public class CazyAnnotationService {
 
-	public Map<GenomeFile, CazyAnnotations> getCazyAnnotations(MagsetResults magset) throws IOException {
-		Map<GenomeFile, CazyAnnotations> result = new TreeMap<>();
+	public Map<Genome, CazyAnnotations> getCazyAnnotations(MagsetResults magset) throws IOException {
+		Map<Genome, CazyAnnotations> result = new TreeMap<>();
 
 		if (!magset.shouldExportHtmlCsvFiles()) {
 			return result;
@@ -29,15 +29,15 @@ public class CazyAnnotationService {
 			return result;
 		}
 
-		for (GenomeFile genomeFile : magset.getAllGenomes()) {
-			result.put(genomeFile, getMap(genomeFile, magset.getConfigurations().getCazyFolder()));
+		for (Genome genome : magset.getAllGenomes()) {
+			result.put(genome, getMap(genome, magset.getConfigurations().getCazyFolder()));
 		}
 
 		return result;
 	}
 
-	private CazyAnnotations getMap(GenomeFile genomeFile, String resultsFolder) throws IOException {
-		String genomeName = genomeFile.getName();
+	private CazyAnnotations getMap(Genome genome, String resultsFolder) throws IOException {
+		String genomeName = genome.getName();
 		Reader in = new FileReader(resultsFolder + "/" + genomeName + "/overview.txt");
 		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withDelimiter('\t').withFirstRecordAsHeader().parse(in);
 
@@ -62,6 +62,6 @@ public class CazyAnnotationService {
 
 			result.put(locusTag, line);
 		}
-		return new CazyAnnotations(genomeFile, result);
+		return new CazyAnnotations(genome, result);
 	}
 }

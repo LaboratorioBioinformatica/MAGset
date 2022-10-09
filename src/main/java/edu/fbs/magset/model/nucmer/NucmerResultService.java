@@ -16,13 +16,13 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
 import edu.fbs.magset.MagsetResults;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 
 public class NucmerResultService {
 
-	public List<NucmerResult> getGenomeNucmerResults(GenomeFile genomeFile, String referenceMatchName,
-			Integer sequenceSize, MagsetResults genocom) throws IOException, InterruptedException {
-		List<NucmerResult> nucmerResults = getNucmerResults(genocom.getConfigurations().getNucmerResultFile(genomeFile),
+	public List<NucmerResult> getGenomeNucmerResults(Genome genome, String referenceMatchName, Integer sequenceSize,
+			MagsetResults genocom) throws IOException, InterruptedException {
+		List<NucmerResult> nucmerResults = getNucmerResults(genocom.getConfigurations().getNucmerResultFile(genome),
 				genocom);
 		List<NucmerResult> filtered = filterNucmerResults(nucmerResults, referenceMatchName,
 				genocom.getConfigurations().getNucmerMinimalQueryMatchSize(),
@@ -33,28 +33,16 @@ public class NucmerResultService {
 		return aggregatedResults;
 	}
 
-	public List<NucmerResultsByMatchName> getGRINucmerResults(MagsetResults genocom)
+	public List<NucmerResultsByMatchName> getGRINucmerResults(MagsetResults magset)
 			throws IOException, InterruptedException {
-		List<NucmerResult> nucmerResults = getNucmerResults(genocom.getConfigurations().getGRINucmerResultFile(),
-				genocom);
+		List<NucmerResult> nucmerResults = getNucmerResults(magset.getConfigurations().getGRINucmerResultFile(),
+				magset);
 		nucmerResults = filterNucmerResultsByIdentity(nucmerResults,
-				genocom.getConfigurations().getNucmerMinimalIdentity());
+				magset.getConfigurations().getNucmerMinimalIdentity());
 
 		Collection<NucmerResultsByMatchName> nucmerResultsByMatchName = getNucmerResultsByMatchName(nucmerResults);
 		return filterNucmerResultsByCoverage(nucmerResultsByMatchName,
-				genocom.getConfigurations().getNucmerMinimalCoveredBetweenSimilarGRIsToConsider());
-	}
-
-	public List<NucmerResultsByMatchName> getGRINucmerResults2(GenomeFile genomeFile, MagsetResults genocom)
-			throws IOException, InterruptedException {
-		List<NucmerResult> nucmerResults = getNucmerResults(
-				genocom.getConfigurations().getGRINucmerResultFile(genomeFile), genocom);
-		nucmerResults = filterNucmerResultsByIdentity(nucmerResults,
-				genocom.getConfigurations().getNucmerMinimalIdentity());
-
-		Collection<NucmerResultsByMatchName> nucmerResultsByMatchName = getNucmerResultsByMatchName(nucmerResults);
-		return filterNucmerResultsByCoverage(nucmerResultsByMatchName,
-				genocom.getConfigurations().getNucmerMinimalCoveredBetweenSimilarGRIsToConsider());
+				magset.getConfigurations().getNucmerMinimalCoveredBetweenSimilarGRIsToConsider());
 	}
 
 	private Collection<NucmerResultsByMatchName> getNucmerResultsByMatchName(List<NucmerResult> nucmerResults) {

@@ -7,7 +7,7 @@ import org.biojava.nbio.core.sequence.DNASequence.DNAType;
 
 import edu.fbs.magset.Configurations;
 import edu.fbs.magset.model.genome.Gene;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import edu.fbs.magset.model.genomic_region_interest.coverage.GRIRawReadsCoverage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +20,7 @@ public class GenomeSegment implements Comparable<GenomeSegment> {
 	private GenomicRegionInterest genomicRegionInterest;
 	private int id;
 	@ToString.Include
-	private GenomeFile genomeFile;
+	private Genome genome;
 	@ToString.Include
 	private String sequenceName;
 	@ToString.Include
@@ -31,10 +31,10 @@ public class GenomeSegment implements Comparable<GenomeSegment> {
 	private Collection<Gene> genes;
 	private GRIRawReadsCoverage readsCoverage = new GRIRawReadsCoverage();
 
-	public GenomeSegment(GenomeFile genomeFile, String sequenceName, DNAType dnaType, int start, int end) {
+	public GenomeSegment(Genome genome, String sequenceName, DNAType dnaType, int start, int end) {
 		super();
 		this.sequenceName = sequenceName;
-		this.genomeFile = genomeFile;
+		this.genome = genome;
 		this.dnaType = dnaType;
 		this.start = start;
 		this.end = end;
@@ -50,7 +50,7 @@ public class GenomeSegment implements Comparable<GenomeSegment> {
 
 	public Collection<Gene> getGenes() {
 		if (genes == null) {
-			genes = getGenomeFile().getGenes(sequenceName, this.getStart(), this.getEnd());
+			genes = getGenome().getGenes(sequenceName, this.getStart(), this.getEnd());
 		}
 		return genes;
 	}
@@ -60,7 +60,7 @@ public class GenomeSegment implements Comparable<GenomeSegment> {
 	}
 
 	public String getName() {
-		return getNameWithoutGenome() + "_" + genomeFile.getName();
+		return getNameWithoutGenome() + "_" + genome.getName();
 	}
 
 	public String getNameWithoutGenome() {
@@ -72,7 +72,7 @@ public class GenomeSegment implements Comparable<GenomeSegment> {
 	}
 
 	public String getDNASequence() {
-		return genomeFile.getGenome().getDNASequence(sequenceName, Math.abs(getStart()), Math.abs(getEnd()));
+		return genome.getDNASequence(sequenceName, Math.abs(getStart()), Math.abs(getEnd()));
 	}
 
 	public boolean isPositiveStrand() {
@@ -91,7 +91,7 @@ public class GenomeSegment implements Comparable<GenomeSegment> {
 
 	@Override
 	public int compareTo(GenomeSegment o) {
-		return new CompareToBuilder().append(genomeFile, o.genomeFile).append(sequenceName, o.sequenceName)
+		return new CompareToBuilder().append(genome, o.genome).append(sequenceName, o.sequenceName)
 				.append(start, o.start).append(end, o.end).build();
 	}
 

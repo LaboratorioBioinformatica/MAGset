@@ -2,7 +2,7 @@ package edu.fbs.magset.model.pangenome;
 
 import java.util.Map;
 
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import lombok.Data;
 
 @Data
@@ -10,10 +10,9 @@ public class PangenomeGene {
 	private String geneName;
 	private String annotation;
 	private Integer numberOfIsolates;
-	private Map<GenomeFile, String> geneNames;
+	private Map<Genome, String> geneNames;
 
-	public PangenomeGene(String geneName, String annotation, Integer numberOfIsolates,
-			Map<GenomeFile, String> geneNames) {
+	public PangenomeGene(String geneName, String annotation, Integer numberOfIsolates, Map<Genome, String> geneNames) {
 		super();
 		this.geneName = geneName;
 		this.annotation = annotation;

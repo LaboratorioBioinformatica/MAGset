@@ -15,7 +15,7 @@ import org.biojava.nbio.core.sequence.DNASequence;
 import org.springframework.stereotype.Service;
 
 import edu.fbs.magset.MagsetResults;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import edu.fbs.magset.model.genomic_region_interest.coverage.MAGCheckService;
 import edu.fbs.magset.model.nucmer.NucmerResult;
 import edu.fbs.magset.model.nucmer.NucmerResultService;
@@ -26,20 +26,19 @@ public class GenomicRegionsInterestService {
 
 	private NucmerResultService nucmerService = new NucmerResultService();
 
-	public GenomicRegionsInterest getGRIs(MagsetResults genocom) throws IOException, InterruptedException {
+	public GenomicRegionsInterest getGRIs(MagsetResults magset) throws IOException, InterruptedException {
 		GenomicRegionsInterest genomicRegionsInterest = new GenomicRegionsInterest();
 		Set<GenomicRegionInterest> gris = new LinkedHashSet<>();
 
-		Map<GenomeFile, List<GenomicRegionInterest>> grisByGenome = new LinkedHashMap<>();
+		Map<Genome, List<GenomicRegionInterest>> grisByGenome = new LinkedHashMap<>();
 
-		for (GenomeFile genomeFile : genocom.getReferenceGenomeFiles().values()) {
-			List<GenomicRegionInterest> genomeGris = getGRIs(genocom, genomeFile, GenomicRegionInterestType.NEGATIVE);
-			grisByGenome.put(genomeFile, genomeGris);
+		for (Genome genome : magset.getReferencesByIndex().values()) {
+			List<GenomicRegionInterest> genomeGris = getGRIs(magset, genome, GenomicRegionInterestType.NEGATIVE);
+			grisByGenome.put(genome, genomeGris);
 		}
 
-		List<GenomicRegionInterest> magGris = getGRIs(genocom, genocom.getMagGenomeFile(),
-				GenomicRegionInterestType.POSITIVE);
-		grisByGenome.put(genocom.getMagGenomeFile(), magGris);
+		List<GenomicRegionInterest> magGris = getGRIs(magset, magset.getMag(), GenomicRegionInterestType.POSITIVE);
+		grisByGenome.put(magset.getMag(), magGris);
 
 		int id = 1;
 		for (List<GenomicRegionInterest> grisGenome : grisByGenome.values()) {
@@ -48,17 +47,17 @@ public class GenomicRegionsInterestService {
 			}
 		}
 
-		gris = clusterGRIsUsingNucmer(grisByGenome, genocom);
+		gris = clusterGRIsUsingNucmer(grisByGenome, magset);
 
 		id = 1;
 		for (GenomicRegionInterest gri : gris) {
 			gri.setId(id++);
 		}
-		new MAGCheckService().loadCoverageRawReads(gris, genocom);
+		new MAGCheckService().loadCoverageRawReads(gris, magset);
 
 		genomicRegionsInterest.setGris(gris);
 
-		File file = new File(genocom.getConfigurations().getNucmerByGenomeGRIsFolder());
+		File file = new File(magset.getConfigurations().getNucmerByGenomeGRIsFolder());
 		if (file.exists()) {
 			genomicRegionsInterest.setClustered(true);
 		}
@@ -66,7 +65,7 @@ public class GenomicRegionsInterestService {
 		return genomicRegionsInterest;
 	}
 
-	private Set<GenomicRegionInterest> clusterGRIsUsingNucmer(Map<GenomeFile, List<GenomicRegionInterest>> grisByGenome,
+	private Set<GenomicRegionInterest> clusterGRIsUsingNucmer(Map<Genome, List<GenomicRegionInterest>> grisByGenome,
 			MagsetResults genocom) throws IOException, InterruptedException {
 		Set<GenomicRegionInterest> result = new LinkedHashSet<GenomicRegionInterest>();
 
@@ -125,13 +124,13 @@ public class GenomicRegionsInterestService {
 		return result;
 	}
 
-	private List<GenomicRegionInterest> getGRIs(MagsetResults genocom, GenomeFile genomeFile,
-			GenomicRegionInterestType type) throws IOException, InterruptedException {
+	private List<GenomicRegionInterest> getGRIs(MagsetResults genocom, Genome genome, GenomicRegionInterestType type)
+			throws IOException, InterruptedException {
 		List<GenomicRegionInterest> result = new ArrayList<>();
-		for (Entry<String, DNASequence> dnaSequenceEntry : genomeFile.getGenome().getDnaSequence().entrySet()) {
+		for (Entry<String, DNASequence> dnaSequenceEntry : genome.getDnaSequence().entrySet()) {
 			String sequenceName = dnaSequenceEntry.getKey();
 			DNASequence dnaSequence = dnaSequenceEntry.getValue();
-			List<NucmerResult> nucmerResults = nucmerService.getGenomeNucmerResults(genomeFile, sequenceName,
+			List<NucmerResult> nucmerResults = nucmerService.getGenomeNucmerResults(genome, sequenceName,
 					dnaSequence.getLength(), genocom);
 
 			NucmerResult previous = nucmerResults.get(0);
@@ -140,7 +139,7 @@ public class GenomicRegionsInterestService {
 
 				if (current.getReferenceMatchStart() - previous.getReferenceMatchEnd() + 1 > genocom.getConfigurations()
 						.getMinimumGRISize()) {
-					GenomeSegment genomeSegment = new GenomeSegment(genomeFile, sequenceName, dnaSequence.getDNAType(),
+					GenomeSegment genomeSegment = new GenomeSegment(genome, sequenceName, dnaSequence.getDNAType(),
 							previous.getReferenceMatchEnd() + 1, current.getReferenceMatchStart());
 					GenomicRegionInterest gri = new GenomicRegionInterest(type, genomeSegment);
 					result.add(gri);

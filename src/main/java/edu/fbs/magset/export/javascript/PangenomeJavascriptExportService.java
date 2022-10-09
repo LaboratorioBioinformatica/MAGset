@@ -5,12 +5,13 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import edu.fbs.magset.MagsetResults;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import edu.fbs.magset.model.pangenome.PangenomeGene;
 
 public class PangenomeJavascriptExportService {
@@ -34,17 +35,15 @@ public class PangenomeJavascriptExportService {
 		Files.write(Paths.get(javascriptOutputFolder + "02_pagenome_data.js"), lines, StandardCharsets.UTF_8);
 	}
 
-	private List<String> hasGenomeInPangenomeGene(MagsetResults genocom, PangenomeGene gene) {
-		List<GenomeFile> genomes = genocom.getAllGenomes();
-		genomes.sort(GenomeFile.COMPARATOR_BY_NAME);
-
+	private List<String> hasGenomeInPangenomeGene(MagsetResults magset, PangenomeGene gene) {
+		Collection<Genome> genomes = magset.getAllGenomes();
 		List<String> hasGenomeInPangenome = new ArrayList<>();
 
-		Map<GenomeFile, String> geneNames = gene.getGeneNames();
+		Map<Genome, String> geneNames = gene.getGeneNames();
 
-		for (GenomeFile genomeFile : genomes) {
-			if (geneNames.containsKey(genomeFile)) {
-				hasGenomeInPangenome.add(geneNames.get(genomeFile));
+		for (Genome genome : genomes) {
+			if (geneNames.containsKey(genome)) {
+				hasGenomeInPangenome.add(geneNames.get(genome));
 			} else {
 				hasGenomeInPangenome.add("");
 			}

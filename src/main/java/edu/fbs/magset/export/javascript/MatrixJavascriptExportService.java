@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.fbs.magset.MagsetResults;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import edu.fbs.magset.model.genome_matrix.GeneMatrix;
 import edu.fbs.magset.model.genome_matrix.GenomeMatrix;
 
@@ -19,8 +19,8 @@ public class MatrixJavascriptExportService {
 
 	public void exportToJavascript(MagsetResults genocom, String javascriptOutputFolder) throws IOException {
 
-		Map<GenomeFile, GenomeMatrix> genesByGenome = genocom.getGenomeMatrices();
-		for (GenomeFile genome : genesByGenome.keySet()) {
+		Map<Genome, GenomeMatrix> genesByGenome = genocom.getGenomeMatrices();
+		for (Genome genome : genesByGenome.keySet()) {
 
 			List<String> lines = new ArrayList<>();
 			lines.add("$( document ).ready(function() {\r\n");

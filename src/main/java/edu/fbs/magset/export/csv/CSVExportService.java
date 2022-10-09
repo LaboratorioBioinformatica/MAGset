@@ -15,7 +15,7 @@ import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.SummaryService;
 import edu.fbs.magset.export.javascript.SummaryResult;
 import edu.fbs.magset.model.genome.Gene;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import edu.fbs.magset.model.genome_matrix.GeneMatrix;
 import edu.fbs.magset.model.genome_matrix.GenomeMatrix;
 import edu.fbs.magset.model.genomic_region_interest.GenomeSegment;
@@ -78,7 +78,7 @@ public class CSVExportService {
 			for (GenomeSegment genomeSegment : gri.getGenomeSegments()) {
 				printer.printRecord( //
 						genomeSegment.getNameWithoutGenome(), //
-						genomeSegment.getGenomeFile().getName(), //
+						genomeSegment.getGenome().getName(), //
 						genomeSegment.getSequenceName(), //
 						genomeSegment.getSize(), //
 						genomeSegment.getStart(), //
@@ -131,15 +131,15 @@ public class CSVExportService {
 			outputFolderFile.mkdirs();
 		}
 
-		Map<Integer, GenomeFile> genomeFiles = genocom.getAllGenomesMap();
+		Map<Integer, Genome> genomes = genocom.getAllGenomesByIndex();
 
-		for (GenomeFile genomeFile : genomeFiles.values()) {
+		for (Genome genome : genomes.values()) {
 			FileWriter out = new FileWriter(
-					outputFolderFile.getAbsolutePath() + "/" + genomeFile.getName() + "_gene_matrix.csv");
+					outputFolderFile.getAbsolutePath() + "/" + genome.getName() + "_gene_matrix.csv");
 			CSVPrinter printer = new CSVPrinter(out,
 					CSVFormat.EXCEL.withDelimiter(';').withHeader(PangenomeGene.CSV_HEADER));
 
-			GenomeMatrix genomeMatrix = genocom.getGenomeMatrices().get(genomeFile);
+			GenomeMatrix genomeMatrix = genocom.getGenomeMatrices().get(genome);
 			if (genomeMatrix != null) {
 				for (GeneMatrix geneMatrix : genomeMatrix.getGenesByName().values()) {
 					printer.printRecord(defaultString(geneMatrix.getGene().getType()), //
@@ -151,8 +151,8 @@ public class CSVExportService {
 							defaultString(geneMatrix.getGene().getMaxString()), //
 							geneMatrix.getGene().getStrand(), //
 							defaultString(geneMatrix.getGene().getParent()), //
-							geneMatrix.getPangenomeGene().isCore(genomeFiles.size()), //
-							geneMatrix.getPangenomeGene().isShared(genomeFiles.size()), //
+							geneMatrix.getPangenomeGene().isCore(genomes.size()), //
+							geneMatrix.getPangenomeGene().isShared(genomes.size()), //
 							geneMatrix.getPangenomeGene().isSpecific(), //
 							(geneMatrix.getGriGenome() != null ? geneMatrix.getGriGenome().getName() : ""), //
 							(geneMatrix.getCogAnnotation() != null ? geneMatrix.getCogAnnotation().getCogId() : ""), //

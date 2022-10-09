@@ -8,7 +8,7 @@ import org.apache.commons.io.IOUtils;
 
 import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.util.ResourceFinder;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 
 public class HtmlAdvancedSearchListExportService {
 
@@ -20,9 +20,9 @@ public class HtmlAdvancedSearchListExportService {
 		IOUtils.write(content, new FileOutputStream(outputFolder + "/advanced-search-list.html"), "UTF-8");
 	}
 
-	private String getScriptItems(MagsetResults genocom) {
+	private String getScriptItems(MagsetResults magset) {
 		StringBuilder result = new StringBuilder();
-		for (GenomeFile genome : genocom.getAllGenomes()) {
+		for (Genome genome : magset.getAllGenomes()) {
 			result.append("<script src=\"js/06_matrix_" + genome.getName() + "_data.js\"></script>");
 
 		}

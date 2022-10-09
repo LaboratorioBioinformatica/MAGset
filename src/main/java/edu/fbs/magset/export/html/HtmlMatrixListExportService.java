@@ -8,13 +8,13 @@ import org.apache.commons.io.IOUtils;
 
 import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.util.ResourceFinder;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 
 public class HtmlMatrixListExportService {
 
 	public void export(MagsetResults genocom, String outputFolder, String header, String footer)
 			throws IOException, FileNotFoundException {
-		for (GenomeFile genome : genocom.getAllGenomes()) {
+		for (Genome genome : genocom.getAllGenomes()) {
 			String footerUpdated = footer.replaceAll("<scriptItems>", getScriptItems(genocom, genome));
 
 			String content = header + IOUtils.toString(ResourceFinder.getResourceAsStream("matrix-list.mhtml"), "UTF-8")
@@ -25,7 +25,7 @@ public class HtmlMatrixListExportService {
 		}
 	}
 
-	private String getScriptItems(MagsetResults genocom, GenomeFile genome) {
+	private String getScriptItems(MagsetResults genocom, Genome genome) {
 		StringBuilder result = new StringBuilder();
 		result.append("<script src=\"js/06_matrix_" + genome.getName() + "_data.js\"></script>");
 		result.append("<script src=\"js/06_matrix_load.js\"></script>");

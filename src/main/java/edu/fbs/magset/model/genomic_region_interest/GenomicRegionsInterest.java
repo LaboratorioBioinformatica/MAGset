@@ -8,14 +8,14 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import edu.fbs.magset.model.genome.Gene;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import lombok.Data;
 
 @Data
 public class GenomicRegionsInterest {
 	private Map<Integer, GenomicRegionInterest> genomicRegionsById;
-	private Map<GenomeFile, Map<String, GenomeSegment>> genomicRegionsGenesByGenome = new LinkedHashMap<>();
-	private Map<GenomeFile, List<GenomeSegment>> genomicRegionsByGenome = new LinkedHashMap<>();
+	private Map<Genome, Map<String, GenomeSegment>> genomicRegionsGenesByGenome = new LinkedHashMap<>();
+	private Map<Genome, List<GenomeSegment>> genomicRegionsByGenome = new LinkedHashMap<>();
 	private boolean clustered;
 
 	public void setGris(Set<GenomicRegionInterest> gris) {
@@ -25,21 +25,21 @@ public class GenomicRegionsInterest {
 			genomicRegionsById.put(gri.getId(), gri);
 			for (GenomeSegment segment : gri.getGenomeSegments()) {
 
-				GenomeFile genomeFile = segment.getGenomeFile();
-				Map<String, GenomeSegment> grisByGeneName = genomicRegionsGenesByGenome.get(genomeFile);
+				Genome genome = segment.getGenome();
+				Map<String, GenomeSegment> grisByGeneName = genomicRegionsGenesByGenome.get(genome);
 
 				if (grisByGeneName == null) {
 					grisByGeneName = new TreeMap<>();
-					genomicRegionsGenesByGenome.put(genomeFile, grisByGeneName);
+					genomicRegionsGenesByGenome.put(genome, grisByGeneName);
 				}
 				for (Gene gene : segment.getGenes()) {
 					grisByGeneName.put(gene.getLocusTag(), segment);
 				}
 
-				List<GenomeSegment> grisByGenome = genomicRegionsByGenome.get(genomeFile);
+				List<GenomeSegment> grisByGenome = genomicRegionsByGenome.get(genome);
 				if (grisByGenome == null) {
 					grisByGenome = new ArrayList<>();
-					genomicRegionsByGenome.put(genomeFile, grisByGenome);
+					genomicRegionsByGenome.put(genome, grisByGenome);
 				}
 				grisByGenome.add(segment);
 
@@ -47,8 +47,8 @@ public class GenomicRegionsInterest {
 		}
 	}
 
-	public GenomeSegment getGenomicRegionByGene(GenomeFile genomeFile, String locusTag) {
-		Map<String, GenomeSegment> griByGeneName = genomicRegionsGenesByGenome.get(genomeFile);
+	public GenomeSegment getGenomicRegionByGene(Genome genome, String locusTag) {
+		Map<String, GenomeSegment> griByGeneName = genomicRegionsGenesByGenome.get(genome);
 		if (griByGeneName != null) {
 			return griByGeneName.get(locusTag);
 		}

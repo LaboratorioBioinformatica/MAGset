@@ -17,34 +17,27 @@ import edu.fbs.magset.model.genomic_region_interest.GenomicRegionInterest;
 import lombok.extern.java.Log;
 
 /**
- * Checks coverage in raw reads, identifying if the negative GRIs were an error
- * in the process of assembling the MAG genome.
+ * Checks coverage in raw reads, identifying if the negative GRIs were an
+ * possible error in the process of assembling the MAG genome.
  * 
- * @author fabio.sanchez
+ * @author fsanchez
  *
  */
 @Log
 public class MAGCheckService {
 
-	public void loadCoverageRawReads(Set<GenomicRegionInterest> gris, MagsetResults genocom) throws IOException {
-
-		String path = genocom.getConfigurations().getMAGCheckFolder();
-		File magcheckFolder = new File(path);
-
-		if (!magcheckFolder.exists()) {
-			log.info("Folder " + path
-					+ " not found. This folder is necessary to execute MAGCheck step, skiping. To execute this optional step, please inform the raw reads fastq files in conf.properties.");
+	public void loadCoverageRawReads(Set<GenomicRegionInterest> gris, MagsetResults magset) throws IOException {
+		if (!magset.getConfigurations().hasMagCheckResults()) {
 			return;
 		}
+		String path = magset.getConfigurations().getMAGCheckFolder();
 		String coveragePath = path + "/result.coverage";
 		if (!new File(coveragePath).exists()) {
 			log.info("Coverage file " + coveragePath
 					+ " not found. This file is necessary to execute MAGCheck step, skiping.");
 			return;
 		}
-		genocom.setMagCheckExecuted(true);
 
-		
 		Map<String, GRIRawReadsCoverage> coverageMap = readGRICoverageFile(coveragePath);
 
 		for (GenomicRegionInterest gri : gris) {

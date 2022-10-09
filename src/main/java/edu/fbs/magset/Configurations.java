@@ -2,12 +2,11 @@ package edu.fbs.magset;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import edu.fbs.magset.model.genomic_region_interest.GenomicRegionsInterest;
 import edu.fbs.magset.util.ExportEnum;
 import edu.fbs.magset.util.InputTypeEnum;
@@ -58,9 +57,7 @@ public class Configurations {
 
 		String[] referenceFilenames = prop.getProperty("reference_genome_files").split(",");
 		for (int i = 0; i < referenceFilenames.length; i++) {
-			String filePath = this.getConvertedGenomesFolder() + referenceFilenames[i];
-			String fileName = Paths.get(filePath).getFileName().toString();
-			this.referenceGenomeFiles.put(i + 1, fileName);
+			this.referenceGenomeFiles.put(i + 1, referenceFilenames[i]);
 		}
 	}
 
@@ -120,12 +117,22 @@ public class Configurations {
 		return backboneAllowedExtraPositionsFromExtraContigs;
 	}
 
-	public String getNucmerResultFile(GenomeFile genomeFile) {
-		return getNucmerByGenomeFolder() + genomeFile.getName() + "/out.coords";
+	public boolean hasMagCheckResults() {
+		String path = getMAGCheckFolder();
+		File magcheckFolder = new File(path);
+
+		if (magcheckFolder.exists()) {
+			return true;
+		}
+		return false;
 	}
 
-	public String getGRINucmerResultFile(GenomeFile genomeFile) {
-		return getNucmerByGenomeGRIsFolder() + genomeFile.getName() + "/out.coords";
+	public String getNucmerResultFile(Genome genome) {
+		return getNucmerByGenomeFolder() + genome.getName() + "/out.coords";
+	}
+
+	public String getGRINucmerResultFile(Genome genome) {
+		return getNucmerByGenomeGRIsFolder() + genome.getName() + "/out.coords";
 	}
 
 	public String getGRINucmerResultFile() {

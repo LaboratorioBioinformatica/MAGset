@@ -2,19 +2,19 @@ package edu.fbs.magset.model.cog;
 
 import java.util.Map;
 
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import lombok.Data;
 import lombok.ToString;
 
 @Data
 @ToString(onlyExplicitlyIncluded = true)
 public class COGAnnotations {
-	private GenomeFile genomeFile;
+	private Genome genome;
 	private Map<String, COGAnnotation> annotations;
 
-	public COGAnnotations(GenomeFile genomeFile, Map<String, COGAnnotation> annotations) {
+	public COGAnnotations(Genome genome, Map<String, COGAnnotation> annotations) {
 		super();
-		this.genomeFile = genomeFile;
+		this.genome = genome;
 		this.annotations = annotations;
 	}
 

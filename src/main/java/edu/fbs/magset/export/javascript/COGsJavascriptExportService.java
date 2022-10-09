@@ -11,14 +11,14 @@ import java.util.Map;
 import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.model.cog.COGAnnotation;
 import edu.fbs.magset.model.cog.COGAnnotations;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 
 public class COGsJavascriptExportService {
 
 	public void exportToJavascript(MagsetResults genocom, String javascriptOutputFolder) throws IOException {
 
-		Map<GenomeFile, COGAnnotations> genesByGenome = genocom.getCogAnnotations();
-		for (GenomeFile genome : genesByGenome.keySet()) {
+		Map<Genome, COGAnnotations> genesByGenome = genocom.getCogAnnotations();
+		for (Genome genome : genesByGenome.keySet()) {
 
 			List<String> lines = new ArrayList<>();
 

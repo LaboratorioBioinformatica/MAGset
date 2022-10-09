@@ -11,13 +11,13 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
 
 import edu.fbs.magset.MagsetResults;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 
 @Service
 public class COGsAnnotationService {
 
-	public Map<GenomeFile, COGAnnotations> getCOGAnnotations(MagsetResults magset) throws IOException {
-		Map<GenomeFile, COGAnnotations> result = new TreeMap<>();
+	public Map<Genome, COGAnnotations> getCOGAnnotations(MagsetResults magset) throws IOException {
+		Map<Genome, COGAnnotations> result = new TreeMap<>();
 
 		if (!magset.shouldExportHtmlCsvFiles()) {
 			return result;
@@ -26,15 +26,15 @@ public class COGsAnnotationService {
 			return result;
 		}
 
-		for (GenomeFile genomeFile : magset.getAllGenomes()) {
-			result.put(genomeFile, getCOGMap(genomeFile, magset.getConfigurations().getCogFolder()));
+		for (Genome genome : magset.getAllGenomes()) {
+			result.put(genome, getCOGMap(genome, magset.getConfigurations().getCogFolder()));
 		}
 
 		return result;
 	}
 
-	private COGAnnotations getCOGMap(GenomeFile genomeFile, String cogResultsFolder) throws IOException {
-		String genomeName = genomeFile.getName();
+	private COGAnnotations getCOGMap(Genome genome, String cogResultsFolder) throws IOException {
+		String genomeName = genome.getName();
 		Reader in = new FileReader(cogResultsFolder + "//results_" + genomeName + "//classifier_result.tsv");
 		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withDelimiter('\t').withAllowMissingColumnNames()
 				.withFirstRecordAsHeader().parse(in);
@@ -48,6 +48,6 @@ public class COGsAnnotationService {
 			cogLine.setCogDescription(record.get(6));
 			result.put(locusTag, cogLine);
 		}
-		return new COGAnnotations(genomeFile, result);
+		return new COGAnnotations(genome, result);
 	}
 }

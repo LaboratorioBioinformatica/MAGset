@@ -11,7 +11,7 @@ import java.util.Map;
 import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.model.cazy.CazyAnnotation;
 import edu.fbs.magset.model.cazy.CazyAnnotations;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 
 public class CazyJavascriptExportService {
 
@@ -20,8 +20,8 @@ public class CazyJavascriptExportService {
 			return;
 		}
 
-		Map<GenomeFile, CazyAnnotations> genesByGenome = genocom.getCazyAnnotations();
-		for (GenomeFile genome : genesByGenome.keySet()) {
+		Map<Genome, CazyAnnotations> genesByGenome = genocom.getCazyAnnotations();
+		for (Genome genome : genesByGenome.keySet()) {
 
 			List<String> lines = new ArrayList<>();
 

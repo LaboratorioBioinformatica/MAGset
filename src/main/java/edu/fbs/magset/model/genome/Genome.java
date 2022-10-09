@@ -1,11 +1,14 @@
 package edu.fbs.magset.model.genome;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.apache.commons.io.FilenameUtils;
 import org.biojava.nbio.core.sequence.DNASequence;
 import org.biojava.nbio.core.sequence.ProteinSequence;
 import org.biojava.nbio.core.sequence.Strand;
@@ -13,15 +16,21 @@ import org.biojava.nbio.core.sequence.compound.AminoAcidCompound;
 import org.biojava.nbio.core.sequence.features.FeatureInterface;
 import org.biojava.nbio.core.sequence.template.AbstractSequence;
 
+import edu.fbs.magset.Configurations;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Data
 @ToString(onlyExplicitlyIncluded = true)
-public class Genome {
-
+public class Genome implements Comparable<Genome> {
 	@ToString.Include
-	private GenomeFile genomeFile;
+	@EqualsAndHashCode.Include
+	private String path;
+	@ToString.Include
+	private String name;
+	private int genomeId;
+
 	private LinkedHashMap<String, DNASequence> dnaSequence;
 	private LinkedHashMap<String, ProteinSequence> protSequences;
 	private TreeMap<GeneLocation, Gene> genesLocationMap;
@@ -29,12 +38,14 @@ public class Genome {
 	private long size;
 
 	public Genome(LinkedHashMap<String, DNASequence> dnaSequence, LinkedHashMap<String, ProteinSequence> protSequences,
-			GenomeFile genomeFile) {
+			String path, int genomeId, Configurations configurations) {
 		super();
 		this.dnaSequence = dnaSequence;
 		this.protSequences = protSequences;
-		this.genomeFile = genomeFile;
 		loadDNASequenceLocationMap(dnaSequence);
+		this.path = FilenameUtils.removeExtension(path) + configurations.getInputType().getExtension();
+		this.name = FilenameUtils.removeExtension(Paths.get(path).getFileName().toString());
+		this.genomeId = genomeId;
 
 		loadGenesLocationMap();
 		if (!dnaSequenceLocationMap.isEmpty()) {
@@ -81,8 +92,11 @@ public class Genome {
 		return results;
 	}
 
-	private void loadGenesLocationMap() {
+	public Collection<Gene> getAllGenes() {
+		return getGenesLocationMap().values();
+	}
 
+	private void loadGenesLocationMap() {
 		genesLocationMap = new TreeMap<>();
 		for (Entry<String, ProteinSequence> proteinSequence : protSequences.entrySet()) {
 			List<FeatureInterface<AbstractSequence<AminoAcidCompound>, AminoAcidCompound>> features = proteinSequence
@@ -102,12 +116,16 @@ public class Genome {
 	}
 
 	private boolean isGene(FeatureInterface<AbstractSequence<AminoAcidCompound>, AminoAcidCompound> feature) {
-		// "CDS", "rRNA", "tRNA", "misc_RNA")
 		String type = feature.getType();
 		if (type.equals("CDS") //
 				|| type.equals("rRNA") || type.equals("tRNA") || type.equals("misc_RNA")) {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public int compareTo(Genome o) {
+		return Integer.compare(genomeId, o.genomeId);
 	}
 }

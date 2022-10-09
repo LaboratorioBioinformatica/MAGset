@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import edu.fbs.magset.MagsetResults;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import edu.fbs.magset.model.genomic_region_interest.GenomeSegment;
 import edu.fbs.magset.model.genomic_region_interest.GenomicRegionInterest;
 import lombok.extern.java.Log;
@@ -48,13 +48,13 @@ public class GRIExportService {
 		}
 	}
 
-	private void exportGRIsFastaFileByGenome(MagsetResults genocom) throws IOException {
+	private void exportGRIsFastaFileByGenome(MagsetResults magset) throws IOException {
 
-		for (Entry<GenomeFile, List<GenomeSegment>> entry : genocom.getGenomicRegionsOfInterest()
-				.getGenomicRegionsByGenome().entrySet()) {
+		for (Entry<Genome, List<GenomeSegment>> entry : magset.getGenomicRegionsOfInterest().getGenomicRegionsByGenome()
+				.entrySet()) {
 			PrintWriter printer = null;
-			GenomeFile genome = entry.getKey();
-			String griFolderPath = genocom.getConfigurations().getGriFolder(genocom.getGenomicRegionsOfInterest());
+			Genome genome = entry.getKey();
+			String griFolderPath = magset.getConfigurations().getGriFolder(magset.getGenomicRegionsOfInterest());
 			try {
 				File griFolder = new File(griFolderPath + "/by_genome");
 				if (!griFolder.exists()) {

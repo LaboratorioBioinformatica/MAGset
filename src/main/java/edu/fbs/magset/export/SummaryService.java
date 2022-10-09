@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.export.javascript.SummaryResult;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import edu.fbs.magset.model.genome_matrix.GeneMatrix;
 import edu.fbs.magset.model.genomic_region_interest.GenomeSegment;
 import edu.fbs.magset.util.InputTypeEnum;
@@ -17,9 +17,9 @@ public class SummaryService {
 
 	public List<SummaryResult> getSummaryResults(MagsetResults genocom) throws IOException {
 		List<SummaryResult> result = new ArrayList<>();
-		Collection<GenomeFile> genomes = genocom.getAllGenomes();
+		Collection<Genome> genomes = genocom.getAllGenomes();
 
-		for (GenomeFile genome : genomes) {
+		for (Genome genome : genomes) {
 			int genesQty = genome.getAllGenes().size();
 			Collection<GeneMatrix> genes = new ArrayList<>();
 			if (genocom.getGenomeMatrices().get(genome) != null) {
@@ -62,7 +62,7 @@ public class SummaryService {
 
 			result.add(new SummaryResult( //
 					escapeEspecialCharacters(genome.getName()), //
-					genome.getGenome().getSize(), //
+					genome.getSize(), //
 					genesQty, //
 					(int) specificGenesQty, //
 					(int) sharedGenesQty, //

@@ -1,6 +1,6 @@
 package edu.fbs.magset.model.pangenome;
 
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 
 public class NonconsideredPangenomeGene extends PangenomeGene {
 
@@ -8,7 +8,7 @@ public class NonconsideredPangenomeGene extends PangenomeGene {
 		super(null, null, null, null);
 	}
 
-	public boolean existsInGenome(GenomeFile genome) {
+	public boolean existsInGenome(Genome genome) {
 		return false;
 	}
 

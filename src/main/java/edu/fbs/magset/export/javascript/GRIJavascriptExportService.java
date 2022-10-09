@@ -23,7 +23,7 @@ public class GRIJavascriptExportService {
 		for (GenomicRegionInterest gri : gris) {
 			for (GenomeSegment genomeSegment : gri.getGenomeSegments()) {
 				lines.add("\tgris.push(new GRI('" + genomeSegment.getNameWithoutGenome() //
-						+ "', '" + genomeSegment.getGenomeFile().getName() //
+						+ "', '" + genomeSegment.getGenome().getName() //
 						+ "', '" + genomeSegment.getSequenceName() //
 						+ "', " + genomeSegment.getSize() //
 						+ ", " + genomeSegment.getStart() //

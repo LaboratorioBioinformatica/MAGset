@@ -10,7 +10,7 @@ import edu.fbs.magset.MagsetResults;
 import edu.fbs.magset.model.cazy.CazyAnnotation;
 import edu.fbs.magset.model.cog.COGAnnotation;
 import edu.fbs.magset.model.genome.Gene;
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import edu.fbs.magset.model.genomic_region_interest.GenomeSegment;
 import edu.fbs.magset.model.pangenome.NonconsideredPangenomeGene;
 import edu.fbs.magset.model.pangenome.PangenomeGene;
@@ -18,8 +18,8 @@ import edu.fbs.magset.model.pangenome.PangenomeGene;
 @Service
 public class GenomeMatrixService {
 
-	public Map<GenomeFile, GenomeMatrix> getGenomeMatrices(MagsetResults magset) {
-		Map<GenomeFile, GenomeMatrix> genomeMatrices = new TreeMap<>();
+	public Map<Genome, GenomeMatrix> getGenomeMatrices(MagsetResults magset) {
+		Map<Genome, GenomeMatrix> genomeMatrices = new TreeMap<>();
 
 		if (!magset.shouldExportHtmlCsvFiles()) {
 			return genomeMatrices;
@@ -28,20 +28,20 @@ public class GenomeMatrixService {
 			return genomeMatrices;
 		}
 
-		for (GenomeFile genomeFile : magset.getAllGenomes()) {
-			genomeMatrices.put(genomeFile, createGenomeMatrix(genomeFile, magset));
+		for (Genome genome : magset.getAllGenomes()) {
+			genomeMatrices.put(genome, createGenomeMatrix(genome, magset));
 		}
 		return genomeMatrices;
 	}
 
-	private GenomeMatrix createGenomeMatrix(GenomeFile genomeFile, MagsetResults genocom) {
+	private GenomeMatrix createGenomeMatrix(Genome genome, MagsetResults genocom) {
 		String panarooGeneNameSufix = ".mRNA.0.CDS.1";
 		GenomeMatrix genomeMatrix = new GenomeMatrix();
-		genomeMatrix.setGenomeFile(genomeFile);
+		genomeMatrix.setGenome(genome);
 
 		Map<String, GeneMatrix> genesByName = new TreeMap<>();
 
-		Collection<Gene> allGenes = genomeFile.getAllGenes();
+		Collection<Gene> allGenes = genome.getAllGenes();
 		for (Gene gene : allGenes) {
 			String locusTag = gene.getLocusTag();
 			String pangenomeId = locusTag;
@@ -56,18 +56,18 @@ public class GenomeMatrixService {
 				pangenomeId = "-";
 			}
 
-			GenomeSegment gri = genocom.getGenomicRegionsOfInterest().getGenomicRegionByGene(genomeFile, locusTag);
-			COGAnnotation cog = genocom.getCogAnnotations().get(genomeFile).getAnnotations().get(locusTag);
+			GenomeSegment gri = genocom.getGenomicRegionsOfInterest().getGenomicRegionByGene(genome, locusTag);
+			COGAnnotation cog = genocom.getCogAnnotations().get(genome).getAnnotations().get(locusTag);
 			CazyAnnotation cazy = null;
 			if (genocom.getConfigurations().isExecuteCazyAnnotations()) {
-				cazy = genocom.getCazyAnnotations().get(genomeFile).getAnnotations().get(locusTag);
+				cazy = genocom.getCazyAnnotations().get(genome).getAnnotations().get(locusTag);
 			}
 
 			GeneMatrix geneMatrix = new GeneMatrix();
 			geneMatrix.setCogAnnotation(cog);
 			geneMatrix.setCazyAnnotation(cazy);
 			geneMatrix.setGene(gene);
-			geneMatrix.setGenome(genomeFile);
+			geneMatrix.setGenome(genome);
 			geneMatrix.setPangenomeGene(pangenomeGene);
 			geneMatrix.setGriGenome(gri);
 			geneMatrix.setPangenomeId(pangenomeId);

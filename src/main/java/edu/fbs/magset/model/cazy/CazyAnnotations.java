@@ -2,19 +2,19 @@ package edu.fbs.magset.model.cazy;
 
 import java.util.Map;
 
-import edu.fbs.magset.model.genome.GenomeFile;
+import edu.fbs.magset.model.genome.Genome;
 import lombok.Data;
 import lombok.ToString;
 
 @Data
 @ToString(onlyExplicitlyIncluded = true)
 public class CazyAnnotations {
-	private GenomeFile genomeFile;
+	private Genome genome;
 	private Map<String, CazyAnnotation> annotations;
 
-	public CazyAnnotations(GenomeFile genomeFile, Map<String, CazyAnnotation> annotations) {
+	public CazyAnnotations(Genome genome, Map<String, CazyAnnotation> annotations) {
 		super();
-		this.genomeFile = genomeFile;
+		this.genome = genome;
 		this.annotations = annotations;
 	}
 
