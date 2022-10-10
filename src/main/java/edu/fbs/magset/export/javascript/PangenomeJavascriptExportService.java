@@ -20,12 +20,12 @@ public class PangenomeJavascriptExportService {
 			throws IOException {
 		List<String> lines = new ArrayList<>();
 		lines.add("$( document ).ready(function() {\r\n");
-		for (PangenomeGene gene : genocom.getPangenome().getUniquePangenomeGenes().values()) {
+		for (PangenomeGene gene : genocom.getPangenome().getGenes()) {
 			String genomeSymbols = hasGenomeInPangenomeGene(genocom, gene).stream()
 					.collect(Collectors.joining("','", "['", "']"));
 
 			lines.add("pangenomeGenes.push(new PangenomeGene('" //
-					+ escapeEspecialCharacters(gene.getGeneName()) + "', '"//
+					+ escapeEspecialCharacters(gene.getGroupName()) + "', '"//
 					+ escapeEspecialCharacters(gene.getAnnotation()) + "', "//
 					+ gene.getNumberOfIsolates() + ", "//
 					+ genomeSymbols + "));");
@@ -39,7 +39,7 @@ public class PangenomeJavascriptExportService {
 		Collection<Genome> genomes = magset.getAllGenomes();
 		List<String> hasGenomeInPangenome = new ArrayList<>();
 
-		Map<Genome, String> geneNames = gene.getGeneNames();
+		Map<Genome, String> geneNames = gene.getGenesByGenome();
 
 		for (Genome genome : genomes) {
 			if (geneNames.containsKey(genome)) {

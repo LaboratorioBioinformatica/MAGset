@@ -34,7 +34,7 @@ public class GenomeMatrixService {
 		return genomeMatrices;
 	}
 
-	private GenomeMatrix createGenomeMatrix(Genome genome, MagsetResults genocom) {
+	private GenomeMatrix createGenomeMatrix(Genome genome, MagsetResults magset) {
 		String panarooGeneNameSufix = ".mRNA.0.CDS.1";
 		GenomeMatrix genomeMatrix = new GenomeMatrix();
 		genomeMatrix.setGenome(genome);
@@ -46,21 +46,23 @@ public class GenomeMatrixService {
 			String locusTag = gene.getLocusTag();
 			String pangenomeId = locusTag;
 
-			PangenomeGene pangenomeGene = genocom.getPangenome().getGenes().get(locusTag);
+			Map<String, PangenomeGene> pagenomeGenesByGeneName = magset.getPangenome().getGenesByGenomeAndGeneName()
+					.get(genome);
+			PangenomeGene pangenomeGene = pagenomeGenesByGeneName.get(locusTag);
 
 			if (pangenomeGene == null) {
-				pangenomeGene = genocom.getPangenome().getGenes().get(locusTag + panarooGeneNameSufix);
+				pangenomeGene = pagenomeGenesByGeneName.get(locusTag + panarooGeneNameSufix);
 			}
 			if (pangenomeGene == null) {
 				pangenomeGene = new NonconsideredPangenomeGene();
 				pangenomeId = "-";
 			}
 
-			GenomeSegment gri = genocom.getGenomicRegionsOfInterest().getGenomicRegionByGene(genome, locusTag);
-			COGAnnotation cog = genocom.getCogAnnotations().get(genome).getAnnotations().get(locusTag);
+			GenomeSegment gri = magset.getGenomicRegionsOfInterest().getGenomicRegionByGene(genome, locusTag);
+			COGAnnotation cog = magset.getCogAnnotations().get(genome).getAnnotations().get(locusTag);
 			CazyAnnotation cazy = null;
-			if (genocom.getConfigurations().isExecuteCazyAnnotations()) {
-				cazy = genocom.getCazyAnnotations().get(genome).getAnnotations().get(locusTag);
+			if (magset.getConfigurations().isExecuteCazyAnnotations()) {
+				cazy = magset.getCazyAnnotations().get(genome).getAnnotations().get(locusTag);
 			}
 
 			GeneMatrix geneMatrix = new GeneMatrix();

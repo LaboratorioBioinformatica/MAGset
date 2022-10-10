@@ -7,7 +7,6 @@ import java.io.Reader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -20,7 +19,7 @@ import edu.fbs.magset.model.genome.Genome;
 public class PangenomeService {
 
 	public Pangenome getPangenome(MagsetResults magset) throws IOException {
-		Pangenome pangenome = new Pangenome();
+		Pangenome pangenome = new Pangenome(magset.getAllGenomes());
 
 		if (!magset.shouldExportHtmlCsvFiles()) {
 			return pangenome;
@@ -28,49 +27,35 @@ public class PangenomeService {
 		if (!magset.hasAnnotatedGenomes()) {
 			return pangenome;
 		}
-		Map<String, PangenomeGene> pangenomeGenes = getPangenomeGenesMap(
-				magset.getConfigurations().getPangenomeFolder(), magset.getAllGenomes());
-		pangenome.setGenes(pangenomeGenes);
-
+		loadPangenomeGenes(magset.getConfigurations().getPangenomeFolder(), magset.getAllGenomes(), pangenome);
 		return pangenome;
 	}
 
-	private Map<String, PangenomeGene> getPangenomeGenesMap(String roaryResultsFolder, Collection<Genome> genomes)
+	private void loadPangenomeGenes(String roaryResultsFolder, Collection<Genome> genomes, Pangenome pangenome)
 			throws FileNotFoundException, IOException {
 		Reader in = new FileReader(roaryResultsFolder + "gene_presence_absence_roary.csv");
 		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
 
-		Map<String, PangenomeGene> allGeneNames = new TreeMap<>();
-
 		for (CSVRecord record : records) {
-			createPangenomeGene(allGeneNames, genomes, record);
+			loadPangenomeGene(genomes, record, pangenome);
 		}
-		return allGeneNames;
 	}
 
-	private void createPangenomeGene(Map<String, PangenomeGene> allGeneNames, Collection<Genome> genomes,
-			CSVRecord record) {
-		Map<Genome, String> geneNames = new HashMap<>();
-		PangenomeGene genePresenceAbsence = new PangenomeGene(record.get(0), record.get(2),
-				Integer.valueOf(record.get(3)), geneNames);
+	private void loadPangenomeGene(Collection<Genome> genomes, CSVRecord record, Pangenome pangenome) {
+		Map<Genome, String> genesByGenome = new HashMap<>();
+		PangenomeGene pangenomeGene = new PangenomeGene(record.get(0), record.get(2), Integer.valueOf(record.get(3)),
+				genesByGenome);
 
 		for (Genome genome : genomes) {
-			String genesNameInGenome = record.get(genome.getName());
-			if (genesNameInGenome == null || genesNameInGenome.isEmpty()) {
+			String genes = record.get(genome.getName());
+			if (genes == null || genes.isEmpty()) {
 				continue;
 			}
-
-			geneNames.put(genome, genesNameInGenome);
-
-			addPangenomeGenes(allGeneNames, genePresenceAbsence, genesNameInGenome);
+			String[] genesArray = genes.split(";");
+			for (String gene : genesArray) {
+				genesByGenome.put(genome, gene);
+			}
 		}
-	}
-
-	private void addPangenomeGenes(Map<String, PangenomeGene> allGeneNames, PangenomeGene genePresenceAbsence,
-			String genesNameInGenome) {
-		String[] genes = genesNameInGenome.split(";");
-		for (String geneName : genes) {
-			allGeneNames.put(geneName, genePresenceAbsence);
-		}
+		pangenome.addPangenomeGene(pangenomeGene);
 	}
 }

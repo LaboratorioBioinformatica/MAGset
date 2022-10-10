@@ -4,32 +4,36 @@ import java.util.Map;
 
 import edu.fbs.magset.model.genome.Genome;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PangenomeGene {
-	private String geneName;
+	@EqualsAndHashCode.Include
+	private String groupName;
 	private String annotation;
 	private Integer numberOfIsolates;
-	private Map<Genome, String> geneNames;
+	private Map<Genome, String> genesByGenome;
 
-	public PangenomeGene(String geneName, String annotation, Integer numberOfIsolates, Map<Genome, String> geneNames) {
+	public PangenomeGene(String groupName, String annotation, Integer numberOfIsolates,
+			Map<Genome, String> genesByGenome) {
 		super();
-		this.geneName = geneName;
+		this.groupName = groupName;
 		this.annotation = annotation;
 		this.numberOfIsolates = numberOfIsolates;
-		this.geneNames = geneNames;
+		this.genesByGenome = genesByGenome;
 	}
 
 	public boolean isSpecific() {
-		return geneNames.size() == 1;
+		return genesByGenome.size() == 1;
 	}
 
 	public boolean isCore(int genomesQuantity) {
-		return geneNames.size() == genomesQuantity;
+		return genesByGenome.size() == genomesQuantity;
 	}
 
 	public boolean isShared(int genomesQuantity) {
-		return geneNames.size() > 1 && geneNames.size() < genomesQuantity;
+		return genesByGenome.size() > 1 && genesByGenome.size() < genomesQuantity;
 	}
 
 	public static final String[] CSV_HEADER = { "type", "locus_tag", "pangenome_id", "product", "protein_id", "start",

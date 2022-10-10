@@ -39,7 +39,7 @@ public class MatrixJavascriptExportService {
 						+ geneMatrix.getGene().getMax() + ", '" //
 						+ geneMatrix.getGene().getStrand() + "', '" //
 						+ defaultString(geneMatrix.getGene().getParent()) + "', '" //
-						+ escapeEspecialCharacters(geneMatrix.getPangenomeGene().getGeneName()) + "', '" //
+						+ escapeEspecialCharacters(geneMatrix.getPangenomeGene().getGroupName()) + "', '" //
 						+ geneMatrix.getPangenomeGene().isCore(genesByGenome.size()) + "', '" //
 						+ geneMatrix.getPangenomeGene().isShared(genesByGenome.size()) + "', '" //
 						+ geneMatrix.getPangenomeGene().isSpecific() + "', '" //
