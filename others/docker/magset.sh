@@ -165,11 +165,11 @@ if [ "$input_type" == "GBK" ]; then
 	## generate .faa
 	cd $genomes_folder
 
-	for file in "${all_genome_files[@]}"; do python ~/programs/gb_to_faa.py $(basename ${file%.*}).gb $(basename ${file%.*}).faa || exit 1; done
+	for file in "${all_genome_files[@]}"; do python /home/mambauser/programs/gb_to_faa.py $(basename ${file%.*}).gb $(basename ${file%.*}).faa || exit 1; done
 
 	# generate .fasta
 	cd ${output_folder}/00_converted_genomes
-	for file in "${all_genome_files[@]}"; do python ~/programs/gb_to_fasta.py $(basename ${file%.*}).gb $(basename ${file%.*}).fasta || exit 1; done 
+	for file in "${all_genome_files[@]}"; do python /home/mambauser/programs/gb_to_fasta.py $(basename ${file%.*}).gb $(basename ${file%.*}).fasta || exit 1; done 
 
 elif [ "$input_type" == "FASTA" ]; then
 	echo "renaming files to .fasta..."
@@ -257,7 +257,7 @@ if [ "$input_type" == "GBK" ]; then
 	cd 04_cogs
 
 	for file in ${output_folder}/00_converted_genomes/*.faa; do 
-		COGclassifier -i ${file} -d ~/databases/cog_files/Cog -o ${output_folder}/04_cogs/results_$(basename ${file%.*}) -t ${num_threads} || exit 1; 
+		COGclassifier -i ${file} -d /home/mambauser/databases/cog_files/Cog -o ${output_folder}/04_cogs/results_$(basename ${file%.*}) -t ${num_threads} || exit 1; 
 	done
 
 	echo "starting step 05 - DBCAN" 
@@ -270,7 +270,7 @@ if [ "$input_type" == "GBK" ]; then
 		mkdir 05_cazy
 		cd 05_cazy
 		for file in ${output_folder}/00_converted_genomes/*.faa; do 
-			run_dbcan  ${output_folder}/00_converted_genomes/$(basename ${file}) protein --out_dir $(basename ${file%.*}) --db_dir ~/databases/dbcan/ --dia_cpu ${num_threads} --hmm_cpu ${num_threads} --tf_cpu ${num_threads} || exit 1; 
+			run_dbcan  ${output_folder}/00_converted_genomes/$(basename ${file}) protein --out_dir $(basename ${file%.*}) --db_dir /home/mambauser/databases/dbcan/ --dia_cpu ${num_threads} --hmm_cpu ${num_threads} --tf_cpu ${num_threads} || exit 1; 
 		done
 	fi
 fi
@@ -289,7 +289,7 @@ if [ -d "07_magcheck" ]; then
 	mv -f 07_magcheck 07_magcheck.$date_string
 fi
 
-java -jar ~/programs/magset-export.jar ${properties_file} "EXPORT_GRIS" || exit 1
+java -jar /home/mambauser/programs/magset-export.jar ${properties_file} "EXPORT_GRIS" || exit 1
 
 if [ -d "${output_folder}/03_gris/non_clustered/" ]; then
 	cd ${output_folder}/03_gris/non_clustered/
@@ -304,7 +304,7 @@ if [ -d "${output_folder}/03_gris/non_clustered/" ]; then
 		show-coords -THrcl out.delta > out.coords || exit 1
 	fi
 	
-	java -jar ~/programs/magset-export.jar ${properties_file} "EXPORT_CLUSTERED_GRIS" || exit 1
+	java -jar /home/mambauser/programs/magset-export.jar ${properties_file} "EXPORT_CLUSTERED_GRIS" || exit 1
 else
 	echo "No GRIs found... ignoring clustering step"
 fi
@@ -500,5 +500,5 @@ mkdir result
 
 micromamba activate base
 
-java -jar ~/programs/magset-export.jar ${properties_file} "EXPORT_CSV_HTML" || exit 1
+java -jar /home/mambauser/programs/magset-export.jar ${properties_file} "EXPORT_CSV_HTML" || exit 1
 echo "MAGset: done!"
