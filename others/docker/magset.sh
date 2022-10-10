@@ -142,6 +142,17 @@ eval "$(micromamba shell hook --shell=bash)"
 micromamba activate base
 
 if [ "$input_type" == "GBK" ]; then
+
+	echo "fixing genome accession/version header, if necessary..."
+	for genome in "${all_genome_files[@]}"; do
+		if grep -c "ACCESSION\s*$" ${genome}; then
+			cat ${genome} | perl -p -e  'BEGIN{undef $/;} s/LOCUS       (.*?) (.*?)ACCESSION  (.*?)KEYWORDS/LOCUS       \1 \2ACCESSION   \1\nVERSION     1\nKEYWORDS/smg' > ${genome}.fixed
+			rm ${genome}
+			mv ${genome}.fixed ${genome}
+			echo "header fixed for: ${genome}"
+		fi
+	done
+	
 	for genome in "${all_genome_files[@]}"; do
 		if [ "${genome: -3}" != ".gb" ]
 		then

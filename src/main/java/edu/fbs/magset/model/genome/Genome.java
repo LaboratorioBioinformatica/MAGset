@@ -23,6 +23,7 @@ import lombok.ToString;
 
 @Data
 @ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Genome implements Comparable<Genome> {
 	@ToString.Include
 	@EqualsAndHashCode.Include
