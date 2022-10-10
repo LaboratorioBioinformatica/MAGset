@@ -43,6 +43,10 @@ COPY --chown=$MAMBA_USER:$MAMBA_USER gb_to_fasta.py /home/$MAMBA_USER/programs/g
 COPY --chown=$MAMBA_USER:$MAMBA_USER magset-export.jar /home/$MAMBA_USER/programs/magset-export.jar
 COPY --chown=$MAMBA_USER:$MAMBA_USER magset.sh /home/$MAMBA_USER/programs/magset.sh
 
+ 
+COPY --chown=$MAMBA_USER:$MAMBA_USER find_missing.py /opt/conda/lib/python3.10/site-packages/panaroo/find_missing.py
+COPY --chown=$MAMBA_USER:$MAMBA_USER prokka.py /opt/conda/lib/python3.10/site-packages/panaroo/prokka.py
+
 RUN chmod 755 /home/$MAMBA_USER/programs/magset.sh
 
 WORKDIR /home/$MAMBA_USER/programs

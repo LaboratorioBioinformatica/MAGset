@@ -1,6 +1,7 @@
 package edu.fbs.magset;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,8 +17,8 @@ import edu.fbs.magset.model.genomic_region_interest.GenomicRegionsInterestServic
 import edu.fbs.magset.model.pangenome.PangenomeService;
 import lombok.extern.java.Log;
 
-@SpringBootApplication
 @Log
+@SpringBootApplication
 public class App implements CommandLineRunner {
 
 	@Autowired
@@ -37,7 +38,7 @@ public class App implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		log.info("Starting magset-export... ");
+		log.info("Starting magset-export... " + Arrays.toString(args));
 		Configurations configurations = new Configurations(new File(args[0]), args[1]);
 		MagsetResults results = new MagsetResults(configurations);
 
