@@ -167,6 +167,12 @@ else
 		then
 			mkdir $output_folder/tmp
 		fi
+
+    if [ ! -d "$output_folder/tmp/Cog" ]
+    then
+      mkdir $output_folder/tmp/Cog
+    fi
+
 		singularity exec -B  $output_folder/tmp/Cog:/home/mambauser/databases/cog_files/Cog,$output_folder/tmp:/tmp$container_volume_raw_reads_folder_singularity,$output_folder:$root_container_folder/output,$genomes_folder:$root_container_folder/input,$output_folder/conf-container.properties:$root_container_folder/conf.properties $singularity_container_file $root_container_folder/programs/magset.sh $root_container_folder/conf.properties |& tee -a ${output_folder}/logs/magset.log 
 	fi
 fi
