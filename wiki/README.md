@@ -34,5 +34,8 @@ The main goal is to find the differences between the genomes and identify the ge
 * [Output files](Output-files.md)
 * [Parameters](Parameters.md)
 
+### Acknowledgements
+This project was funded in part by [CNPq](https://www.gov.br/cnpq/pt-br), grant number 440230/2022-5, within the Call CNPq/MCTI/CT-Biotec number 30/2022
+
 ## Article / How to cite 
 Coming soon!
