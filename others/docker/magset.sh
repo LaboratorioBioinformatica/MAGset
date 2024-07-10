@@ -476,7 +476,7 @@ if [ "${#raw_data_files_r1[@]}" -gt 0 ] ||  [ "${#raw_data_files_unpaired[@]}" -
 				echo "nucmer_minimal_covered_between_similar_gris_to_consider=$(prop 'nucmer_minimal_covered_between_similar_gris_to_consider')" >> conf.properties
 			fi
 			
-			/programs/magset.sh ${output_folder}/08_mag_improve/conf.properties || exit 1
+			/home/mambauser/programs/magset.sh ${output_folder}/08_mag_improve/conf.properties || exit 1
 	
 			if [ -d "${output_folder}/result_after_reassembly" ]; then
 				mv -f ${output_folder}/result_after_reassembly ${output_folder}/result_after_reassembly.$date_string
