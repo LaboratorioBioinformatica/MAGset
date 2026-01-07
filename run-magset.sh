@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-version=1.5.2
- 
+version=1.5.3
+
 function prop {
     grep "^${1}" ${file}|cut -d'=' -f2
 }
@@ -45,14 +45,14 @@ then
 	echo "genomes folder $genomes_folder not found."
 	exit 1
 fi
-echo "genomes_folder: $genomes_folder" 
+echo "genomes_folder: $genomes_folder"
 
 if [ ! -d "$output_folder" ]
 then
 	mkdir $output_folder
 	chmod 0777 $output_folder
 fi
-echo "output_folder: $output_folder" 
+echo "output_folder: $output_folder"
 
 #Check if the files are using symbolic links
 if [[ -L "$genomes_folder" ]]; then
@@ -82,7 +82,7 @@ if [ "$raw_reads_folder" != "" ]; then
 		echo "raw_reads_folder $raw_reads_folder is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
 		exit 1
 	fi
-	
+
 	for raw_data_r1 in "${raw_data_files_r1[@]}"; do
 		if [[ -L "$raw_reads_folder/$raw_data_r1" ]]; then
 			echo "raw_data_r1 $raw_reads_folder/$raw_data_r1 is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
@@ -94,21 +94,21 @@ if [ "$raw_reads_folder" != "" ]; then
 		if [[ -L "$raw_reads_folder/$raw_data_r2" ]]; then
 			echo "raw_data_r2 $raw_reads_folder/$raw_data_r2 is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
 			exit 1
-		fi	
-	done 
+		fi
+	done
 
 	for raw_data_unpaired in "${raw_data_files_unpaired[@]}"; do
 		if [[ -L "$raw_reads_folder/$raw_data_unpaired" ]]; then
 			echo "raw_data_unpaired $raw_reads_folder/$raw_data_unpaired is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
 			exit 1
-		fi	
+		fi
 	done
-	
+
 	for raw_data_unpaired in "${raw_data_files_interleaved[@]}"; do
 		if [[ -L "$raw_reads_folder/$raw_data_interleaved" ]]; then
 			echo "raw_data_interleaved $raw_reads_folder/$raw_data_interleaved is a symbolic link. Symbolic links are not supported by containers (this software uses containers internally), please use folders and files without symbolic links."
 			exit 1
-		fi	
+		fi
 	done
 fi
 
@@ -134,7 +134,7 @@ then
 	echo "raw_reads_folder: $raw_reads_folder."
 	container_volume_raw_reads_folder_docker=" -v $raw_reads_folder:$root_container_folder/raw_data/ "
 	container_volume_raw_reads_folder_singularity=",$raw_reads_folder:$root_container_folder/raw_data/"
-	
+
 	setProperty "raw_reads_folder" "$root_container_folder/raw_data/" "$output_folder/conf-container.properties"
 fi
 
@@ -173,6 +173,6 @@ else
       mkdir $output_folder/tmp/Cog
     fi
 
-		singularity exec -B  $output_folder/tmp/Cog:/home/mambauser/databases/cog_files/Cog,$output_folder/tmp:/tmp$container_volume_raw_reads_folder_singularity,$output_folder:$root_container_folder/output,$genomes_folder:$root_container_folder/input,$output_folder/conf-container.properties:$root_container_folder/conf.properties $singularity_container_file $root_container_folder/programs/magset.sh $root_container_folder/conf.properties |& tee -a ${output_folder}/logs/magset.log 
+		singularity exec -B  $output_folder/tmp/Cog:/home/mambauser/databases/cog_files/Cog,$output_folder/tmp:/tmp$container_volume_raw_reads_folder_singularity,$output_folder:$root_container_folder/output,$genomes_folder:$root_container_folder/input,$output_folder/conf-container.properties:$root_container_folder/conf.properties $singularity_container_file $root_container_folder/programs/magset.sh $root_container_folder/conf.properties |& tee -a ${output_folder}/logs/magset.log
 	fi
 fi

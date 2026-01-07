@@ -17,7 +17,7 @@ The main goal is to find the differences between the genomes and identify the ge
 **MAgset Pipeline:**
 
 ![Pipeline](/wiki/pipeline.png)
-  
+
 **Screenshot from a MAGset result:**
 
 ![Home result page](/wiki/home-sample-result-index.png)
@@ -37,5 +37,7 @@ The main goal is to find the differences between the genomes and identify the ge
 ## Acknowledgements
 This project was funded in part by [CNPq](https://www.gov.br/cnpq/pt-br), grant number 440230/2022-5, within the Call CNPq/MCTI/CT-Biotec number 30/2022
 
-## Article / How to cite 
-Coming soon!
+## How to cite
+
+Sanchez, F. B., Sato Guima, S. E., & Setubal, J. C. (2024). How to Obtain and Compare Metagenome-Assembled Genomes. Methods in molecular biology (Clifton, N.J.), 2802, 135–163. https://doi.org/10.1007/978-1-0716-3838-5_6
+
